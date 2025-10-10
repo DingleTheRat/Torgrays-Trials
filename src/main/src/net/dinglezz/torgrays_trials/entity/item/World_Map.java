@@ -1,5 +1,7 @@
 package net.dinglezz.torgrays_trials.entity.item;
 
+import java.awt.event.KeyEvent;
+
 import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
@@ -17,10 +19,10 @@ public class World_Map extends Item {
     @Override
     public boolean use(Mob mob) {
         Main.game.ui.uiState = States.UIStates.MAP;
-        Main.game.inputHandler.upPressed = false;
-        Main.game.inputHandler.downPressed = false;
-        Main.game.inputHandler.leftPressed = false;
-        Main.game.inputHandler.rightPressed = false;
+        Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).put(KeyEvent.VK_W, false);
+        Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).put(KeyEvent.VK_A, false);
+        Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).put(KeyEvent.VK_S, false);
+        Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).put(KeyEvent.VK_D, false);
         return false;
     }
 }

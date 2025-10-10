@@ -9,20 +9,20 @@ public class States {
         EXCEPTION,
     }
     public enum UIStates {
-        NONE(false, false),
-        JUST_DEFAULT(true, true),
-        DIALOGUE(true, true),
-        INTERACT(true, true),
-        PAUSE(true, true),
-        CHARACTER(false, false),
-        TRADE(false, false),
-        MAP(false, false),
-        SAVE(false, false),;
+        NONE("", false),
+        JUST_DEFAULT("play", true),
+        DIALOGUE("dialogue", true),
+        INTERACT("", true),
+        PAUSE("", true),
+        CHARACTER("character", false),
+        TRADE("trade", false),
+        MAP("map", false),
+        SAVE("", false);
 
-        final boolean defaultKeyboardInput;
+        final String inputGroup;
         final boolean defaultUI;
-        UIStates(boolean defaultKeyboardInput, boolean defaultUI) {
-            this.defaultKeyboardInput = defaultKeyboardInput;
+        UIStates(String inputGroup, boolean defaultUI) {
+            this.inputGroup = inputGroup;
             this.defaultUI = defaultUI;
         }
     }

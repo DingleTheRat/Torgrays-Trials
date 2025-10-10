@@ -12,6 +12,7 @@ import net.dinglezz.torgrays_trials.tile.MapHandler;
 
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -206,7 +207,7 @@ public class UI {
             y += lineHeight;
             graphics2D.drawString("Game State: " + game.gameState, x ,y); y += lineHeight;
             graphics2D.drawString("Time State: " + game.environmentManager.lighting.darknessState, x ,y); y += lineHeight;
-            graphics2D.drawString("UI State: " + uiState + " (" + uiState.defaultUI + ", " + uiState.defaultKeyboardInput + ")", x ,y); y += lineHeight;
+            graphics2D.drawString("UI State: " + uiState + " (" + uiState.defaultUI + ")", x ,y); y += lineHeight;
             graphics2D.drawString("Sub-UI State: " + subUIState, x ,y); y += lineHeight;
             y += lineHeight;
             graphics2D.drawString("World_Map: " + game.currentMap, x, y); y += lineHeight;
@@ -392,7 +393,7 @@ public class UI {
                 if (commandNumber == 0) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
-                    if (game.inputHandler.spacePressed) {
+                    if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                         subUIState = "Settings Main";
                         commandNumber = 0;
 
@@ -409,7 +410,7 @@ public class UI {
                 if (commandNumber == 1) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
-                    if (game.inputHandler.spacePressed) {
+                    if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                         subUIState = "Controls";
                         commandNumber = 0;
                     }
@@ -421,7 +422,7 @@ public class UI {
                 if (commandNumber == 2) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
-                    if (game.inputHandler.spacePressed) {
+                    if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                         commandNumber = 1;
                         subUIState = "Confirm";
                         setCurrentDialogue("Ending the game without saving \nmay result in you loosing progress. \nPLEASE SAVE BEFORE CONTINUING!!!!!!");
@@ -442,7 +443,7 @@ public class UI {
                 if (commandNumber == 3) {
                     graphics2D.drawString(">", x - game.tileSize, y);
 
-                    if (game.inputHandler.spacePressed) {
+                    if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                         game.gameState = States.GameStates.PLAY;
                         game.ui.uiState = States.UIStates.JUST_DEFAULT;
                         commandNumber = 0;
@@ -455,7 +456,7 @@ public class UI {
             case "Controls": controlsPanel(frameX, frameY); break;
         }
 
-        game.inputHandler.spacePressed = false;
+        game.inputHandler.keyStates.get(States.GameStates.PAUSE).put(KeyEvent.VK_SPACE, false);
     }
 
     public void settingsMain(int frameX, int frameY) {
@@ -491,7 +492,7 @@ public class UI {
         if (commandNumber == 2) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                 // Set the yesAction to toggle full screen
                 yesAction = () -> {
                     game.fullScreen = !game.fullScreen;
@@ -516,7 +517,7 @@ public class UI {
         if (commandNumber == 3) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                 // Set the yesAction to toggle BRendering
                 yesAction = () -> {
                     game.BRendering = !game.BRendering;
@@ -543,7 +544,7 @@ public class UI {
         if (commandNumber == 4) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                 // Set the yesAction to toggle pathfinding
                 yesAction = () -> {
                     game.pathFinding = !game.pathFinding;
@@ -567,7 +568,7 @@ public class UI {
         if (commandNumber == 5) {
             graphics2D.drawString(">", textX - 30, textY);
 
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                 subUIState = "Main Pause";
                 commandNumber = 0;
             }
@@ -640,7 +641,7 @@ public class UI {
         graphics2D.drawString("Close", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                 subUIState = "Main Pause";
             }
         }
@@ -668,7 +669,7 @@ public class UI {
         graphics2D.drawString("Yes", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                 yesAction.run();
             }
         }
@@ -678,7 +679,7 @@ public class UI {
         graphics2D.drawString("No", textX, textY);
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                 noAction.run();
             }
         }
@@ -722,7 +723,7 @@ public class UI {
         graphics2D.drawString("Close", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PAUSE).get(KeyEvent.VK_SPACE)) {
                 subUIState = "Main Pause";
                 commandNumber = 0;
             }
@@ -803,7 +804,7 @@ public class UI {
         graphics2D.drawString("Slot 1", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_SPACE)) {
                 save(1);
             }
         }
@@ -813,7 +814,7 @@ public class UI {
         graphics2D.drawString("Slot 2", textX, textY);
         if (commandNumber == 1) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_SPACE)) {
                 save(2);
             }
         }
@@ -823,7 +824,7 @@ public class UI {
         graphics2D.drawString("Slot 3", textX, textY);
         if (commandNumber == 2) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_SPACE)) {
                 save(3);
             }
         }
@@ -833,13 +834,13 @@ public class UI {
         graphics2D.drawString("Ignore", textX, textY);
         if (commandNumber == 3) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_SPACE)) {
                 uiState = States.UIStates.JUST_DEFAULT;
                 commandNumber = 0;
             }
         }
 
-        game.inputHandler.spacePressed = false;
+        game.inputHandler.keyStates.get(States.GameStates.PLAY).put(KeyEvent.VK_SPACE, false);
     }
     private void save(int slot) {
         game.saveSlot = slot;
@@ -1090,7 +1091,7 @@ public class UI {
         graphics2D.drawString("Copy Stack Trace", textX, textY);
         if (commandNumber == 0) {
             graphics2D.drawString(">", textX - 30, textY);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.keyStates.get(States.GameStates.EXCEPTION).get(KeyEvent.VK_SPACE)) {
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(game.exceptionStackTrace), null);
             }
         }
@@ -1102,7 +1103,7 @@ public class UI {
             graphics2D.drawString("Ignore", textX, textY);
             if (commandNumber == 1) {
                 graphics2D.drawString(">", textX - 30, textY);
-                if (game.inputHandler.spacePressed) {
+                if (game.inputHandler.keyStates.get(States.GameStates.EXCEPTION).get(KeyEvent.VK_SPACE)) {
                     game.gameState = States.GameStates.PLAY;
                     commandNumber = 0;
                     game.player.attacking = false;
@@ -1125,14 +1126,14 @@ public class UI {
             graphics2D.drawString("Quit", textX, textY);
             if (commandNumber == 2 || (commandNumber == 1 && game.exceptionState == States.ExceptionStates.ONLY_QUITABLE)) {
                 graphics2D.drawString(">", textX - 30, textY);
-                if (game.inputHandler.spacePressed) {
+                if (game.inputHandler.keyStates.get(States.GameStates.EXCEPTION).get(KeyEvent.VK_SPACE)) {
                     if (game.saveSlot != 0) DataManager.saveData(game.saveSlot);
                     System.exit(0);
                 }
             }
         }
-        
-        game.inputHandler.spacePressed = false;
+
+       game.inputHandler.keyStates.get(States.GameStates.EXCEPTION).put(KeyEvent.VK_SPACE, false);
     }
     public void drawTransitionScreen() {
         // Update transition counter
@@ -1179,7 +1180,7 @@ public class UI {
             case "Sell" -> drawTradeSellScreen();
         }
 
-        game.inputHandler.spacePressed = false;
+        game.inputHandler.uiKeyStates.get(States.UIStates.TRADE).put(KeyEvent.VK_SPACE, false);
     }
     public void drawTradeSelectScreen() {
         drawBasics();
@@ -1198,7 +1199,7 @@ public class UI {
         graphics2D.drawString("Buy", x, y);
         if (commandNumber == 0) {
             graphics2D.drawString(">", x - 24, y);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.uiKeyStates.get(States.UIStates.TRADE).get(KeyEvent.VK_SPACE)) {
                 subUIState = "Buy";
             }
         }
@@ -1208,7 +1209,9 @@ public class UI {
         graphics2D.drawString("Sell", x, y);
         if (commandNumber == 1) {
             graphics2D.drawString(">", x - 24, y);
-            if (game.inputHandler.spacePressed) subUIState = "Sell";
+            if (game.inputHandler.uiKeyStates.get(States.UIStates.TRADE).get(KeyEvent.VK_SPACE)) {
+                subUIState = "Sell";
+            }
         }
 
         // Leave Text
@@ -1216,7 +1219,7 @@ public class UI {
         graphics2D.drawString("Leave", x, y);
         if (commandNumber == 2) {
             graphics2D.drawString(">", x - 24, y);
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.uiKeyStates.get(States.UIStates.TRADE).get(KeyEvent.VK_SPACE)) {
                 game.ui.uiState = States.UIStates.JUST_DEFAULT;
                 game.ui.commandNumber = 0;
             }
@@ -1253,7 +1256,7 @@ public class UI {
             graphics2D.drawString(text, x, y + 34);
 
             // Buy an items
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.uiKeyStates.get(States.UIStates.TRADE).get(KeyEvent.VK_SPACE)) {
                 if (npc.getInventory().get(itemIndex).price > game.player.coins) {
                     setCurrentDialogue("Sorry partner, your wallet declined :(");
                     uiState = States.UIStates.DIALOGUE;
@@ -1300,7 +1303,7 @@ public class UI {
             graphics2D.drawString(text, x, y + 34);
 
             // Sell an items
-            if (game.inputHandler.spacePressed) {
+            if (game.inputHandler.uiKeyStates.get(States.UIStates.TRADE).get(KeyEvent.VK_SPACE)) {
                 if (game.player.getInventory().get(itemIndex) == game.player.currentWeapon ||
                         game.player.getInventory().get(itemIndex) == game.player.currentShield ||
                         game.player.getInventory().get(itemIndex) == game.player.currentLight) {

@@ -10,6 +10,7 @@ import net.dinglezz.torgrays_trials.main.Sound;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -50,7 +51,7 @@ public class Dark_Chest extends Entity implements Serializable {
     @Override
     public <T extends Entity> void whileHit(T entity) {
         if (entity instanceof Player player && !opened) {
-            if (Main.game.inputHandler.interactKeyPressed) {
+            if (Main.game.inputHandler.keyStates.get("play").get(KeyEvent.VK_E)) {
                 // Play sound :D
                 Sound.playSFX("Unlock");
 

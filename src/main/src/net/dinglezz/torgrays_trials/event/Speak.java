@@ -4,6 +4,9 @@ import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
+
+import java.awt.event.KeyEvent;
+
 import org.json.JSONObject;
 
 public class Speak extends Event {
@@ -18,7 +21,7 @@ public class Speak extends Event {
     public void whileHit() {
         Main.game.ui.uiState = States.UIStates.INTERACT;
 
-        if (Main.game.inputHandler.interactKeyPressed) {
+        if (Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_E)) {
             // Prepare for dialogue
             Main.game.ui.uiState = States.UIStates.DIALOGUE;
             Main.game.player.cancelAttack();

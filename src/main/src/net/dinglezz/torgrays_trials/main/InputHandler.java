@@ -2,18 +2,74 @@ package net.dinglezz.torgrays_trials.main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class InputHandler implements KeyListener {
-    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, interactKeyPressed, f3Pressed;
+    // Presets
+    public final HashMap<Integer, Boolean> UI_KEYS = new HashMap<>() {{
+        // WASD
+        put(KeyEvent.VK_W, false);
+        put(KeyEvent.VK_A, false);
+        put(KeyEvent.VK_S, false);
+        put(KeyEvent.VK_D, false);
+
+        // Arrows
+        put(KeyEvent.VK_UP, false);
+        put(KeyEvent.VK_DOWN, false);
+        put(KeyEvent.VK_LEFT, false);
+        put(KeyEvent.VK_RIGHT, false);
+
+        // Other
+        put(KeyEvent.VK_SPACE, false);
+        put(KeyEvent.VK_ENTER, false);
+        put(KeyEvent.VK_ESCAPE, false);
+    }};
+
+    // Simple States
+    public HashMap<Integer, Boolean> pause = UI_KEYS;
+    public HashMap<Integer, Boolean> character = UI_KEYS;
+    public HashMap<Integer, Boolean> trade = UI_KEYS;
+    public HashMap<Integer, Boolean> exception = UI_KEYS;
+
+    // Custom States
+    public HashMap<Integer, Boolean> play = new HashMap<>() {{
+        // Movement
+        put(KeyEvent.VK_W, false);
+        put(KeyEvent.VK_A, false);
+        put(KeyEvent.VK_S, false);
+        put(KeyEvent.VK_D, false);
+
+        // Other
+        put(KeyEvent.VK_E, false);
+        put(KeyEvent.VK_SPACE, false);
+        put(KeyEvent.VK_ESCAPE, false);
+        put(KeyEvent.VK_F3, false);
+    }};
+    public HashMap<Integer, Boolean> dialogue = new HashMap<>() {{
+        put(KeyEvent.VK_SPACE, false);
+    }};
+    public HashMap<Integer, Boolean> map = new HashMap<>() {{
+        put(KeyEvent.VK_ESCAPE, false);
+    }};
+
+    public HashMap<States.GameStates, HashMap<Integer, Boolean>> keyStates = new HashMap<>() {{
+       put(States.GameStates.PLAY, play);
+       put(States.GameStates.EXCEPTION, exception);
+    }};
+    public HashMap<States.UIStates, HashMap<Integer, Boolean>> uiKeyStates = new HashMap<>() {{
+       put(States.UIStates.PAUSE, pause);
+       put(States.UIStates.DIALOGUE, dialogue);
+       put(States.UIStates.CHARACTER, character);
+       put(States.UIStates.MAP, map);
+       put(States.UIStates.TRADE, trade);
+    }};
     public int maxCommandNumber = 0;
+    HashMap<Integer, Boolean> uiInputState = uiKeyStates.get(Main.game.ui.uiState);
+    HashMap<Integer, Boolean> inputState = keyStates.get(Main.game.gameState);
+
     // Debug
     public boolean debug = false;
-
-    public void cancelInputs() {
-        spacePressed = false;
-        interactKeyPressed = false;
-    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -24,7 +80,21 @@ public class InputHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-        if (Main.game.ui.uiState.defaultKeyboardInput) {
+        // Update input states
+        inputState = keyStates.get(Main.game.gameState);
+        uiInputState = uiKeyStates.get(Main.game.ui.uiState);
+
+        // Set pressed key to true (Depending on the game state)
+        if (inputState != null && inputState.containsKey(code) && !uiInputState.containsKey(code)) {
+            keyStates.get(Main.game.gameState).put(code, true);
+        }
+        
+        // Same thing for the UI States
+        if (uiInputState != null && uiInputState.containsKey(code)) {
+            uiKeyStates.get(Main.game.ui.uiState).put(code, true);
+        }
+
+        if (!uiInputState.containsKey(code)) {
             switch (Main.game.gameState) {
                 case TITLE -> titleState(code);
                 case PLAY -> playState(code);
@@ -42,25 +112,35 @@ public class InputHandler implements KeyListener {
             case SAVE -> saveState(code);
         }
 
-        // F3 Stuff
-        if (f3Pressed && code == KeyEvent.VK_P) {
-            Main.game.debugPathfinding = !Main.game.debugPathfinding;
-            Main.game.ui.addMiniNotification("Debug Pathfinding: " + Main.game.debugPathfinding);
-            debug = false;
-        } else if (f3Pressed && code == KeyEvent.VK_R) {
-            if (Main.game.BRendering) {
-                Main.game.BRendering = false;
-                Main.game.ui.addMiniNotification("BRendering: " + Main.game.BRendering);
+        debuging(code);
+    }
+    public void debuging(int code) {
+        if (uiInputState.containsKey(KeyEvent.VK_F3) && uiInputState.get(KeyEvent.VK_F3)) {
+            switch (code) {
+                // Pathfinding
+                case KeyEvent.VK_P -> {
+                    Main.game.debugPathfinding = !Main.game.debugPathfinding;
+                    Main.game.ui.addMiniNotification("Debug Pathfinding: " + Main.game.debugPathfinding);
+                    debug = false;
+                }
+                // BRendering
+                case KeyEvent.VK_R -> {
+                    if (Main.game.BRendering) {
+                        Main.game.BRendering = false;
+                        Main.game.ui.addMiniNotification("BRendering: " + Main.game.BRendering);
+                    }
+                }
+                // Hitboxes
+                case KeyEvent.VK_B -> {
+                    Main.game.debugHitBoxes = !Main.game.debugHitBoxes;
+                    Main.game.ui.addMiniNotification("Debug Hit Boxes: " + Main.game.debugHitBoxes);
+                    debug = false;
+                }
+                case KeyEvent.VK_F3 -> debug = true;
             }
-        } else if (f3Pressed && code == KeyEvent.VK_B) {
-            Main.game.debugHitBoxes = !Main.game.debugHitBoxes;
-            Main.game.ui.addMiniNotification("Debug Hit Boxes: " + Main.game.debugHitBoxes);
-            debug = false;
-        } else if (code == KeyEvent.VK_F3) {
-            f3Pressed = true;
-            debug = true;
         }
     }
+
     public void titleState(int code) {
         if (Objects.equals(Main.game.ui.subUIState, "Main Title")) {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
@@ -165,20 +245,12 @@ public class InputHandler implements KeyListener {
         }
     }
     public void playState(int code) {
-        switch (code) {
-            case KeyEvent.VK_W -> upPressed = true;
-            case KeyEvent.VK_A -> leftPressed = true;
-            case KeyEvent.VK_S -> downPressed = true;
-            case KeyEvent.VK_D -> rightPressed = true;
-            case KeyEvent.VK_E -> interactKeyPressed = true;
-            case KeyEvent.VK_SPACE -> spacePressed = true;
-            case KeyEvent.VK_ESCAPE -> {
-                if (Main.game.ui.uiState == States.UIStates.JUST_DEFAULT || Main.game.ui.uiState == States.UIStates.INTERACT) {
-                    Main.game.gameState = States.GameStates.PAUSE;
-                    Main.game.ui.uiState = States.UIStates.PAUSE;
-                    Main.game.ui.subUIState = "";
-                    Main.game.ui.commandNumber = 0;
-                }
+        if (code == KeyEvent.VK_ESCAPE) {
+            if (Main.game.ui.uiState == States.UIStates.JUST_DEFAULT || Main.game.ui.uiState == States.UIStates.INTERACT) {
+                Main.game.gameState = States.GameStates.PAUSE;
+                Main.game.ui.uiState = States.UIStates.PAUSE;
+                Main.game.ui.subUIState = "";
+                Main.game.ui.commandNumber = 0;
             }
         }
     }
@@ -212,7 +284,6 @@ public class InputHandler implements KeyListener {
 
             if (Main.game.ui.commandNumber > maxCommandNumber) Main.game.ui.commandNumber = 0;
         }
-        if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) spacePressed = true;
 
         if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) {
             if (Main.game.ui.subUIState.equals("Settings Main")) {
@@ -357,11 +428,8 @@ public class InputHandler implements KeyListener {
             if (Main.game.ui.commandNumber > maxCommandNumber) Main.game.ui.commandNumber = 0;
             Sound.playSFX("Cursor");
         }
-        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) spacePressed = true;
     }
     public void tradeState(int code) {
-        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) spacePressed = true;
-
         if (Objects.equals(Main.game.ui.subUIState, "Select")) {
             if (code == KeyEvent.VK_ESCAPE) {
                 Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
@@ -406,20 +474,28 @@ public class InputHandler implements KeyListener {
             if (Main.game.ui.commandNumber > maxCommandNumber) Main.game.ui.commandNumber = 0;
             Sound.playSFX("Cursor");
         }
-        if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) spacePressed = true;
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
 
+        // Update input states
+        inputState = keyStates.get(Main.game.gameState);
+        uiInputState = uiKeyStates.get(Main.game.ui.uiState);
+
+        // Set released key to false (Depending on the game state)
+        if (inputState != null && inputState.containsKey(code)) {
+            keyStates.get(Main.game.gameState).put(code, true);
+        }
+        
+        // Same thing for the UI States
+        if (uiInputState != null && uiInputState.containsKey(code)) {
+            uiKeyStates.get(Main.game.ui.uiState).put(code, true);
+        }
+
         switch (code) {
-            case KeyEvent.VK_W -> upPressed = false;
-            case KeyEvent.VK_A -> leftPressed = false;
-            case KeyEvent.VK_S -> downPressed = false;
-            case KeyEvent.VK_D -> rightPressed = false;
             case KeyEvent.VK_F3 -> {
-                f3Pressed = false;
                 if (debug) {
                     Main.game.debug = !Main.game.debug;
                     Main.game.ui.addMiniNotification("Debug: " + Main.game.debug);

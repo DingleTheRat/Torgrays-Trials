@@ -6,6 +6,7 @@ import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
 
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class GateKeeper extends Mob {
@@ -86,7 +87,7 @@ public class GateKeeper extends Mob {
     // Functionality
     @Override
     public <T extends Entity>  void whileHit(T entity) {
-        if (Main.game.inputHandler.interactKeyPressed) {
+        if (Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_E)) {
             Main.game.player.cancelInventory();
             speak(true);
         }

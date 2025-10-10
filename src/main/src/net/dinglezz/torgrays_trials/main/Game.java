@@ -306,9 +306,6 @@ public class Game extends JPanel implements Runnable {
                     .forEach(Particle::update);
 
             environmentManager.update();
-
-            // Finally, reset all inputs
-            inputHandler.cancelInputs();
         }
     }
 

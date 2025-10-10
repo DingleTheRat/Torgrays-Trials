@@ -1,5 +1,7 @@
 package net.dinglezz.torgrays_trials.entity.npc;
 
+import java.awt.event.KeyEvent;
+
 import net.dinglezz.torgrays_trials.entity.Entity;
 import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.main.Main;
@@ -60,7 +62,7 @@ public class Coiner extends Mob {
     // Functionality
     @Override
     public <T extends Entity> void whileHit(T entity) {
-        if (Main.game.inputHandler.interactKeyPressed) {
+        if (Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_E)) {
             Main.game.player.cancelInventory();
             speak(false);
         }

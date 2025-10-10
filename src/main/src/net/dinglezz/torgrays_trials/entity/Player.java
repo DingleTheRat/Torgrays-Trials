@@ -14,7 +14,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
+import java.util.HashMap;
 
 public class Player extends Mob implements Serializable {
     // Attributes
@@ -26,6 +28,9 @@ public class Player extends Mob implements Serializable {
     private boolean attackCanceled = false;
     private boolean inventoryCanceled = false;
     private boolean attackCheckCanceled = false;
+
+    // Main Input State
+    HashMap<Integer, Boolean> playInputState = Main.game.inputHandler.uiKeyStates.get(States.UIStates.JUST_DEFAULT);
 
     public Player() {
         super("Player", null);
@@ -128,15 +133,15 @@ public class Player extends Mob implements Serializable {
     public void update() {
         if (attacking)
             attack();
-        else if (Main.game.inputHandler.upPressed || Main.game.inputHandler.downPressed || Main.game.inputHandler.leftPressed || Main.game.inputHandler.rightPressed) {
+        else if (playInputState.get(KeyEvent.VK_W) || playInputState.get(KeyEvent.VK_A) || playInputState.get(KeyEvent.VK_S) || playInputState.get(KeyEvent.VK_D)) {
             // Set direction based on input
-            if (Main.game.inputHandler.upPressed && Main.game.inputHandler.leftPressed) direction = "up left";
-            else if (Main.game.inputHandler.upPressed && Main.game.inputHandler.rightPressed) direction = "up right";
-            else if (Main.game.inputHandler.downPressed && Main.game.inputHandler.leftPressed) direction = "down left";
-            else if (Main.game.inputHandler.downPressed && Main.game.inputHandler.rightPressed) direction = "down right";
-            else if (Main.game.inputHandler.upPressed) direction = "up";
-            else if (Main.game.inputHandler.downPressed) direction = "down";
-            else if (Main.game.inputHandler.leftPressed) direction = "left";
+            if (playInputState.get(KeyEvent.VK_W) && playInputState.get(KeyEvent.VK_A)) direction = "up left";
+            else if (playInputState.get(KeyEvent.VK_W) && playInputState.get(KeyEvent.VK_D)) direction = "up right";
+            else if (playInputState.get(KeyEvent.VK_A) && playInputState.get(KeyEvent.VK_A)) direction = "down left";
+            else if (playInputState.get(KeyEvent.VK_A) && playInputState.get(KeyEvent.VK_D)) direction = "down right";
+            else if (playInputState.get(KeyEvent.VK_W)) direction = "up";
+            else if (playInputState.get(KeyEvent.VK_A)) direction = "left";
+            else if (playInputState.get(KeyEvent.VK_S)) direction = "down";
             else direction = "right";
 
             // Check collision
@@ -191,7 +196,7 @@ public class Player extends Mob implements Serializable {
         }
 
         // Attacking
-        if (Main.game.inputHandler.spacePressed && !attackCheckCanceled) {
+        if (playInputState.get(KeyEvent.VK_SPACE) && !attackCheckCanceled) {
             checkCollisions();
 
             if (!attacking && !attackCanceled) {
@@ -207,7 +212,7 @@ public class Player extends Mob implements Serializable {
         attackCheckCanceled = false;
 
         // Inventory
-        if (Main.game.inputHandler.interactKeyPressed) {
+        if (playInputState.get(KeyEvent.VK_E)) {
             checkCollisions();
 
             if (!inventoryCanceled && Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) Main.game.ui.uiState = States.UIStates.CHARACTER;

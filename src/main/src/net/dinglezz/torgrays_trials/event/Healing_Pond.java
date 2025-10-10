@@ -4,6 +4,9 @@ import net.dinglezz.torgrays_trials.main.DataManager;
 import net.dinglezz.torgrays_trials.main.Main;
 import net.dinglezz.torgrays_trials.main.States;
 import net.dinglezz.torgrays_trials.tile.TilePoint;
+
+import java.awt.event.KeyEvent;
+
 import org.json.JSONObject;
 
 public class Healing_Pond extends Event {
@@ -18,7 +21,7 @@ public class Healing_Pond extends Event {
     public void whileHit() {
         Main.game.ui.uiState = States.UIStates.INTERACT;
 
-        if (Main.game.inputHandler.interactKeyPressed) {
+        if (Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_E)) {
             Main.game.ui.uiState = States.UIStates.DIALOGUE;
             Main.game.player.cancelAttack();
             if (Main.game.saveSlot != 0) {
