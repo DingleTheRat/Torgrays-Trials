@@ -30,7 +30,7 @@ public class Player extends Mob implements Serializable {
     private boolean attackCheckCanceled = false;
 
     // Main Input State
-    HashMap<Integer, Boolean> playInputState = Main.game.inputHandler.uiKeyStates.get(States.UIStates.JUST_DEFAULT);
+    HashMap<Integer, Boolean> playInputState = Main.game.inputHandler.keyStates.get(States.GameStates.PLAY);
 
     public Player() {
         super("Player", null);
@@ -137,8 +137,8 @@ public class Player extends Mob implements Serializable {
             // Set direction based on input
             if (playInputState.get(KeyEvent.VK_W) && playInputState.get(KeyEvent.VK_A)) direction = "up left";
             else if (playInputState.get(KeyEvent.VK_W) && playInputState.get(KeyEvent.VK_D)) direction = "up right";
-            else if (playInputState.get(KeyEvent.VK_A) && playInputState.get(KeyEvent.VK_A)) direction = "down left";
-            else if (playInputState.get(KeyEvent.VK_A) && playInputState.get(KeyEvent.VK_D)) direction = "down right";
+            else if (playInputState.get(KeyEvent.VK_S) && playInputState.get(KeyEvent.VK_A)) direction = "down left";
+            else if (playInputState.get(KeyEvent.VK_S) && playInputState.get(KeyEvent.VK_D)) direction = "down right";
             else if (playInputState.get(KeyEvent.VK_W)) direction = "up";
             else if (playInputState.get(KeyEvent.VK_A)) direction = "left";
             else if (playInputState.get(KeyEvent.VK_S)) direction = "down";
@@ -204,6 +204,7 @@ public class Player extends Mob implements Serializable {
                 Main.game.player.attacking = true;
                 Main.game.player.spriteCounter = 0;
                 attackArea = currentWeapon.attackArea;
+                playInputState.put(KeyEvent.VK_SPACE, false);
             }
 
             // Reset Values

@@ -52,48 +52,49 @@ public class InputHandler implements KeyListener {
     public HashMap<Integer, Boolean> map = new HashMap<>() {{
         put(KeyEvent.VK_ESCAPE, false);
     }};
+    public HashMap<Integer, Boolean> interact = new HashMap<>() {{
+        put(KeyEvent.VK_E, false);
+    }};
 
     public HashMap<States.GameStates, HashMap<Integer, Boolean>> keyStates = new HashMap<>() {{
        put(States.GameStates.PLAY, play);
+       put(States.GameStates.PAUSE, pause);
        put(States.GameStates.EXCEPTION, exception);
     }};
     public HashMap<States.UIStates, HashMap<Integer, Boolean>> uiKeyStates = new HashMap<>() {{
-       put(States.UIStates.PAUSE, pause);
        put(States.UIStates.DIALOGUE, dialogue);
+       put(States.UIStates.INTERACT, interact);
        put(States.UIStates.CHARACTER, character);
        put(States.UIStates.MAP, map);
        put(States.UIStates.TRADE, trade);
     }};
     public int maxCommandNumber = 0;
-    HashMap<Integer, Boolean> uiInputState = uiKeyStates.get(Main.game.ui.uiState);
-    HashMap<Integer, Boolean> inputState = keyStates.get(Main.game.gameState);
+    HashMap<Integer, Boolean> uiInputState = new HashMap<>();
+    HashMap<Integer, Boolean> inputState = new HashMap<>();
 
     // Debug
     public boolean debug = false;
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent event) {
         // Not used, but required by KeyListener interface :/
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-        int code = e.getKeyCode();
+    public void keyPressed(KeyEvent event) {
+        int code = event.getKeyCode();
+
+        // Initialize fields that tell if there is a hashmap of the current UI/Game state
+        boolean canChangeGame = keyStates.get(Main.game.gameState) != null;
+        boolean canChangeUI = uiKeyStates.get(Main.game.ui.uiState) != null;
 
         // Update input states
-        inputState = keyStates.get(Main.game.gameState);
-        uiInputState = uiKeyStates.get(Main.game.ui.uiState);
+        if (canChangeGame) inputState = keyStates.get(Main.game.gameState);
+        if (canChangeUI) uiInputState = uiKeyStates.get(Main.game.ui.uiState);
 
         // Set pressed key to true (Depending on the game state)
-        if (inputState != null && inputState.containsKey(code) && !uiInputState.containsKey(code)) {
-            keyStates.get(Main.game.gameState).put(code, true);
-        }
-        
-        // Same thing for the UI States
-        if (uiInputState != null && uiInputState.containsKey(code)) {
-            uiKeyStates.get(Main.game.ui.uiState).put(code, true);
-        }
-
+        if (uiInputState.containsKey(code) && canChangeUI) uiInputState.put(code, true);
+        else if (inputState.containsKey(code) && canChangeGame) inputState.put(code, true);
         if (!uiInputState.containsKey(code)) {
             switch (Main.game.gameState) {
                 case TITLE -> titleState(code);
@@ -112,10 +113,10 @@ public class InputHandler implements KeyListener {
             case SAVE -> saveState(code);
         }
 
-        debuging(code);
+        debugging(code);
     }
-    public void debuging(int code) {
-        if (uiInputState.containsKey(KeyEvent.VK_F3) && uiInputState.get(KeyEvent.VK_F3)) {
+    public void debugging(int code) {
+        if (uiInputState.containsKey(KeyEvent.VK_F3) || inputState.containsKey(KeyEvent.VK_F3)) {
             switch (code) {
                 // Pathfinding
                 case KeyEvent.VK_P -> {
@@ -481,18 +482,12 @@ public class InputHandler implements KeyListener {
         int code = e.getKeyCode();
 
         // Update input states
-        inputState = keyStates.get(Main.game.gameState);
-        uiInputState = uiKeyStates.get(Main.game.ui.uiState);
+        if (keyStates.get(Main.game.gameState) != null) inputState = keyStates.get(Main.game.gameState);
+        if (uiKeyStates.get(Main.game.ui.uiState) != null) uiInputState = uiKeyStates.get(Main.game.ui.uiState);
 
         // Set released key to false (Depending on the game state)
-        if (inputState != null && inputState.containsKey(code)) {
-            keyStates.get(Main.game.gameState).put(code, true);
-        }
-        
-        // Same thing for the UI States
-        if (uiInputState != null && uiInputState.containsKey(code)) {
-            uiKeyStates.get(Main.game.ui.uiState).put(code, true);
-        }
+        if (inputState.containsKey(code)) inputState.put(code, false);
+        if (uiInputState.containsKey(code)) uiInputState.put(code, false);
 
         switch (code) {
             case KeyEvent.VK_F3 -> {
