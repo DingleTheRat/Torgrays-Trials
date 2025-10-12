@@ -23,7 +23,6 @@ public class Healing_Pond extends Event {
 
         if (Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_E)) {
             Main.game.ui.uiState = States.UIStates.DIALOGUE;
-            Main.game.player.cancelAttack();
             if (Main.game.saveSlot != 0) {
                 Main.game.ui.setCurrentDialogue("*Drinks water* \nI feel.. safe, almost like the world took a \nsnapshot of me");
                 Main.game.ui.uiState = States.UIStates.DIALOGUE;

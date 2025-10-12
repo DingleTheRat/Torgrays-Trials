@@ -21,10 +21,9 @@ public class Speak extends Event {
     public void whileHit() {
         Main.game.ui.uiState = States.UIStates.INTERACT;
 
-        if (Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_E)) {
+        if (Main.game.inputHandler.uiKeyStates.get(States.UIStates.INTERACT).get(KeyEvent.VK_E)) {
             // Prepare for dialogue
             Main.game.ui.uiState = States.UIStates.DIALOGUE;
-            Main.game.player.cancelAttack();
 
             // Set the entity depending on the provided type
             Mob mob = switch (getParameter("type", String.class)) {

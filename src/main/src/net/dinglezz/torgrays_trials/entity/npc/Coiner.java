@@ -62,8 +62,7 @@ public class Coiner extends Mob {
     // Functionality
     @Override
     public <T extends Entity> void whileHit(T entity) {
-        if (Main.game.inputHandler.keyStates.get(States.GameStates.PLAY).get(KeyEvent.VK_E)) {
-            Main.game.player.cancelInventory();
+        if (Main.game.inputHandler.uiKeyStates.get(States.UIStates.INTERACT).get(KeyEvent.VK_E)) {
             speak(false);
         }
     }

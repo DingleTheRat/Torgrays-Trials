@@ -765,9 +765,6 @@ public class UI {
         graphics2D.drawString(text, x, y);
     }
     public void drawSaveScreen() {
-        // Cancel attack check
-        game.player.cancelAttackCheck();
-
         // Background
         graphics2D.setColor(new Color(0, 0, 0, 0.35f));
         graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
@@ -1172,8 +1169,6 @@ public class UI {
         return fadeBack;
     }
     public void drawTradeScreen() {
-        game.player.cancelAttackCheck();
-
         switch (subUIState) {
             case "Select" -> drawTradeSelectScreen();
             case "Buy" -> drawTradeBuyScreen();

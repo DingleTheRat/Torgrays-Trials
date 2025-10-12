@@ -51,14 +51,13 @@ public class Dark_Chest extends Entity implements Serializable {
     @Override
     public <T extends Entity> void whileHit(T entity) {
         if (entity instanceof Player player && !opened) {
-            if (Main.game.inputHandler.keyStates.get("play").get(KeyEvent.VK_E)) {
+            if (Main.game.inputHandler.uiKeyStates.get(States.UIStates.INTERACT).get(KeyEvent.VK_E)) {
                 // Play sound :D
                 Sound.playSFX("Unlock");
 
                 // Get Ready for dialogue
                 Main.game.ui.uiState = States.UIStates.DIALOGUE;
                 StringBuilder stringBuilder = new StringBuilder();
-                player.cancelInventory();
 
                 if (lootTable.isEmpty()) {
                     stringBuilder.append("This chest is empty :(");

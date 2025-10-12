@@ -315,7 +315,6 @@ public class InputHandler implements KeyListener {
     }
     public void dialogueState(int code) {
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ESCAPE) {
-            Main.game.player.cancelAttack();
             Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
         }
     }

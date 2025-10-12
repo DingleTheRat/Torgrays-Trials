@@ -25,9 +25,6 @@ public class Player extends Mob implements Serializable {
 
     public final int screenX;
     public final int screenY;
-    private boolean attackCanceled = false;
-    private boolean inventoryCanceled = false;
-    private boolean attackCheckCanceled = false;
 
     // Main Input State
     HashMap<Integer, Boolean> playInputState = Main.game.inputHandler.keyStates.get(States.GameStates.PLAY);
@@ -138,7 +135,7 @@ public class Player extends Mob implements Serializable {
             if (playInputState.get(KeyEvent.VK_W) && playInputState.get(KeyEvent.VK_A)) direction = "up left";
             else if (playInputState.get(KeyEvent.VK_W) && playInputState.get(KeyEvent.VK_D)) direction = "up right";
             else if (playInputState.get(KeyEvent.VK_S) && playInputState.get(KeyEvent.VK_A)) direction = "down left";
-            else if (playInputState.get(KeyEvent.VK_S) && playInputState.get(KeyEvent.VK_D)) direction = "down right";
+            else if (playInputState.get(KeyEvent.VK_A) && playInputState.get(KeyEvent.VK_D)) direction = "down right";
             else if (playInputState.get(KeyEvent.VK_W)) direction = "up";
             else if (playInputState.get(KeyEvent.VK_A)) direction = "left";
             else if (playInputState.get(KeyEvent.VK_S)) direction = "down";
@@ -196,30 +193,23 @@ public class Player extends Mob implements Serializable {
         }
 
         // Attacking
-        if (playInputState.get(KeyEvent.VK_SPACE) && !attackCheckCanceled) {
+        if (playInputState.get(KeyEvent.VK_SPACE)) {
             checkCollisions();
 
-            if (!attacking && !attackCanceled) {
+            if (!attacking) {
                 Sound.playSFX("Swing");
                 Main.game.player.attacking = true;
                 Main.game.player.spriteCounter = 0;
                 attackArea = currentWeapon.attackArea;
                 playInputState.put(KeyEvent.VK_SPACE, false);
             }
-
-            // Reset Values
-            attackCanceled = false;
         }
-        attackCheckCanceled = false;
 
         // Inventory
         if (playInputState.get(KeyEvent.VK_E)) {
             checkCollisions();
-
-            if (!inventoryCanceled && Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) Main.game.ui.uiState = States.UIStates.CHARACTER;
-
-            // Reset Values
-            inventoryCanceled = false;
+            if (Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) Main.game.ui.uiState = States.UIStates.CHARACTER;
+            else if (Main.game.ui.uiState == States.UIStates.CHARACTER) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
         }
 
         // Update effects
@@ -267,10 +257,6 @@ public class Player extends Mob implements Serializable {
             attacking = false;
         }
     }
-
-    public void cancelAttack() {attackCanceled = true;}
-    public void cancelInventory() {inventoryCanceled = true;}
-    public void cancelAttackCheck() {attackCheckCanceled = true;}
 
     public void damageMonster(Monster monster, int knockBackPower) {
         if (monster != null && !monster.dying && !monster.invincible) {
