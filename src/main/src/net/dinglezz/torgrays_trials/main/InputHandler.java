@@ -99,7 +99,7 @@ public class InputHandler implements KeyListener {
             switch (Main.game.gameState) {
                 case TITLE -> titleState(code);
                 case PLAY -> playState(code);
-                case GAME_END -> gameOverState(code);
+                case DEATH -> deathState(code);
                 case EXCEPTION -> exceptionState(code);
             }
         }
@@ -161,7 +161,7 @@ public class InputHandler implements KeyListener {
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (Main.game.ui.commandNumber == 0) {
                     Main.game.ui.subUIState = "Difficulties";
-                    Main.game.ui.commandNumber = 1;
+                    Main.game.ui.commandNumber = -1;
                 } else if (Main.game.ui.commandNumber == 1) {
                     Main.game.ui.subUIState = "Saves";
                     Main.game.ui.commandNumber = 0;
@@ -173,16 +173,12 @@ public class InputHandler implements KeyListener {
             if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
                 Main.game.ui.commandNumber--;
                 Sound.playSFX("Cursor");
-                if (Main.game.ui.commandNumber < 0) {
-                    Main.game.ui.commandNumber = 3;
-                }
+                if (Main.game.ui.commandNumber < 0) Main.game.ui.commandNumber = 3;
             }
             if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
                 Main.game.ui.commandNumber++;
                 Sound.playSFX("Cursor");
-                if (Main.game.ui.commandNumber > 3) {
-                    Main.game.ui.commandNumber = 0;
-                }
+                if (Main.game.ui.commandNumber > 3) Main.game.ui.commandNumber = 0;
             }
             if (code == KeyEvent.VK_ENTER || code == KeyEvent.VK_SPACE) {
                 if (Main.game.ui.commandNumber == 0) {
@@ -319,7 +315,7 @@ public class InputHandler implements KeyListener {
         }
     }
     public void characterState(int code) {
-        if (code == KeyEvent.VK_E || code == KeyEvent.VK_ESCAPE) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+        if (code == KeyEvent.VK_ESCAPE) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) Main.game.player.selectItem();
         playerInventory(code);
     }
@@ -376,25 +372,20 @@ public class InputHandler implements KeyListener {
         }
     }
 
-    public void gameOverState(int code) {
-        if (Main.game.difficulty.equals("Easy")) {
-            maxCommandNumber = 2;
-        } else {
-            maxCommandNumber = 1;
-        }
+    public void deathState(int code) {
+        System.out.println("Hai");
+        
+        if (Main.game.difficulty.equals("Easy")) maxCommandNumber = 2;
+        else maxCommandNumber = 1;
 
         if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) {
             Main.game.ui.commandNumber--;
-            if (Main.game.ui.commandNumber < 0) {
-                Main.game.ui.commandNumber = maxCommandNumber;
-            }
+            if (Main.game.ui.commandNumber < 0) Main.game.ui.commandNumber = maxCommandNumber;
             Sound.playSFX("Cursor");
         }
         if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) {
             Main.game.ui.commandNumber++;
-            if (Main.game.ui.commandNumber > maxCommandNumber) {
-                Main.game.ui.commandNumber = 0;
-            }
+            if (Main.game.ui.commandNumber > maxCommandNumber) Main.game.ui.commandNumber = 0;
             Sound.playSFX("Cursor");
         }
         if (code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER) {

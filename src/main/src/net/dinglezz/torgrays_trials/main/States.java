@@ -5,7 +5,7 @@ public class States {
         TITLE,
         PLAY,
         PAUSE,
-        GAME_END,
+        DEATH,
         EXCEPTION,
     }
     public enum UIStates {

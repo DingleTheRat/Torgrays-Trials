@@ -320,7 +320,7 @@ public class Game extends JPanel implements Runnable {
             TileManager.draw(graphics2D);
 
             // Add entities to the list
-            if (gameState != States.GameStates.GAME_END) entityList.add(player);
+            if (gameState != States.GameStates.DEATH) entityList.add(player);
 
             entityList.addAll(npcs.getOrDefault(currentMap, new ArrayList<>()));
             entityList.addAll(items.getOrDefault(currentMap, new ArrayList<>()));

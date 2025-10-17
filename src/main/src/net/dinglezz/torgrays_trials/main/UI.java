@@ -93,7 +93,7 @@ public class UI {
             switch (game.gameState) {
                 case TITLE -> drawTitleScreen();
                 case PLAY, PAUSE -> drawBasics();
-                case GAME_END -> drawGameOverScreen();
+                case DEATH -> drawDeathScreen();
                 case EXCEPTION -> drawExceptionScreen();
             }
         }
@@ -995,7 +995,7 @@ public class UI {
             }
         }
     }
-    public void drawGameOverScreen() {
+    public void drawDeathScreen() {
         graphics2D.setColor(new Color(0.1f, 0, 0, 0.94f));
         graphics2D.fillRect(0, 0, game.screenWidth, game.screenHeight);
 
@@ -1023,9 +1023,7 @@ public class UI {
         x = getCentreX(text);
         y += game.tileSize * 4;
         graphics2D.drawString(text, x, y);
-        if (commandNumber == 0) {
-            graphics2D.drawString(">", x - 40, y);
-        }
+        if (commandNumber == 0) graphics2D.drawString(">", x - 40, y);
 
         // Respawn
         if (game.difficulty.equals("Easy")) {
@@ -1033,9 +1031,7 @@ public class UI {
             x = getCentreX(text);
             y += 55;
             graphics2D.drawString(text, x, y);
-            if (commandNumber == 1) {
-                graphics2D.drawString(">", x - 40, y);
-            }
+            if (commandNumber == 1) graphics2D.drawString(">", x - 40, y);
         }
 
         // Quit

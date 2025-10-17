@@ -1,7 +1,6 @@
 package net.dinglezz.torgrays_trials.entity.object;
 
 import net.dinglezz.torgrays_trials.entity.Entity;
-import net.dinglezz.torgrays_trials.entity.Mob;
 import net.dinglezz.torgrays_trials.entity.Player;
 import net.dinglezz.torgrays_trials.entity.item.Item;
 import net.dinglezz.torgrays_trials.main.Main;
@@ -40,11 +39,11 @@ public class Dark_Chest extends Entity implements Serializable {
     // Interact Prompts
     @Override
     public <T extends Entity> void onHit(T entity) {
-        if (!opened) Main.game.ui.uiState = States.UIStates.INTERACT;
+        if (!opened && entity instanceof Player) Main.game.ui.uiState = States.UIStates.INTERACT;
     }
     @Override
     public <T extends Entity> void onLeave(T entity) {
-        if (!opened) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+        if (!opened && entity instanceof Player) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
     }
 
     // Functionality

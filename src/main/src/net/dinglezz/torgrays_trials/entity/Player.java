@@ -186,7 +186,7 @@ public class Player extends Mob implements Serializable {
         }
         if (getHealth() <= 0) {
             Sound.stopMusic();
-            Main.game.gameState = States.GameStates.GAME_END;
+            Main.game.gameState = States.GameStates.DEATH;
             Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
             Sound.playSFX("Game Over");
             Main.game.ui.commandNumber = -1;
@@ -208,8 +208,13 @@ public class Player extends Mob implements Serializable {
         // Inventory
         if (playInputState.get(KeyEvent.VK_E)) {
             checkCollisions();
+
+            // Toggle Inventory
             if (Main.game.ui.uiState == States.UIStates.JUST_DEFAULT) Main.game.ui.uiState = States.UIStates.CHARACTER;
             else if (Main.game.ui.uiState == States.UIStates.CHARACTER) Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
+
+            // Reset E Key
+            playInputState.put(KeyEvent.VK_E, false);
         }
 
         // Update effects
