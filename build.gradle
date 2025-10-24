@@ -1,9 +1,22 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group = 'net.dingletherat.torgrays_trials'
 version = '2.3-ALPHA'
+
+application {
+    mainClass = 'net.dingletherat.torgrays_trials.main.Main'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/src']
+        }
+    }
+}
 
 repositories {
     mavenCentral()
