@@ -1,0 +1,52 @@
+{
+  "min": 1,
+  "name": "Normal Dark Chest",
+  "loot": [
+    {
+      "chance": 0.35,
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "item": "net.dinglezz.torgrays_trials.entity.item.soup.Torgray_Soup"
+      }]
+    },
+    {
+      "chance": 0.25,
+      "loot": [
+        {
+          "amount": 1,
+          "chance": 0.4,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 2,
+          "chance": 0.3,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 3,
+          "chance": 0.2,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 4,
+          "chance": 0.07,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 5,
+          "chance": 0.03,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        }
+      ]
+    },
+    {
+      "chance": 0.1,
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "item": "net.dinglezz.torgrays_trials.entity.item.weapon.Stick"
+      }]
+    }
+  ]
+}

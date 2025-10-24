@@ -1,0 +1,42 @@
+{
+  "max": 1,
+  "name": "Dracores",
+  "loot": [
+    {
+      "chance": 0.25,
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "item": ""
+      }]
+    },
+    {
+      "chance": 0.4,
+      "loot": [
+        {
+          "amount": 1,
+          "chance": 0.55,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 2,
+          "chance": 0.35,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 3,
+          "chance": 0.1,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        }
+      ]
+    },
+    {
+      "chance": 0.35,
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "item": "net.dinglezz.torgrays_trials.entity.item.soup.Torgray_Soup"
+      }]
+    }
+  ]
+}

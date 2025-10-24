@@ -1,0 +1,66 @@
+{
+  "min": 1,
+  "max": 3,
+  "name": "Coiner's Dark Chest",
+  "loot": [
+    {
+      "chance": 0.4,
+      "loot": [
+        {
+          "amount": 2,
+          "chance": 0.36,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 3,
+          "chance": 0.3,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 4,
+          "chance": 0.16,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 5,
+          "chance": 0.1,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 6,
+          "chance": 0.04,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        },
+        {
+          "amount": 7,
+          "chance": 0.04,
+          "item": "net.dinglezz.torgrays_trials.entity.item.Coins"
+        }
+      ]
+    },
+    {
+      "chance": 0.25,
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "item": "net.dinglezz.torgrays_trials.entity.item.soup.Coiner_Soup"
+      }]
+    },
+    {
+      "chance": 0.15,
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "item": "net.dinglezz.torgrays_trials.entity.item.soup.Torgray_Soup"
+      }]
+    },
+    {
+      "chance": 0.05,
+      "loot": [{
+        "amount": 1,
+        "chance": 1,
+        "item": "net.dinglezz.torgrays_trials.entity.item.World_Map"
+      }]
+    }
+  ]
+}
