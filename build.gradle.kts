@@ -47,6 +47,6 @@ tasks.register<Jar>("buildFatJar") {
 
 
 tasks.register<JavaExec>("generateData") {
-    mainClass.set("net.dingletherat.torgrays_trials.data_generation.DataGenerator")
+    mainClass.set("net.dingletherat.torgrays_trials.datagen.DataGenerator")
     classpath = sourceSets.main.get().runtimeClasspath
 }

@@ -6,47 +6,10 @@
     "row": 12
   },
   "entities": {
-    "npcs": [{
-      "path": "net.dinglezz.torgrays_trials.entity.npc.Coiner",
-      "col": 12,
-      "row": 9
-    }],
+    "npcs": [],
     "monsters": [],
     "items": [],
-    "objects": [
-      {
-        "path": "net.dinglezz.torgrays_trials.entity.object.Table",
-        "col": 12,
-        "row": 10
-      },
-      {
-        "path": "net.dinglezz.torgrays_trials.entity.object.Gate",
-        "col": 12,
-        "row": 8
-      },
-      {
-        "path": "net.dinglezz.torgrays_trials.entity.object.Dark_Chest",
-        "col": 11,
-        "row": 6,
-        "loot table": "Coiner's Dark Chest"
-      },
-      {
-        "path": "net.dinglezz.torgrays_trials.entity.object.Dark_Chest",
-        "col": 13,
-        "row": 6,
-        "loot table": "Coiner's Dark Chest"
-      },
-      {
-        "path": "net.dinglezz.torgrays_trials.entity.object.Torch_Light",
-        "col": 10,
-        "row": 8
-      },
-      {
-        "path": "net.dinglezz.torgrays_trials.entity.object.Torch_Light",
-        "col": 14,
-        "row": 8
-      }
-    ]
+    "objects": []
   },
   "name": "Coiner's Shop",
   "light radius": 500,
@@ -156,27 +119,5 @@
       "46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46 46"
     ]
   },
-  "events": [
-    {
-      "path": "net.dinglezz.torgrays_trials.event.Teleport",
-      "col": 12,
-      "row": 13,
-      "parameters": {
-        "col": 10,
-        "row": 39,
-        "map": "Main Island",
-        "required direction": "down",
-        "direction": "down"
-      }
-    },
-    {
-      "path": "net.dinglezz.torgrays_trials.event.Speak",
-      "col": 12,
-      "row": 11,
-      "parameters": {
-        "type": "npc",
-        "index": 0
-      }
-    }
-  ]
+  "events": []
 }
