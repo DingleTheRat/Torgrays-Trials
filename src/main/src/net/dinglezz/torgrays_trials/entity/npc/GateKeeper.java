@@ -86,7 +86,7 @@ public class GateKeeper extends Mob {
 
     // Functionality
     @Override
-    public <T extends Entity>  void whileHit(T entity) {
+    public <T extends Entity> void whileHit(T entity) {
         if (Main.game.inputHandler.uiKeyStates.get(States.UIStates.INTERACT).get(KeyEvent.VK_E)) {
             speak(true);
         }

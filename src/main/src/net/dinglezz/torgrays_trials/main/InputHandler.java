@@ -46,15 +46,9 @@ public class InputHandler implements KeyListener {
         put(KeyEvent.VK_ESCAPE, false);
         put(KeyEvent.VK_F3, false);
     }};
-    public HashMap<Integer, Boolean> dialogue = new HashMap<>() {{
-        put(KeyEvent.VK_SPACE, false);
-    }};
-    public HashMap<Integer, Boolean> map = new HashMap<>() {{
-        put(KeyEvent.VK_ESCAPE, false);
-    }};
-    public HashMap<Integer, Boolean> interact = new HashMap<>() {{
-        put(KeyEvent.VK_E, false);
-    }};
+    public HashMap<Integer, Boolean> dialogue = new HashMap<>() {{put(KeyEvent.VK_SPACE, false);}};
+    public HashMap<Integer, Boolean> map = new HashMap<>() {{put(KeyEvent.VK_ESCAPE, false);}};
+    public HashMap<Integer, Boolean> interact = new HashMap<>() {{put(KeyEvent.VK_E, false);}};
 
     public HashMap<States.GameStates, HashMap<Integer, Boolean>> keyStates = new HashMap<>() {{
        put(States.GameStates.PLAY, play);

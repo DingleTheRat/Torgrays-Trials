@@ -19,7 +19,7 @@ public class Coiner extends Mob {
         speed = 1;
         spriteSpeed = 80;
 
-        resizeSolidArea(8, 21, 32, 28, 0);
+        resizeSolidArea(8, 21, 32, 28, 2);
 
         getImage();
         setDialogue();
@@ -57,13 +57,5 @@ public class Coiner extends Mob {
     @Override
     public <T extends Entity> void onLeave(T entity) {
         Main.game.ui.uiState = States.UIStates.JUST_DEFAULT;
-    }
-
-    // Functionality
-    @Override
-    public <T extends Entity> void whileHit(T entity) {
-        if (Main.game.inputHandler.uiKeyStates.get(States.UIStates.INTERACT).get(KeyEvent.VK_E)) {
-            speak(false);
-        }
     }
 }

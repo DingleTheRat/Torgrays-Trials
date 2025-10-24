@@ -135,7 +135,7 @@ public class Player extends Mob implements Serializable {
             if (playInputState.get(KeyEvent.VK_W) && playInputState.get(KeyEvent.VK_A)) direction = "up left";
             else if (playInputState.get(KeyEvent.VK_W) && playInputState.get(KeyEvent.VK_D)) direction = "up right";
             else if (playInputState.get(KeyEvent.VK_S) && playInputState.get(KeyEvent.VK_A)) direction = "down left";
-            else if (playInputState.get(KeyEvent.VK_A) && playInputState.get(KeyEvent.VK_D)) direction = "down right";
+            else if (playInputState.get(KeyEvent.VK_S) && playInputState.get(KeyEvent.VK_D)) direction = "down right";
             else if (playInputState.get(KeyEvent.VK_W)) direction = "up";
             else if (playInputState.get(KeyEvent.VK_A)) direction = "left";
             else if (playInputState.get(KeyEvent.VK_S)) direction = "down";
