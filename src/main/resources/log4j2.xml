@@ -3,7 +3,7 @@
     <Appenders>
         <Console name="SysOut" target="SYSTEM_OUT">
             <PatternLayout disableAnsi="false" noConsoleNoAnsi="false"
-                           pattern="%style{[%d{HH:mm:ss}]}{blue} %style{[%t/%level]}{green} %style{(%logger{0})}{cyan}: %msg{nolookups}%n"/>
+                           pattern="%style{[%d{HH:mm:ss}]}{blue} %style{[%t/%level]}{green} %style{(%logger{0})}{cyan} %msg{nolookups}%n"/>
         </Console>
         <Queue name="ServerGuiConsole">
             <PatternLayout disableAnsi="false" noConsoleNoAnsi="false"
