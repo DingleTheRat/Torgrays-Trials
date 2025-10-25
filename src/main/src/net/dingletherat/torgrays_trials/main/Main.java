@@ -28,7 +28,7 @@ public class Main {
         Main.LOGGER.info("Game thread started");
     }
     
-    public static void handleException(InterruptedException e) {
+    public static void handleException(Exception e) {
         e.printStackTrace();
         running = false;
         System.exit(1);
