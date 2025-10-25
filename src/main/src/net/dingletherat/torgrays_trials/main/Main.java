@@ -9,7 +9,7 @@ public class Main {
     public static JFrame window;
     public static Game game;
     public static boolean running = true;
-    public static final Logger LOGGER = LoggerFactory.getLogger("Torgray's Trials: ");
+    public static final Logger LOGGER = LoggerFactory.getLogger("Torgray's Trials");
 
     public static void main(String[] args) {
         LOGGER.info("Program started");

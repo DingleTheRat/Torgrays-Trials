@@ -29,7 +29,6 @@ public class Game extends JPanel {
 			
 			long elapsed = System.nanoTime() - start;
 			long sleepTime = OPTIMAL_TIME - elapsed;
-			System.out.println(FPS);
 			
 			if (sleepTime > 0) {
 				try {
