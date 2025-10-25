@@ -12,7 +12,7 @@ public class UI {
 	private String currentDialogue = "";
 	public int commandNumber = 0;  // Which menu option is selected?
 	
-	public ST.UIStates uiState = ST.UIStates.JUST_DEFAULT;
+	public States.UIStates uiState = States.UIStates.JUST_DEFAULT;
 	public String subUIState = "Main Title";
 	
 	public UI(Game game) {

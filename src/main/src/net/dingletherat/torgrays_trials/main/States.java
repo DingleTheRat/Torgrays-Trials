@@ -1,6 +1,6 @@
 package net.dingletherat.torgrays_trials.main;
 
-public class ST {
+public class States {
 	public enum GameStates {
 		TITLE,
 		PLAY,

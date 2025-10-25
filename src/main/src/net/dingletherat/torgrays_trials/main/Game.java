@@ -22,8 +22,9 @@ public class Game extends JPanel {
 	// Classes
 	public UI ui;
 	
-	public ST.GameStates gameState = ST.GameStates.TITLE;
-	public ST.UIStates uiState = ST.UIStates.NONE;
+	public States.GameStates gameState = States.GameStates.TITLE;
+	public States.UIStates uiState = States.UIStates.NONE;
+	public String difficulty;
 	
 	public void setup() {
         Main.LOGGER.info("Setting up game");
@@ -66,9 +67,12 @@ public class Game extends JPanel {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, screenWidth, screenHeight);
 		
-		if (gameState == ST.GameStates.TITLE) ui.draw(g);
+		if (gameState == States.GameStates.TITLE) ui.draw(g);
 	}
 	
 	private void update() {
+	}
+	
+	public void adjustDifficulty() {
 	}
 }
