@@ -12,7 +12,8 @@ public class Game extends JPanel {
 	public double FPS = 0;
 	
 	public void setup() {
-		gameThread = new Thread(this::gameLoop);
+        Main.LOGGER.info("Setting up game");
+        gameThread = new Thread(this::gameLoop);
 		setPreferredSize(new Dimension(width, height));
 	}
 	

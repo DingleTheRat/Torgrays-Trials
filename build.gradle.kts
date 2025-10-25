@@ -22,6 +22,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("org.json:json:20250107") // Json Json 2025
     implementation("com.github.UsUsStudios:Torgrays-Datagen:v1.1")
+    implementation("org.slf4j:slf4j-api:2.0.9");
+    runtimeOnly("ch.qos.logback:logback-classic:1.5.13")
 }
 
 tasks.test {
