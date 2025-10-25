@@ -2,6 +2,7 @@ package net.dingletherat.torgrays_trials.main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.time.Duration;
 
@@ -21,6 +22,7 @@ public class Game extends JPanel {
 	
 	// Classes
 	public UI ui;
+	public InputHandler inputHandler;
 	
 	public States.GameStates gameState = States.GameStates.TITLE;
 	public States.UIStates uiState = States.UIStates.NONE;
@@ -32,6 +34,10 @@ public class Game extends JPanel {
 		setPreferredSize(new Dimension(screenWidth, screenHeight));
 		
 		ui = new UI(this);
+		inputHandler = new InputHandler(this);
+		addKeyListener(inputHandler);
+		
+		Sound.playMusic("Tech Geek");
 	}
 	
 	public void gameLoop() {
@@ -70,8 +76,7 @@ public class Game extends JPanel {
 		if (gameState == States.GameStates.TITLE) ui.draw(g);
 	}
 	
-	private void update() {
-	}
+	private void update() {}
 	
 	public void adjustDifficulty() {
 	}
