@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import net.dingletherat.torgrays_trials.json.Translations;
+
 public class UI {
 	Game game;
 	Font maruMonica;
@@ -34,13 +36,14 @@ public class UI {
 		this.g = g;
 		g.setFont(maruMonica);
 		g.setColor(Color.white);
+        if (game.gameState == States.GameStates.TITLE) {drawTitleScreen();}
 	}
 	
 	private void drawTitleScreen() {
 		if (Objects.equals(subUIState, "Main Title")) {
 			// Title Text
 			g.setFont(g.getFont().deriveFont(Font.BOLD, 90f));
-			String text = "Torgray's Trials";
+			String text = Translations.translatableText(game.identifier, "title");
 			int x = getCentreX(text);
 			int y = game.tileSize * 3;
 			
@@ -62,7 +65,7 @@ public class UI {
 			g.setColor(Color.white);
 			
 			g.setFont(g.getFont().deriveFont(Font.BOLD, 48f));
-			text = "New Game";
+			text = Translations.translatableText(game.identifier, "new_game");
 			x = getCentreX(text);
 			y += (game.tileSize * 3) + (game.tileSize / 2);
 			g.drawString(text, x, y);
@@ -71,7 +74,7 @@ public class UI {
 			}
 			
 			g.setFont(g.getFont().deriveFont(Font.BOLD, 48f));
-			text = "Load Game";
+			text = Translations.translatableText(game.identifier, "load_game");
 			x = getCentreX(text);
 			y += game.tileSize;
 			g.drawString(text, x, y);
@@ -80,7 +83,7 @@ public class UI {
 			}
 			
 			g.setFont(g.getFont().deriveFont(Font.BOLD, 48f));
-			text = "Quit";
+			text = Translations.translatableText(game.identifier, "quit");
 			x = getCentreX(text);
 			y += game.tileSize;
 			g.drawString(text, x, y);

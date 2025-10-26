@@ -1,6 +1,8 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
+import net.dingletherat.torgrays_trials.json.Translations;
+
 import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
@@ -27,7 +29,11 @@ public class Game extends JPanel {
 
 	public States.GameStates gameState = States.GameStates.TITLE;
 	public States.UIStates uiState = States.UIStates.NONE;
+
+	// Game settings
 	public String difficulty;
+	public String language = "french"; // English is the default
+	public String identifier = "vanilla";
 	
 	public void setup() {
         Main.LOGGER.info("Setting up game");
@@ -41,6 +47,9 @@ public class Game extends JPanel {
 		ui = new UI(this);
 		addKeyListener(keyboardInputHandler = new InputHandler.Keyboard());
 		addMouseListener(mouseInputHandler = new InputHandler.Mouse());
+
+        // Load translation files
+        Translations.loadFiles();
 
         // Load sound library and play music
         Sound.loadLibrary();
