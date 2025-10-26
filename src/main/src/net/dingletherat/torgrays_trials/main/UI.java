@@ -1,3 +1,4 @@
+// Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
 import java.awt.*;
@@ -33,26 +34,6 @@ public class UI {
 		this.g = g;
 		g.setFont(maruMonica);
 		g.setColor(Color.white);
-		
-		if (uiState.defaultUI) {
-			switch (game.gameState) {
-				case TITLE -> drawTitleScreen();
-				// case PLAY, PAUSE -> drawBasics();
-				// case GAME_END -> drawGameOverScreen();
-				// case EXCEPTION -> drawExceptionScreen();
-			}
-		}
-		
-		switch (uiState) {
-			// case DIALOGUE -> drawDialogueScreen();
-			// case INTERACT -> drawInteractScreen();
-			// case PAUSE -> drawPauseScreen();
-			// case TRADE -> drawTradeScreen();
-			// case CHARACTER -> drawCharacterScreen();
-			// case MAP -> drawMapScreen();
-			// case SAVE -> drawSaveScreen();
-		}
-		
 	}
 	
 	private void drawTitleScreen() {

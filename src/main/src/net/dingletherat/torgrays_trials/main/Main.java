@@ -24,14 +24,16 @@ public class Main {
         game.setup();
         window.add(game);
         window.pack();
-        window.setVisible(true);
 
         game.gameThread.start();
         Main.LOGGER.info("Game thread started");
+
+        window.setVisible(true);
+        Main.LOGGER.info("Window enabled");
     }
     
-    public static void handleException(Exception e) {
-        e.printStackTrace();
+    public static void handleException(Exception exception) {
+        exception.printStackTrace();
         running = false;
         System.exit(1);
     }

@@ -1,3 +1,4 @@
+// Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
 import java.awt.event.KeyEvent;
@@ -5,7 +6,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class InputHandler {
     // Keyboard
