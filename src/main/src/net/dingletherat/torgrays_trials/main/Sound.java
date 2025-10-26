@@ -7,40 +7,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Sound {
+    public static final HashMap<String, URL> SOUND_LIBRARY = new HashMap<>();
+    
 	ArrayList<Clip> clips = new ArrayList<>();
-	public HashMap<String, URL> soundLibrary = new HashMap<>();
 	FloatControl floatControl;
 	int volumeScale = 3;
 	float volume;
-	
-	public Sound() {
-		// Music
-		soundLibrary.put("Tech Geek", getClass().getResource("/sound/music/tech_geek.wav"));
-		soundLibrary.put("Umbral Force", getClass().getResource("/sound/music/umbral_force.wav"));
-		soundLibrary.put("Coin Toss", getClass().getResource("/sound/music/coin_toss.wav"));
-		soundLibrary.put("Gloom Over Torgray", getClass().getResource("/sound/music/gloom_over_torgray.wav"));
-		// Unused
-		soundLibrary.put("Journey", getClass().getResource("/sound/music/unused/journey.wav")); // By AWESOME_DRAGON
-		soundLibrary.put("Dark Mystery", getClass().getResource("/sound/music/unused/dark_mystery.wav")); // By LHTD
-		
-		// SFX
-		soundLibrary.put("Coin", getClass().getResource("/sound/sfx/coin.wav"));
-		soundLibrary.put("Power Up", getClass().getResource("/sound/sfx/power_up.wav"));
-		soundLibrary.put("Unlock", getClass().getResource("/sound/sfx/unlock.wav"));
-		soundLibrary.put("Hit Monster", getClass().getResource("/sound/sfx/hit_monster.wav"));
-		soundLibrary.put("Receive Damage", getClass().getResource("/sound/sfx/receive_damage.wav"));
-		soundLibrary.put("Cursor", getClass().getResource("/sound/sfx/cursor.wav"));
-		soundLibrary.put("Game Over", getClass().getResource("/sound/sfx/game_over.wav"));
-		soundLibrary.put("Teleport", getClass().getResource("/sound/sfx/teleport.wav"));
-		soundLibrary.put("Swing", getClass().getResource("/sound/sfx/swing.wav"));
-		// Unused
-		soundLibrary.put("Way", getClass().getResource("/sound/sfx/unused/way.wav"));
-	}
-	
+
+    public static void loadLibrary() {
+        // Music
+        SOUND_LIBRARY.put("Tech Geek", Sound.class.getResource("/sound/music/tech_geek.wav"));
+        SOUND_LIBRARY.put("Umbral Force", Sound.class.getResource("/sound/music/umbral_force.wav"));
+        SOUND_LIBRARY.put("Coin Toss", Sound.class.getResource("/sound/music/coin_toss.wav"));
+        SOUND_LIBRARY.put("Gloom Over Torgray", Sound.class.getResource("/sound/music/gloom_over_torgray.wav"));
+        Main.LOGGER.info("Loaded all music files");
+
+        // SFX
+        SOUND_LIBRARY.put("Coin", Sound.class.getResource("/sound/sfx/coin.wav"));
+        SOUND_LIBRARY.put("Power Up", Sound.class.getResource("/sound/sfx/power_up.wav"));
+        SOUND_LIBRARY.put("Unlock", Sound.class.getResource("/sound/sfx/unlock.wav"));
+        SOUND_LIBRARY.put("Hit Monster", Sound.class.getResource("/sound/sfx/hit_monster.wav"));
+        SOUND_LIBRARY.put("Receive Damage", Sound.class.getResource("/sound/sfx/receive_damage.wav"));
+        SOUND_LIBRARY.put("Cursor", Sound.class.getResource("/sound/sfx/cursor.wav"));
+        SOUND_LIBRARY.put("Game Over", Sound.class.getResource("/sound/sfx/game_over.wav"));
+        SOUND_LIBRARY.put("Teleport", Sound.class.getResource("/sound/sfx/teleport.wav"));
+        SOUND_LIBRARY.put("Swing", Sound.class.getResource("/sound/sfx/swing.wav"));
+        Main.LOGGER.info("Loaded all sound files");
+    }
+
 	public int getFile(String soundName) {
 		try {
-			if (soundLibrary.get(soundName) != null) {
-				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundLibrary.get(soundName));
+			if (SOUND_LIBRARY.get(soundName) != null) {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(SOUND_LIBRARY.get(soundName));
 				Clip clip = AudioSystem.getClip();
 				clip.open(audioInputStream);
 				floatControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -143,5 +141,4 @@ public class Sound {
 	public static void playSFX(String sfxName) {
 		sfx.play(sfx.getFile(sfxName));
 	}
-	
 }

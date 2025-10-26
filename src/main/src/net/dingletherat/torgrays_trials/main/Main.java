@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
     public static JFrame window;
@@ -17,7 +18,8 @@ public class Main {
         window = new JFrame();
         window.setTitle("Torgray's Trials");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
+        window.getContentPane().setBackground(Color.BLACK);
+
         game = new Game();
         game.setup();
         window.add(game);

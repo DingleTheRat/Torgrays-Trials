@@ -2,7 +2,6 @@ package net.dingletherat.torgrays_trials.main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.time.Duration;
 
@@ -22,8 +21,9 @@ public class Game extends JPanel {
 	
 	// Classes
 	public UI ui;
-	public InputHandler inputHandler;
-	
+	public InputHandler.Keyboard keyboardInputHandler;
+	public InputHandler.Mouse mouseInputHandler;
+
 	public States.GameStates gameState = States.GameStates.TITLE;
 	public States.UIStates uiState = States.UIStates.NONE;
 	public String difficulty;
@@ -31,13 +31,22 @@ public class Game extends JPanel {
 	public void setup() {
         Main.LOGGER.info("Setting up game");
         gameThread = new Thread(this::gameLoop);
+
+        // Extra window settings
 		setPreferredSize(new Dimension(screenWidth, screenHeight));
-		
+        setBackground(Color.BLACK);
+
+        // Load UI and mouse and keyboard input handler
 		ui = new UI(this);
-		inputHandler = new InputHandler(this);
-		addKeyListener(inputHandler);
-		
-		Sound.playMusic("Tech Geek");
+		addKeyListener(keyboardInputHandler = new InputHandler.Keyboard());
+		addMouseListener(mouseInputHandler = new InputHandler.Mouse());
+
+        // Load sound library and play music
+        Sound.loadLibrary();
+        Sound.playMusic("Tech Geek");
+
+
+        Main.LOGGER.info("Completed setup for game");
 	}
 	
 	public void gameLoop() {
@@ -69,9 +78,6 @@ public class Game extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, screenWidth, screenHeight);
 		
 		if (gameState == States.GameStates.TITLE) ui.draw(g);
 	}
