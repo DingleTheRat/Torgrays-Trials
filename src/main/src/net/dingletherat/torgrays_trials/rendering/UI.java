@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.util.Objects;
 import net.dingletherat.torgrays_trials.json.Translations;
 import net.dingletherat.torgrays_trials.main.Game;
-import net.dingletherat.torgrays_trials.main.Images;
 import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.main.States;
 

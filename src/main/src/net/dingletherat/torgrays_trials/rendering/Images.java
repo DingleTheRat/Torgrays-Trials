@@ -1,5 +1,5 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.main;
+package net.dingletherat.torgrays_trials.rendering;
 
 import java.awt.*;
 import java.util.HashMap;

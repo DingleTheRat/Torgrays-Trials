@@ -2,6 +2,7 @@
 package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.json.Translations;
+import net.dingletherat.torgrays_trials.rendering.TileManager;
 import net.dingletherat.torgrays_trials.rendering.UI;
 
 import javax.swing.*;
@@ -17,6 +18,8 @@ public class Game extends JPanel {
 	public final int tileSize = originalTileSize * scale; // 48x48 tile
 	public final int maxScreenCol = 20;
 	public final int maxScreenRow = 12;
+	public final int maxWorldCol = 50;
+	public final int maxWorldRow = 50;
 	public int screenWidth = tileSize * maxScreenCol; // 960 pixels
 	public int screenHeight = tileSize * maxScreenRow; // 576 pixels
 	
@@ -28,13 +31,15 @@ public class Game extends JPanel {
 	public InputHandler.Keyboard keyboardInputHandler;
 	public InputHandler.Mouse mouseInputHandler;
 
-	public States.GameStates gameState = States.GameStates.TITLE;
+	public States.GameStates gameState = States.GameStates.PLAY;
 	public States.UIStates uiState = States.UIStates.NONE;
 
 	// Game settings
 	public String difficulty;
 	public String language = "english"; // English is the default
 	public String identifier = "vanilla";
+	
+	public String currentMap = "Main Island";
 	
 	public void setup() {
         Main.LOGGER.info("Setting up game");
@@ -51,11 +56,11 @@ public class Game extends JPanel {
 
         // Load translation files
         Translations.loadFiles();
+		TileManager.setup();
 
         // Load sound library and play music
         Sound.loadLibrary();
         Sound.playMusic("Tech Geek");
-
 
         Main.LOGGER.info("Completed setup for game");
 	}
@@ -91,6 +96,7 @@ public class Game extends JPanel {
 		super.paintComponent(g);
 		
 		if (gameState == States.GameStates.TITLE) ui.draw(g);
+		else if (gameState == States.GameStates.PLAY) TileManager.draw(g); // TEMPORARY! will relace this with better code later
 	}
 	
 	private void update() {}
