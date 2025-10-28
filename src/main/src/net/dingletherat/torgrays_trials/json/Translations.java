@@ -29,7 +29,7 @@ public class Translations {
 
         // If a language files does not contain a translation for that key: warn, and return the translationKey
         if (languageFile.getString(translationKey) == null) {
-            Main.LOGGER.warn("Couldn't find translation for " + translationKey + " in " + languageFile);
+	        Main.LOGGER.warn("Couldn't find translation for {} in {}", translationKey, languageFile);
             return translationKey;
         }
 
@@ -48,7 +48,7 @@ public class Translations {
         // Get the names of all the files in "/values/translations"
         String[] translationFiles = UtilityTool.getFileNames("/values/translations");
 
-        // Error, and return if something whent wrong while getting the file names
+        // Error, and return if something when wrong while getting the file names
         if (translationFiles == null) {
             Main.LOGGER.error("Cannot load translation files because \"translationFiles\" is null");
             return;
@@ -62,6 +62,6 @@ public class Translations {
             JSONObject jsonObject = UtilityTool.getJsonObject(filePath);
             if (jsonObject != null) TRANSLATION_FILES.put(file.replace(".json", ""), jsonObject);
         }
-        Main.LOGGER.info("Loaded " + TRANSLATION_FILES.size() + " translation files");
+	    Main.LOGGER.info("Loaded {} translation files", TRANSLATION_FILES.size());
     }
 }

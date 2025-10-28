@@ -2,6 +2,7 @@
 package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.json.Translations;
+import net.dingletherat.torgrays_trials.rendering.UI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +33,7 @@ public class Game extends JPanel {
 
 	// Game settings
 	public String difficulty;
-	public String language = "french"; // English is the default
+	public String language = "english"; // English is the default
 	public String identifier = "vanilla";
 	
 	public void setup() {

@@ -1,12 +1,15 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.main;
+package net.dingletherat.torgrays_trials.rendering;
 
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
-
 import net.dingletherat.torgrays_trials.json.Translations;
+import net.dingletherat.torgrays_trials.main.Game;
+import net.dingletherat.torgrays_trials.main.Images;
+import net.dingletherat.torgrays_trials.main.Main;
+import net.dingletherat.torgrays_trials.main.States;
 
 public class UI {
 	Game game;
