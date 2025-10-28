@@ -101,10 +101,11 @@ public class TileManager {
 	}
 	
 	public static void draw(Graphics g) {
-		float playerWorldX = 10;  // Main.game.player.worldX;
-		float playerWorldY = 10;  // Main.game.player.worldY;
-		int playerScreenX = 10;  // Main.game.player.screenX;
-		int playerScreenY = 10;  // Main.game.player.screenY;
+		// TODO: go back to getting the position from the player
+		float playerWorldX = 1000;  // Main.game.player.worldX;
+		float playerWorldY = 1000;  // Main.game.player.worldY;
+		int playerScreenX = 1000;   // Main.game.player.screenX;
+		int playerScreenY = 1000;   // Main.game.player.screenY;
 		int tileSize = Main.game.tileSize;
 		if (!maps.containsKey(Main.game.currentMap)) {
 			Main.LOGGER.error("Map '{}' not found", Main.game.currentMap);
@@ -112,8 +113,9 @@ public class TileManager {
 		}
 		Map map = maps.get(Main.game.currentMap);
 		
-		IntStream.range(0, Main.game.maxWorldRow).parallel().forEach(worldRow ->
-			IntStream.range(0, Main.game.maxWorldCol).parallel().forEach(worldCol -> {
+		// Draw the ground
+		IntStream.range(0, map.x()).parallel().forEach(worldRow ->
+			IntStream.range(0, map.y()).parallel().forEach(worldCol -> {
 				int tileNumber = map.ground().get(new Pair(worldCol, worldRow));
 				int worldX = worldCol * tileSize;
 				int worldY = worldRow * tileSize;
@@ -128,9 +130,34 @@ public class TileManager {
 					Tile currentTile = tileTypes.get(tileNumber);
 					g.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
 				}
-			}
-		));
+			})
+		);
+		
+		// Draw the foreground
+		IntStream.range(0, map.x()).parallel().forEach(worldRow ->
+			IntStream.range(0, map.y()).parallel().forEach(worldCol -> {
+				int tileNumber = map.foreground().get(new Pair(worldCol, worldRow));
+				int worldX = worldCol * tileSize;
+				int worldY = worldRow * tileSize;
+				float screenX = worldX - playerWorldX + playerScreenX;
+				float screenY = worldY - playerWorldY + playerScreenY;
+				
+				// Check if the tile is within the visible screen
+				if (worldX + tileSize > playerWorldX - playerScreenX &&
+						worldX - tileSize < playerWorldX + playerScreenX &&
+						worldY + tileSize > playerWorldY - playerScreenY &&
+						worldY - tileSize < playerWorldY + playerScreenY) {
+					Tile currentTile = tileTypes.get(tileNumber);
+					g.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
+				}
+			})
+		);
 	}
 	
-	record Pair(int x, int y) {}
+	record Pair(int x, int y) {
+		@Override
+		public String toString() {
+			return "(" + x + ", " + y + ")";
+		}
+	}
 }

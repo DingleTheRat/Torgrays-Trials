@@ -2,6 +2,7 @@
 package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.json.Translations;
+import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 import net.dingletherat.torgrays_trials.rendering.UI;
 
@@ -18,8 +19,6 @@ public class Game extends JPanel {
 	public final int tileSize = originalTileSize * scale; // 48x48 tile
 	public final int maxScreenCol = 20;
 	public final int maxScreenRow = 12;
-	public final int maxWorldCol = 50;
-	public final int maxWorldRow = 50;
 	public int screenWidth = tileSize * maxScreenCol; // 960 pixels
 	public int screenHeight = tileSize * maxScreenRow; // 576 pixels
 	
@@ -57,6 +56,7 @@ public class Game extends JPanel {
         // Load translation files
         Translations.loadFiles();
 		TileManager.setup();
+		MapHandler.loadMaps();
 
         // Load sound library and play music
         Sound.loadLibrary();
