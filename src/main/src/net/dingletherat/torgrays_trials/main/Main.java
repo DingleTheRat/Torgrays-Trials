@@ -24,7 +24,7 @@ public class Main {
         game.setup();
         window.add(game);
         window.pack();
-
+        
         game.gameThread.start();
         game.gameThread.setUncaughtExceptionHandler((thread, throwable) -> handleException((Exception) throwable));
         Main.LOGGER.info("Game thread started");

@@ -30,7 +30,7 @@ public class Game extends JPanel {
 	public InputHandler.Keyboard keyboardInputHandler;
 	public InputHandler.Mouse mouseInputHandler;
 
-	public States.GameStates gameState = States.GameStates.PLAY;
+	public States.GameStates gameState = States.GameStates.TITLE;
 	public States.UIStates uiState = States.UIStates.NONE;
 
 	// Game settings
@@ -55,7 +55,7 @@ public class Game extends JPanel {
 
         // Load translation files
         Translations.loadFiles();
-		TileManager.setup();
+		TileManager.loadTiles();
 		MapHandler.loadMaps();
 
         // Load sound library and play music
