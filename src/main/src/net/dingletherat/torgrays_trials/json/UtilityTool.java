@@ -16,23 +16,23 @@ import net.dingletherat.torgrays_trials.main.Main;
  **/
 public class UtilityTool {
     /**
-     * Converts a given JSON file into a JSONObject.
+     * Converts a given JSON file into a {@code JSONObject}.
      *
-     * @param filePath The file path for the file, which has to be a JSON, that is going to be converted to a JSONObject. EX: "values/translations/english.json"
-     * @return Returns a JSONObject that was made from the file
+     * @param filePath The file path for the file, which has to be a JSON, that is going to be converted to a {@code JSONObject}. {@code EX: "values/translations/english.json"}
+     * @return Returns a {@code JSONObject} that was made from the file
      **/
     public static JSONObject getJsonObject(String filePath) {
         // Firstly, get the inputStream from the filePath given
         try (InputStream inputStream = UtilityTool.class.getResourceAsStream(filePath)) {
             // Warn if the inputStream is null, meaning it couldn't find the path
             if (inputStream == null) {
-                Main.LOGGER.warn("From: getJsonObject(), \"" + filePath + "\" is not a valid path");
+                Main.LOGGER.warn("From: getJsonObject(), \"{}\" is not a valid path", filePath);
                 return null;
             }
 
             // Warn if the filePath does not contain ".json", meaning it's not a JSON file
             if (!filePath.endsWith(".json")) {
-                Main.LOGGER.warn("From: getJsonObject(): \"" + filePath + "\" does not lead to a json file");
+                Main.LOGGER.warn("From: getJsonObject(): \"{}\" does not lead to a json file", filePath);
                 return null;
             }
 
@@ -55,7 +55,7 @@ public class UtilityTool {
 
     /**
      * Gets all the names of the contents of a given directory.
-     * @param directoryPath The path to the directory you want the method to get the names of the contents of. EX: "values/translations"
+     * @param directoryPath The path to the directory you want the method to get the names of the contents of. {@code EX: "values/translations"}
      * @return A String array of all the names of the files contained in the directory
      **/
     public static String[] getFileNames(String directoryPath) {
@@ -63,7 +63,7 @@ public class UtilityTool {
         try (InputStream inputStream = UtilityTool.class.getResourceAsStream(directoryPath)) {
             // If the inputStream is null, meaning something is wrong with the directoryPath, then return and warn
             if (inputStream == null) {
-                Main.LOGGER.warn("From: getFileNames(): \"" + directoryPath + "\" is not a valid path.");
+                Main.LOGGER.warn("From: getFileNames(): \"{}\" is not a valid path.", directoryPath);
                 return null;
             }
 

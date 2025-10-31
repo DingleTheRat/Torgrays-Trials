@@ -73,9 +73,22 @@ public class TileManager {
         registerTile(48, "tunnel_door", false);
     }
 
+    /**
+     * Registers a new tile instance into the {@code tileTypes} HashMap with its own index and image.
+     * 
+     * @param i The index of the tile. Used mainly for two things: getting the specific tile from the {@code tileTypes} HashMap,
+     * or is used in a map file to load in the tile of the specified index.
+     * <p>
+     * @param imageName The name of the image that will be used for the tile.
+     * The image is obtained from {@code /drawable/tiles} and must end with {@code .png}.
+     * In the case that something goes wrong, the {@code disabled.png} image will be used for the tile.
+     * <p>
+     * @param collision Determines if you can go through the tile, or not.
+     */
     public static void registerTile(int i, String imageName, boolean collision) {
-        // Create a new tile and add it to the tileTypes HashMap, as well as store it in a field for later use
+        // Create a new tile and add it to the tileTypes HashMap, as well as store it in a field for later use.
         Tile tile = new Tile();
+        tile.collision = collision;
         tileTypes.put(i, tile);
 
         /* Entering try and catch zone because this part involves ImageIO.
