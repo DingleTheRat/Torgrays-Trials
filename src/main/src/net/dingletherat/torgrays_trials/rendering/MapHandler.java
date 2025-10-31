@@ -90,13 +90,13 @@ public class MapHandler {
 				
 				// If the tile number is not registered, register it as a disabled tile
 				if (TileManager.tileTypes.get(number) == null) {
-					Main.LOGGER.error("Index {} is not a valid tile in {} map ground.", number, name);
+					Main.LOGGER.warn("Index {} is not a valid tile in {} map ground.", number, name);
 					TileManager.registerTile(number, "", false);
 				}
 				
 				// Warn if a collision tile is not on the foreground layer
 				if (TileManager.tileTypes.get(number).collision) {
-					Main.LOGGER.error("Collision tile {} is not on the foreground layer in {} map.\n" +
+					Main.LOGGER.warn("Collision tile {} is not on the foreground layer in {} map.\n" +
 							"Collisions are only checked on the foreground layer.", number, name);
 				}
 				col++;
