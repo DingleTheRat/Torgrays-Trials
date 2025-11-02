@@ -27,8 +27,7 @@ public class Game extends JPanel {
 
     // Classes
     public UI ui;
-    public InputHandler.Keyboard keyboardInputHandler;
-    public InputHandler.Mouse mouseInputHandler;
+    public InputHandler inputHandler;
 
     public States.GameStates gameState = States.GameStates.TITLE;
     public States.UIStates uiState = States.UIStates.NONE;
@@ -48,14 +47,16 @@ public class Game extends JPanel {
         setPreferredSize(new Dimension(screenWidth, screenHeight));
         setBackground(Color.BLACK);
 
-        // Load UI and mouse and keyboard input handler
+        // Change the layout to Box, then load in UI
+        setLayout(new BoxLayout(Main.game, BoxLayout.Y_AXIS));
         ui = new UI(this);
-        addKeyListener(keyboardInputHandler = new InputHandler.Keyboard());
-        addMouseListener(mouseInputHandler = new InputHandler.Mouse());
 
-        // Load translation files
-        Translations.loadFiles();
+        // Add a keyboard listener and load all tiles
+        addKeyListener(inputHandler = new InputHandler());
         TileManager.loadTiles();
+
+        // Load JSON files
+        Translations.loadFiles();
         MapHandler.loadMaps();
 
         // Load sound library and play music
