@@ -11,9 +11,13 @@ public class Player extends Mob {
         // Load Sprites
         loadSprites();
 
-        // Set positon
-        x = 1000f;
-        y = 1000f;
+        // Set position to colum 23 and row 21
+        x = Main.game.tileSize * 21;
+        y = Main.game.tileSize * 23;
+
+        /* Set onScreen to true, so the player can be drawn
+        Since the super class's update method isn't called, and the player is always on Screen, it doesn't update to false*/
+        onScreen = true;
 
         Main.LOGGER.info("Loaded Torgray :D");
     }
@@ -24,6 +28,7 @@ public class Player extends Mob {
         down = Images.loadImage("entity/player/walking/torgray_down_1");
         left = Images.loadImage("entity/player/walking/torgray_left_1");
         right = Images.loadImage("entity/player/walking/torgray_right_1");
+        currentImage = down;
     }
 
     @Override

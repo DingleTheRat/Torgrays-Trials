@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
 
+import net.dingletherat.torgrays_trials.json.Translations;
 import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.main.States;
@@ -33,7 +34,7 @@ public class UI {
 
     public void titleScreen() {
         JLabel frame = makeFrame(Component.LEFT_ALIGNMENT, Component.CENTER_ALIGNMENT, 0, 0);
-        frame.setText("New Game");
+        frame.setText(Translations.translatableText(Main.game.identifier, "new_game"));
         frame.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent event) {
@@ -46,7 +47,7 @@ public class UI {
         Main.game.add(Box.createRigidArea(new Dimension(0, 20)));
 
         JLabel frame2 = makeFrame(Component.LEFT_ALIGNMENT, Component.CENTER_ALIGNMENT, 0, 0);
-        frame2.setText("Load Game");
+        frame2.setText(Translations.translatableText(Main.game.identifier, "load_game"));
         Main.game.add(frame2);
     }
 

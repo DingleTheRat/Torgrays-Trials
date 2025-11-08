@@ -50,16 +50,12 @@ public class Game extends JPanel {
     public String currentMap = "Main Island";
 
     public void setup() {
-        Main.LOGGER.info("Setting up game");
+        Main.LOGGER.info("--Setting up game--");
         gameThread = new Thread(this::gameLoop);
 
         // Extra window settings
         setPreferredSize(new Dimension(screenWidth, screenHeight));
         setBackground(Color.BLACK);
-
-        // Change the layout to Box, then load in UI
-        setLayout(new BoxLayout(Main.game, BoxLayout.Y_AXIS));
-        ui = new UI(this);
 
         // Add a keyboard listener and load all tiles
         addKeyListener(inputHandler = new InputHandler());
@@ -69,6 +65,10 @@ public class Game extends JPanel {
         Translations.loadFiles();
         MapHandler.loadMaps();
 
+        // Change the layout to Box, then load in UI
+        setLayout(new BoxLayout(Main.game, BoxLayout.Y_AXIS));
+        //ui = new UI(this);
+
         // Load in Torgray :D
         player = new Player();
         entities.add(player);
@@ -77,7 +77,7 @@ public class Game extends JPanel {
         Sound.loadLibrary();
         Sound.playMusic("Tech Geek");
 
-        Main.LOGGER.info("Completed setup for game");
+        Main.LOGGER.info("--Completed setup for game--");
     }
 
     public void gameLoop() {
@@ -110,13 +110,14 @@ public class Game extends JPanel {
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        if (gameState == States.GameStates.TITLE) ui.draw(graphics);
-
-        // Draw every entity inside the entities hashmap
-        entities.forEach(entity -> entity.draw(graphics));
-
-        if (gameState == States.GameStates.PLAY)
+        if (gameState == States.GameStates.PLAY) {
             TileManager.draw(graphics); // TEMPORARY! will relace this with better code later
+
+            // Draw every entity inside the entities hashmap
+            entities.forEach(entity -> entity.draw(graphics));
+        }
+
+        if (gameState == States.GameStates.TITLE) ui.draw(graphics);
     }
 
     private void update() {
