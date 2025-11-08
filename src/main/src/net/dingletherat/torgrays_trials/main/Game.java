@@ -1,6 +1,7 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
+import net.dingletherat.torgrays_trials.entity.Player;
 import net.dingletherat.torgrays_trials.json.Translations;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
@@ -29,7 +30,11 @@ public class Game extends JPanel {
     public UI ui;
     public InputHandler inputHandler;
 
-    public States.GameStates gameState = States.GameStates.TITLE;
+    // Entities
+    public Player player;
+
+    // States
+    public States.GameStates gameState = States.GameStates.PLAY;
     public States.UIStates uiState = States.UIStates.NONE;
 
     // Game settings
@@ -58,6 +63,9 @@ public class Game extends JPanel {
         // Load JSON files
         Translations.loadFiles();
         MapHandler.loadMaps();
+
+        // Load in Torgray :D
+        player = new Player();
 
         // Load sound library and play music
         Sound.loadLibrary();
@@ -93,12 +101,12 @@ public class Game extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
 
-        if (gameState == States.GameStates.TITLE) ui.draw(g);
+        if (gameState == States.GameStates.TITLE) ui.draw(graphics);
         else if (gameState == States.GameStates.PLAY)
-            TileManager.draw(g); // TEMPORARY! will relace this with better code later
+            TileManager.draw(graphics); // TEMPORARY! will relace this with better code later
     }
 
     private void update() {

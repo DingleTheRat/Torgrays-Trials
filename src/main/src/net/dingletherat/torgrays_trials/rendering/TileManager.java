@@ -1,10 +1,10 @@
+// Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.rendering;
 
 import net.dingletherat.torgrays_trials.main.Main;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -113,28 +113,19 @@ public class TileManager {
             }
 
             // If all checks have passed, then set the tile's image to a scaled version of the imageStream
-            tile.image = scaleImage(ImageIO.read(imageStream), Main.game.tileSize, Main.game.tileSize);
+            tile.image = Images.scaleImage(ImageIO.read(imageStream), Main.game.tileSize, Main.game.tileSize);
         } catch (IOException | NullPointerException exception) {
             Main.handleException(exception);
         }
     }
 
-    public static BufferedImage scaleImage(BufferedImage original, int width, int height) {
-        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D graphics2D = scaledImage.createGraphics();
-        graphics2D.drawImage(original, 0, 0, width, height, null);
-        graphics2D.dispose();
-
-        return scaledImage;
-    }
-
     public static void draw(Graphics graphics) {
-        // TODO: go back to getting the position from the player
-        float playerWorldX = 1000;  // Main.game.player.worldX;
-        float playerWorldY = 1000;  // Main.game.player.worldY;
-        int playerScreenX = 1000;   // Main.game.player.screenX;
-        int playerScreenY = 1000;   // Main.game.player.screenY;
+        float playerX = Main.game.player.x;
+        float playerY = Main.game.player.y;
+        float playerScreenX = Main.game.player.screenX;
+        float playerScreenY = Main.game.player.screenY;
         int tileSize = Main.game.tileSize;
+
         if (!maps.containsKey(Main.game.currentMap)) {
             Main.LOGGER.error("Map '{}' not found", Main.game.currentMap);
             return;
@@ -147,14 +138,14 @@ public class TileManager {
                     int tileNumber = map.ground().get(new Pair(worldCol, worldRow));
                     int worldX = worldCol * tileSize;
                     int worldY = worldRow * tileSize;
-                    float screenX = worldX - playerWorldX + playerScreenX;
-                    float screenY = worldY - playerWorldY + playerScreenY;
+                    float screenX = worldX - playerX + playerScreenX;
+                    float screenY = worldY - playerY + playerScreenY;
 
                     // Check if the tile is within the visible screen
-                    if (worldX + tileSize > playerWorldX - playerScreenX &&
-                            worldX - tileSize < playerWorldX + playerScreenX &&
-                            worldY + tileSize > playerWorldY - playerScreenY &&
-                            worldY - tileSize < playerWorldY + playerScreenY) {
+                    if (worldX + tileSize > playerX - playerScreenX &&
+                            worldX - tileSize < playerX + playerScreenX &&
+                            worldY + tileSize > playerY - playerScreenY &&
+                            worldY - tileSize < playerY + playerScreenY) {
                         Tile currentTile = tileTypes.get(tileNumber);
                         graphics.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
                     }
@@ -167,14 +158,14 @@ public class TileManager {
                     int tileNumber = map.foreground().get(new Pair(worldCol, worldRow));
                     int worldX = worldCol * tileSize;
                     int worldY = worldRow * tileSize;
-                    float screenX = worldX - playerWorldX + playerScreenX;
-                    float screenY = worldY - playerWorldY + playerScreenY;
+                    float screenX = worldX - playerX + playerScreenX;
+                    float screenY = worldY - playerY + playerScreenY;
 
                     // Check if the tile is within the visible screen
-                    if (worldX + tileSize > playerWorldX - playerScreenX &&
-                            worldX - tileSize < playerWorldX + playerScreenX &&
-                            worldY + tileSize > playerWorldY - playerScreenY &&
-                            worldY - tileSize < playerWorldY + playerScreenY) {
+                    if (worldX + tileSize > playerX - playerScreenX &&
+                            worldX - tileSize < playerX + playerScreenX &&
+                            worldY + tileSize > playerY - playerScreenY &&
+                            worldY - tileSize < playerY + playerScreenY) {
                         Tile currentTile = tileTypes.get(tileNumber);
                         graphics.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
                     }
