@@ -11,6 +11,10 @@ public class Player extends Mob {
         // Load Sprites
         loadSprites();
 
+        // Set positon
+        x = 1000f;
+        y = 1000f;
+
         Main.LOGGER.info("Loaded Torgray :D");
     }
 

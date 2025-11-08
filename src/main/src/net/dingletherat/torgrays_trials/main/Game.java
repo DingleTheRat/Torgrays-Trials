@@ -1,6 +1,7 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
+import net.dingletherat.torgrays_trials.entity.Entity;
 import net.dingletherat.torgrays_trials.entity.Player;
 import net.dingletherat.torgrays_trials.json.Translations;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
@@ -8,9 +9,12 @@ import net.dingletherat.torgrays_trials.rendering.TileManager;
 import net.dingletherat.torgrays_trials.rendering.UI;
 
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.time.Duration;
+import java.util.ArrayList;
 
 public class Game extends JPanel {
     // Screen settings
@@ -32,6 +36,7 @@ public class Game extends JPanel {
 
     // Entities
     public Player player;
+    public ArrayList<Entity> entities = new ArrayList<>();
 
     // States
     public States.GameStates gameState = States.GameStates.PLAY;
@@ -66,6 +71,7 @@ public class Game extends JPanel {
 
         // Load in Torgray :D
         player = new Player();
+        entities.add(player);
 
         // Load sound library and play music
         Sound.loadLibrary();
@@ -105,11 +111,17 @@ public class Game extends JPanel {
         super.paintComponent(graphics);
 
         if (gameState == States.GameStates.TITLE) ui.draw(graphics);
-        else if (gameState == States.GameStates.PLAY)
+
+        // Draw every entity inside the entities hashmap
+        entities.forEach(entity -> entity.draw(graphics));
+
+        if (gameState == States.GameStates.PLAY)
             TileManager.draw(graphics); // TEMPORARY! will relace this with better code later
     }
 
     private void update() {
+        // Update every entity inside the entities hashmap
+        entities.forEach(Entity::update);
     }
 
     public void adjustDifficulty() {
