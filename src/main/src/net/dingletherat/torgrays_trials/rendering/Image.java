@@ -13,33 +13,33 @@ import javax.imageio.ImageIO;
 import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.main.UtilityTool;
 
-/** A class that holds data of BuffuredImages, and a BuffuredImage
- * BuffuredImages are not serializable, meaning if we want to save the game, we can't, it will throw an exception.
- * This class aims to solve that. Every instance of this class stores the image, and also a BufferedImage that can't be saved.
- * You can obtain the BufferedImage using the {@code getImage} method.
+/** A class that holds data of BufferedImages, and a BufferedImage
+ * BufferedImages are not serializable, meaning if we want to save the game, we can't, it will throw an exception.
+ * This class aims to solve that. Every instance of this class stores the image and also a BufferedImage that can't be saved.
+ * You can get the BufferedImage using the {@code getImage} method.
  * An instance of this class is created using the {@code} loadImage} method in the static version of this class, because the constructor is private.
- * It's private because this method uses a cache system which is more efficent than crating a bunch of new instances of this class **/
+ * It's private because this method uses a cache system which is more efficient than crating a bunch of new instances of this class **/
 public class Image implements Serializable {
     private static final HashMap<String, Image> imageCache = new HashMap<>();
 
     private byte[] data;
     private transient BufferedImage image;
 
-    /** Loads an image, from either a cache, or creates an entirely new one.
+    /** Loads an image from either a cache or creates an entirely new one.
      * If you are loading an entirely new image, it will create a new instance of this class.
-     * However if the same image was already loaded, it will just use that instance. Instances are stored in a private cache.
+     * However, if the same image was already loaded, it will just use that instance. Instances are stored in a private cache.
      * <p>
      * @param imageName The name of the image you want to load in.
      * The image is loaded in from the {@code} /drawable/} directory, so put your image in there
      * If you want to load an image from a directory inside the {@code} /drawable/} continue with the path like so: {@code} "tiles/my_image"}
      * <p>
      * @return An instance of this class, Image. If you try to use this to render an image, it likely won't work.
-     * Instead, call the {@code} getImage} method from the instance of the class to get a buffured image. This will work if yoy try to draw it. **/
+     * Instead, call the {@code} getImage} method from the instance of the class to get a buffered image. This will work if yoy try to draw it. **/
     public static Image loadImage(String imageName) {
         // Check if the image is located in the image cache, if it is, return it to save resources
         if (imageCache.containsKey(imageName)) return imageCache.get(imageName);
 
-        // Sadly there is no way around this, we gotta load an image and scale it to the tile size D:
+        // Sadly, there is no way around this, we have to load an image and scale it to the tile size D:
         Image image = new Image(imageName);
         image.image = UtilityTool.scaleImage(image.image, Main.game.tileSize, Main.game.tileSize);
 
@@ -84,7 +84,8 @@ public class Image implements Serializable {
        data = UtilityTool.serializeImage(image);
     }
 
-    /// @return A buffured image that is stored in the {@code} Image} class
+    /** @return A buffered image that is stored in instances the {@code} Image} class.
+    If a game was loaded in, it turns the data into a buffered image, then returns it. **/
     public BufferedImage getImage() {
         // In the case that the game was loaded (meaning the image is null), set the image to the unserialized data
         if (image == null) image = UtilityTool.deserializeImage(data);
