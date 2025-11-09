@@ -1,17 +1,24 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.json;
+package net.dingletherat.torgrays_trials.main;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
-import net.dingletherat.torgrays_trials.main.Main;
+import net.dingletherat.torgrays_trials.rendering.Image;
 
 /**
-* The toolbox of the game.
+ * The toolbox of the game.
  * It has many miscellaneous methods that are used throughout the code.
  **/
 public class UtilityTool {
@@ -75,6 +82,34 @@ public class UtilityTool {
              */
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             return bufferedReader.lines().toArray(String[]::new);
+        } catch (IOException exception) {
+            Main.handleException(exception);
+            return null;
+        }
+    }
+
+    public static BufferedImage scaleImage(BufferedImage original, int width, int height) {
+        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = scaledImage.createGraphics();
+        graphics.drawImage(original, 0, 0, width, height, null);
+        graphics.dispose();
+
+        return scaledImage;
+    }
+    public static byte[] serializeImage(BufferedImage image) {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", byteArrayOutputStream); // You can use "jpg", "bmp", etc.
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException exception) {
+            Main.handleException(exception);
+            return null;
+        }
+    }
+    public static BufferedImage deserializeImage(byte[] data) {
+        try {
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+            return ImageIO.read(byteArrayInputStream);
         } catch (IOException exception) {
             Main.handleException(exception);
             return null;

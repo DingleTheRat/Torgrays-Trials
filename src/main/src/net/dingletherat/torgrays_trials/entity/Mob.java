@@ -1,12 +1,10 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.entity;
 
-import java.awt.Image;
-
-import net.dingletherat.torgrays_trials.rendering.Images;
+import net.dingletherat.torgrays_trials.rendering.Image;
 
 public class Mob extends Entity {
-    public Image up, down, left, right = Images.loadImage("disabled");
+    public Image up, down, left, right = Image.loadImage("disabled");
 
     // Properties
     /// How much is added to the entity's X and Y values every update when they move

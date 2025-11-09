@@ -2,6 +2,7 @@
 package net.dingletherat.torgrays_trials.rendering;
 
 import net.dingletherat.torgrays_trials.main.Main;
+import net.dingletherat.torgrays_trials.main.UtilityTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -86,37 +87,11 @@ public class TileManager {
      * @param collision Determines if you can go through the tile, or not.
      */
     public static void registerTile(int i, String imageName, boolean collision) {
-        // Create a new tile and add it to the tileTypes HashMap, as well as store it in a field for later use.
+        // Create a new tile and add it to the tileTypes HashMap, set it's collision, and load the image
         Tile tile = new Tile();
         tile.collision = collision;
+        tile.image = Image.loadImage("tile/" + imageName);
         tileTypes.put(i, tile);
-
-        /* Entering try and catch zone because this part involves ImageIO.
-         The catch also has a NullPointerException because "requireNonNull" is used in the code*/
-        try {
-            // Get the imageStream that we will use for the tile. It's separately instantiated as it will be used for null checking
-            InputStream imageStream = TileManager.class.getResourceAsStream("/drawable/tile/" + imageName + ".png");
-
-            /* Make sure the imageStream is a member of "/drawable/tile/" and is a png. If not, use the disabled imageStream and warn.
-             * The way we find out that is by checking if the imageStream is null. If it is, it's likely not a valid member.
-            However, if the imageName was just "", don't warn as it may be a result of an error */
-            if (imageName.isEmpty()) {
-                tile.image = ImageIO.read(Objects.requireNonNull(
-                        TileManager.class.getResourceAsStream("/drawable/disabled.png")));
-                return;
-            }
-            if (imageStream == null) {
-                Main.LOGGER.warn(imageName + " is not a valid member of \"/drawable/tiles\". ");
-                tile.image = ImageIO.read(Objects.requireNonNull(
-                        TileManager.class.getResourceAsStream("/drawable/disabled.png")));
-                return;
-            }
-
-            // If all checks have passed, then set the tile's image to a scaled version of the imageStream
-            tile.image = Images.scaleImage(ImageIO.read(imageStream), Main.game.tileSize, Main.game.tileSize);
-        } catch (IOException | NullPointerException exception) {
-            Main.handleException(exception);
-        }
     }
 
     public static void draw(Graphics graphics) {
@@ -147,7 +122,7 @@ public class TileManager {
                             worldY + tileSize > playerY - playerScreenY &&
                             worldY - tileSize < playerY + playerScreenY) {
                         Tile currentTile = tileTypes.get(tileNumber);
-                        graphics.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
+                        graphics.drawImage(currentTile.image.getImage(), Math.round(screenX), Math.round(screenY), null);
                     }
                 })
         );
@@ -167,7 +142,7 @@ public class TileManager {
                             worldY + tileSize > playerY - playerScreenY &&
                             worldY - tileSize < playerY + playerScreenY) {
                         Tile currentTile = tileTypes.get(tileNumber);
-                        graphics.drawImage(currentTile.image, Math.round(screenX), Math.round(screenY), null);
+                        graphics.drawImage(currentTile.image.getImage(), Math.round(screenX), Math.round(screenY), null);
                     }
                 })
         );

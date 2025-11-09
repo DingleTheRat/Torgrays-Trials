@@ -5,7 +5,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -135,7 +134,7 @@ public class MapHandler {
 	public static String[] getResourceFileNames(String directoryPath) {
 		try (InputStream inputStream = MapHandler.class.getResourceAsStream(directoryPath)) {
 			if (inputStream == null) {
-				Main.LOGGER.error("Warning: \"{}\" is not a valid path.", directoryPath);
+				Main.LOGGER.warn("Warning: \"{}\" is not a valid path.", directoryPath);
 				return new String[0];
 			}
 			

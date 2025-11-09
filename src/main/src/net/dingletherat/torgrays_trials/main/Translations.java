@@ -1,11 +1,9 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.json;
+package net.dingletherat.torgrays_trials.main;
 
 import java.util.HashMap;
 
 import org.json.JSONObject;
-
-import net.dingletherat.torgrays_trials.main.Main;
 
 public class Translations {
     private static final HashMap<String, JSONObject> TRANSLATION_FILES = new HashMap<>();

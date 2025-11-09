@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.InputStream;
 
-import net.dingletherat.torgrays_trials.json.Translations;
+import net.dingletherat.torgrays_trials.main.Translations;
 import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.main.States;

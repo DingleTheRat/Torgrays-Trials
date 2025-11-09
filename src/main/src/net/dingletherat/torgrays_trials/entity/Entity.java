@@ -2,10 +2,9 @@
 package net.dingletherat.torgrays_trials.entity;
 
 import java.awt.Graphics;
-import java.awt.Image;
 
 import net.dingletherat.torgrays_trials.main.Main;
-import net.dingletherat.torgrays_trials.rendering.Images;
+import net.dingletherat.torgrays_trials.rendering.Image;
 
 /** Extend this class to create an Entity.
  * Think of an Entity like a simple object in a map that is rendered separately from tiles.
@@ -16,7 +15,7 @@ import net.dingletherat.torgrays_trials.rendering.Images;
  **/
 public class Entity {
     /// The image that is drawn at the entity's location to represent the entity.
-    public Image currentImage = Images.loadImage("disabled");
+    public Image currentImage = Image.loadImage("disabled");
     
     // Positions
     public float x;
@@ -54,7 +53,7 @@ public class Entity {
      **/
     public void draw(Graphics graphics) {
         if (onScreen) {
-            graphics.drawImage(currentImage, Math.round(screenX), Math.round(screenY), null);
+            graphics.drawImage(currentImage.getImage(), Math.round(screenX), Math.round(screenY), null);
         }
     }
 

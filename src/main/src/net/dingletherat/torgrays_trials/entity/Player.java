@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import net.dingletherat.torgrays_trials.main.Main;
-import net.dingletherat.torgrays_trials.rendering.Images;
+import net.dingletherat.torgrays_trials.rendering.Image;
 
 public class Player extends Mob {
     public Player() {
@@ -28,10 +28,10 @@ public class Player extends Mob {
 
     /// Loads in all the sprites that Torgray (the player) uses
     public void loadSprites() {
-        up = Images.loadImage("entity/player/walking/torgray_up_1");
-        down = Images.loadImage("entity/player/walking/torgray_down_1");
-        left = Images.loadImage("entity/player/walking/torgray_left_1");
-        right = Images.loadImage("entity/player/walking/torgray_right_1");
+        up = Image.loadImage("entity/player/walking/torgray_up_1");
+        down = Image.loadImage("entity/player/walking/torgray_down_1");
+        left = Image.loadImage("entity/player/walking/torgray_left_1");
+        right = Image.loadImage("entity/player/walking/torgray_right_1");
         currentImage = down;
     }
 
