@@ -2,14 +2,9 @@
 package net.dingletherat.torgrays_trials.rendering;
 
 import net.dingletherat.torgrays_trials.main.Main;
-import net.dingletherat.torgrays_trials.main.UtilityTool;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 public class TileManager {
@@ -17,61 +12,61 @@ public class TileManager {
     public static HashMap<String, Map> maps = new HashMap<>();
 
     public static void loadTiles() {
-        registerTile(0, "nothing", false);
+        registerTile(0, "nothing", "00000/00000/00000/00000/00000");
 
         // Grass
-        registerTile(10, "grass/grass_1", false);
-        registerTile(11, "grass/grass_2", false);
+        registerTile(10, "grass/grass_1", "00000/00000/00000/00000/00000");
+        registerTile(11, "grass/grass_2", "00000/00000/00000/00000/00000");
 
         // Water
-        registerTile(12, "water/water", false);
-        registerTile(13, "water/white_line_water", false);
-        registerTile(14, "water/water_corner_1", true);
-        registerTile(15, "water/water_edge_3", true);
-        registerTile(16, "water/water_corner_3", true);
-        registerTile(17, "water/water_edge_4", true);
-        registerTile(18, "water/water_edge_2", true);
-        registerTile(19, "water/water_corner_2", true);
-        registerTile(20, "water/water_edge_1", true);
-        registerTile(21, "water/water_corner_4", true);
-        registerTile(22, "water/water_outer_corner_1", true);
-        registerTile(23, "water/water_outer_corner_2", true);
-        registerTile(24, "water/water_outer_corner_3", true);
-        registerTile(25, "water/water_outer_corner_4", true);
+        registerTile(12, "water/water", "00000/00000/00000/00000/00000");
+        registerTile(13, "water/white_line_water", "00000/00000/00000/00000/00000");
+        registerTile(14, "water/water_corner_1", "11111/11111/11111/11111/11111");
+        registerTile(15, "water/water_edge_3", "11111/11111/11111/11111/11111");
+        registerTile(16, "water/water_corner_3", "11111/11111/11111/11111/11111");
+        registerTile(17, "water/water_edge_4", "11111/11111/11111/11111/11111");
+        registerTile(18, "water/water_edge_2", "11111/11111/11111/11111/11111");
+        registerTile(19, "water/water_corner_2", "11111/11111/11111/11111/11111");
+        registerTile(20, "water/water_edge_1", "11111/11111/11111/11111/11111");
+        registerTile(21, "water/water_corner_4", "11111/11111/11111/11111/11111");
+        registerTile(22, "water/water_outer_corner_1", "11111/11111/11111/11111/11111");
+        registerTile(23, "water/water_outer_corner_2", "11111/11111/11111/11111/11111");
+        registerTile(24, "water/water_outer_corner_3", "11111/11111/11111/11111/11111");
+        registerTile(25, "water/water_outer_corner_4", "11111/11111/11111/11111/11111");
 
         // Path
-        registerTile(26, "path/path", false);
-        registerTile(27, "path/path_corner_1", false);
-        registerTile(28, "path/path_edge_1", false);
-        registerTile(29, "path/path_corner_2", false);
-        registerTile(30, "path/path_edge_4", false);
-        registerTile(31, "path/path_edge_2", false);
-        registerTile(32, "path/path_corner_3", false);
-        registerTile(33, "path/path_edge_3", false);
-        registerTile(34, "path/path_corner_4", false);
-        registerTile(35, "path/path_outer_corner_1", false);
-        registerTile(36, "path/path_outer_corner_2", false);
-        registerTile(37, "path/path_outer_corner_3", false);
-        registerTile(38, "path/path_outer_corner_4", false);
+        registerTile(26, "path/path", "00000/00000/00000/00000/00000");
+        registerTile(27, "path/path_corner_1", "00000/00000/00000/00000/00000");
+        registerTile(28, "path/path_edge_1", "00000/00000/00000/00000/00000");
+        registerTile(29, "path/path_corner_2", "00000/00000/00000/00000/00000");
+        registerTile(30, "path/path_edge_4", "00000/00000/00000/00000/00000");
+        registerTile(31, "path/path_edge_2", "00000/00000/00000/00000/00000");
+        registerTile(32, "path/path_corner_3", "00000/00000/00000/00000/00000");
+        registerTile(33, "path/path_edge_3", "00000/00000/00000/00000/00000");
+        registerTile(34, "path/path_corner_4", "00000/00000/00000/00000/00000");
+        registerTile(35, "path/path_outer_corner_1", "00000/00000/00000/00000/00000");
+        registerTile(36, "path/path_outer_corner_2", "00000/00000/00000/00000/00000");
+        registerTile(37, "path/path_outer_corner_3", "00000/00000/00000/00000/00000");
+        registerTile(38, "path/path_outer_corner_4", "00000/00000/00000/00000/00000");
 
         // Building Stuff
-        registerTile(39, "floor", false);
-        registerTile(40, "planks", true);
+        registerTile(39, "floor", "00000/00000/00000/00000/00000");
+        registerTile(40, "planks", "11111/11111/11111/11111/11111");
 
         // Tree
-        registerTile(41, "tree/tree", true);
+        registerTile(41, "tree/tree", "11111/11111/11111/11111/11111");
 
         // Event Tiles
-        registerTile(42, "path/path_pit", false);
-        registerTile(43, "grass/grass_pit", false);
-        registerTile(44, "grass/grass_healing", false);
-        registerTile(45, "coiner's_hut", false);
+        registerTile(42, "path/path_pit", "00000/00000/00000/00000/00000");
+        registerTile(43, "grass/grass_pit", "00000/00000/00000/00000/00000");
+        registerTile(44, "grass/grass_healing", "00000/00000/00000/00000/00000");
+        registerTile(45, "coiner's_hut", "00000/00000/00000/00000/00000");
 
         // Dark Tiles
-        registerTile(46, "tree/dark_tree", true);
-        registerTile(47, "grass/dark_grass", false);
+        registerTile(46, "tree/dark_tree", "11111/11111/11111/11111/11111");
+        registerTile(47, "grass/dark_grass", "00000/00000/00000/00000/00000");
 
-        registerTile(48, "tunnel_door", false);
+        registerTile(48, "tunnel_door", "00000/00000/00000/00000/00000");
     }
 
     /**
@@ -86,11 +81,16 @@ public class TileManager {
      * <p>
      * @param collision Determines if you can go through the tile, or not.
      */
-    public static void registerTile(int i, String imageName, boolean collision) {
+    public static void registerTile(int i, String imageName, String collision) {
         // Create a new tile and add it to the tileTypes HashMap, set it's collision, and load the image
-        Tile tile = new Tile();
-        tile.collision = collision;
-        tile.image = Image.loadImage("tile/" + imageName);
+        boolean[][] collisionArray = new boolean[5][5];
+        for (int row = 0; row < collision.split("/").length; row++) {
+            for (int col = 0; col < collision.split("/")[row].length(); col++) {
+                collisionArray[row][col] = collision.split("/")[row].charAt(col) == '1';
+            }
+        }
+        System.out.println(Arrays.toString(Arrays.stream(collisionArray).toArray()));
+        Tile tile = new Tile(Image.loadImage("tile/" + imageName), collisionArray);
         tileTypes.put(i, tile);
     }
 
@@ -122,7 +122,7 @@ public class TileManager {
                             worldY + tileSize > playerY - playerScreenY &&
                             worldY - tileSize < playerY + playerScreenY) {
                         Tile currentTile = tileTypes.get(tileNumber);
-                        graphics.drawImage(currentTile.image.getImage(), Math.round(screenX), Math.round(screenY), null);
+                        graphics.drawImage(currentTile.image().getImage(), Math.round(screenX), Math.round(screenY), null);
                     }
                 })
         );
@@ -142,7 +142,7 @@ public class TileManager {
                             worldY + tileSize > playerY - playerScreenY &&
                             worldY - tileSize < playerY + playerScreenY) {
                         Tile currentTile = tileTypes.get(tileNumber);
-                        graphics.drawImage(currentTile.image.getImage(), Math.round(screenX), Math.round(screenY), null);
+                        graphics.drawImage(currentTile.image().getImage(), Math.round(screenX), Math.round(screenY), null);
                     }
                 })
         );
