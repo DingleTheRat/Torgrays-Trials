@@ -20,6 +20,8 @@ public class Entity {
     // Positions
     public float x;
     public float y;
+    public float width = 48;
+    public float height = 48;
 
     // Updating
     /// Can the entity update while not being on the screen? If it's true, the {@code} onScreen} field will always be set to true inside the main update loop of the entity.
@@ -30,12 +32,21 @@ public class Entity {
 
     // Other
     public String name;
-
+    
     public Entity(String name, float spawnX, float spawnY) {
         // Can you guess what this does? (impossible)
         this.name = name;
         x = spawnX;
         y = spawnY;
+    }
+    
+    public Entity(String name, float spawnX, float spawnY, float width, float height) {
+        // Can you guess what this does? (impossible)
+        this.name = name;
+        x = spawnX;
+        y = spawnY;
+        this.width = width;
+        this.height = height;
     }
 
     /** Called in the main draw method to draw the entity.
@@ -51,8 +62,6 @@ public class Entity {
      **/
     public void draw(Graphics graphics) {
         if (onScreen) {
-            System.out.println(Math.round(x + Main.game.screenWidth / 2f));
-            System.out.println(Math.round(y + Main.game.screenWidth / 2f));
             graphics.drawImage(currentImage.getImage(), Math.round(x - Main.game.player.camX + Main.game.screenWidth / 2f),
                     Math.round(y - Main.game.player.camY + Main.game.screenHeight / 2f), null);
         }

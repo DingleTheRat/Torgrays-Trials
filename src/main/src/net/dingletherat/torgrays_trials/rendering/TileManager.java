@@ -3,7 +3,6 @@ package net.dingletherat.torgrays_trials.rendering;
 
 import net.dingletherat.torgrays_trials.main.Main;
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
@@ -89,7 +88,6 @@ public class TileManager {
                 collisionArray[row][col] = collision.split("/")[row].charAt(col) == '1';
             }
         }
-        System.out.println(Arrays.toString(Arrays.stream(collisionArray).toArray()));
         Tile tile = new Tile(Image.loadImage("tile/" + imageName), collisionArray);
         tileTypes.put(i, tile);
     }
@@ -146,7 +144,7 @@ public class TileManager {
         );
     }
 
-    record Pair(int x, int y) {
+    public record Pair(int x, int y) {
         @Override
         public String toString() {
             return "(" + x + ", " + y + ")";

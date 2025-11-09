@@ -53,6 +53,21 @@ public class Player extends Mob {
             if (keyMap.get(KeyEvent.VK_S)) y += speed;
             if (keyMap.get(KeyEvent.VK_D)) x += speed;
         }
+        System.out.println(CollisionChecker.checkEntityColliding(this));
+        if (CollisionChecker.checkEntityColliding(this)) {
+            if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
+                    (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
+                if (keyMap.get(KeyEvent.VK_W)) y += speed / 1.4f;
+                if (keyMap.get(KeyEvent.VK_A)) x += speed / 1.4f;
+                if (keyMap.get(KeyEvent.VK_S)) y -= speed / 1.4f;
+                if (keyMap.get(KeyEvent.VK_D)) x -= speed / 1.4f;
+            } else {
+                if (keyMap.get(KeyEvent.VK_W)) y += speed;
+                if (keyMap.get(KeyEvent.VK_A)) x += speed;
+                if (keyMap.get(KeyEvent.VK_S)) y -= speed;
+                if (keyMap.get(KeyEvent.VK_D)) x -= speed;
+            }
+        }
         
         // Modify the screenX and screenY depending on the size of the window
         camX -= (camX - x) * 0.15f;
