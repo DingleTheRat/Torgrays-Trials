@@ -95,10 +95,8 @@ public class TileManager {
     }
 
     public static void draw(Graphics graphics) {
-        float playerX = Main.game.player.x;
-        float playerY = Main.game.player.y;
-        float playerScreenX = Main.game.player.screenX;
-        float playerScreenY = Main.game.player.screenY;
+        float camX = Main.game.player.camX;
+        float camY = Main.game.player.camY;
         int tileSize = Main.game.tileSize;
 
         if (!maps.containsKey(Main.game.currentMap)) {
@@ -113,14 +111,14 @@ public class TileManager {
                     int tileNumber = map.ground().get(new Pair(worldCol, worldRow));
                     int worldX = worldCol * tileSize;
                     int worldY = worldRow * tileSize;
-                    float screenX = worldX - playerX + playerScreenX;
-                    float screenY = worldY - playerY + playerScreenY;
+                    float screenX = worldX - camX + Main.game.screenWidth / 2f;
+                    float screenY = worldY - camY + Main.game.screenHeight / 2f;
 
                     // Check if the tile is within the visible screen
-                    if (worldX + tileSize > playerX - playerScreenX &&
-                            worldX - tileSize < playerX + playerScreenX &&
-                            worldY + tileSize > playerY - playerScreenY &&
-                            worldY - tileSize < playerY + playerScreenY) {
+                    if (worldX + tileSize > camX - Main.game.screenWidth / 2f &&
+                            worldX - tileSize < camX + Main.game.screenWidth / 2f &&
+                            worldY + tileSize > camY - Main.game.screenHeight / 2f &&
+                            worldY - tileSize < camY + Main.game.screenHeight / 2f) {
                         Tile currentTile = tileTypes.get(tileNumber);
                         graphics.drawImage(currentTile.image().getImage(), Math.round(screenX), Math.round(screenY), null);
                     }
@@ -133,14 +131,14 @@ public class TileManager {
                     int tileNumber = map.foreground().get(new Pair(worldCol, worldRow));
                     int worldX = worldCol * tileSize;
                     int worldY = worldRow * tileSize;
-                    float screenX = worldX - playerX + playerScreenX;
-                    float screenY = worldY - playerY + playerScreenY;
+                    float screenX = worldX - camX + Main.game.screenWidth / 2f;
+                    float screenY = worldY - camY + Main.game.screenHeight / 2f;
 
                     // Check if the tile is within the visible screen
-                    if (worldX + tileSize > playerX - playerScreenX &&
-                            worldX - tileSize < playerX + playerScreenX &&
-                            worldY + tileSize > playerY - playerScreenY &&
-                            worldY - tileSize < playerY + playerScreenY) {
+                    if (worldX + tileSize > camX - Main.game.screenWidth / 2f &&
+                            worldX - tileSize < camX + Main.game.screenWidth / 2f &&
+                            worldY + tileSize > camY - Main.game.screenHeight / 2f &&
+                            worldY - tileSize < camY + Main.game.screenHeight / 2f) {
                         Tile currentTile = tileTypes.get(tileNumber);
                         graphics.drawImage(currentTile.image().getImage(), Math.round(screenX), Math.round(screenY), null);
                     }

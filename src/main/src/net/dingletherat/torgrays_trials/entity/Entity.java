@@ -20,8 +20,6 @@ public class Entity {
     // Positions
     public float x;
     public float y;
-    public float screenX;
-    public float screenY;
 
     // Updating
     /// Can the entity update while not being on the screen? If it's true, the {@code} onScreen} field will always be set to true inside the main update loop of the entity.
@@ -53,7 +51,10 @@ public class Entity {
      **/
     public void draw(Graphics graphics) {
         if (onScreen) {
-            graphics.drawImage(currentImage.getImage(), Math.round(screenX), Math.round(screenY), null);
+            System.out.println(Math.round(x + Main.game.screenWidth / 2f));
+            System.out.println(Math.round(y + Main.game.screenWidth / 2f));
+            graphics.drawImage(currentImage.getImage(), Math.round(x - Main.game.player.camX + Main.game.screenWidth / 2f),
+                    Math.round(y - Main.game.player.camY + Main.game.screenHeight / 2f), null);
         }
     }
 
@@ -66,18 +67,10 @@ public class Entity {
      * Use {@code} updateOffScreen} if you want to disable this.
      **/
     public void update() {
-        // Check if the entity is on the screen using the player
-        if (x + Main.game.tileSize > Main.game.player.x - Main.game.player.screenX &&
-                x - Main.game.tileSize < Main.game.player.x + Main.game.player.screenX &&
-                y + Main.game.tileSize > Main.game.player.y - Main.game.player.screenY &&
-                y - Main.game.tileSize < Main.game.player.y + Main.game.player.screenY || updateOffScreen){
-            onScreen = true;
-
-            /* Modify screenX & screenY depending on the position of the entity relative to the player
-            Since the player is always at the center of the screen, this can get us the screen's X & Y*/
-            screenX = (x - Main.game.player.x) + Main.game.player.screenX;
-            screenY = (y - Main.game.player.y) + Main.game.player.screenY;
-        } else 
-            onScreen = false;
+        // Check if the entity is on the screen using the player's camera position
+	    onScreen = x + Main.game.tileSize > Main.game.player.camX + Main.game.screenWidth / 2f &&
+			    x - Main.game.tileSize < Main.game.player.camX + Main.game.screenWidth / 2f &&
+			    y + Main.game.tileSize > Main.game.player.camY + Main.game.screenHeight / 2f &&
+			    y - Main.game.tileSize < Main.game.player.camY + Main.game.screenHeight / 2f || updateOffScreen;
     }
 }

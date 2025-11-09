@@ -8,6 +8,7 @@ import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.rendering.Image;
 
 public class Player extends Mob {
+    public float camX, camY;
     public Player() {
         super("Torgray", 0f, 0f);
 
@@ -18,6 +19,8 @@ public class Player extends Mob {
         speed = 4;
         x = Main.game.tileSize * 21; // Colum 21
         y = Main.game.tileSize * 23; // Row 23
+        camX = x;
+        camY = y;
 
         /* Set onScreen to true, so the player can be drawn
         Since the super class's update method isn't called, and the player is always on Screen, it doesn't update to false*/
@@ -37,14 +40,22 @@ public class Player extends Mob {
 
     @Override
     public void update() {
-        // Modify the screenX and screenY depending on the size of the window
-        screenX = Main.game.getWidth() / 2 - (Main.game.tileSize / 2);
-        screenY = Main.game.getHeight() / 2 - (Main.game.tileSize / 2);
-
         HashMap<Integer, Boolean> keyMap = Main.game.inputHandler.keyMap;
-        if (keyMap.get(KeyEvent.VK_W)) y -= speed;
-        if (keyMap.get(KeyEvent.VK_A)) x -= speed;
-        if (keyMap.get(KeyEvent.VK_S)) y += speed;
-        if (keyMap.get(KeyEvent.VK_D)) x += speed;
+        if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
+                (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
+            if (keyMap.get(KeyEvent.VK_W)) y -= speed / 1.4f;
+            if (keyMap.get(KeyEvent.VK_A)) x -= speed / 1.4f;
+            if (keyMap.get(KeyEvent.VK_S)) y += speed / 1.4f;
+            if (keyMap.get(KeyEvent.VK_D)) x += speed / 1.4f;
+        } else {
+            if (keyMap.get(KeyEvent.VK_W)) y -= speed;
+            if (keyMap.get(KeyEvent.VK_A)) x -= speed;
+            if (keyMap.get(KeyEvent.VK_S)) y += speed;
+            if (keyMap.get(KeyEvent.VK_D)) x += speed;
+        }
+        
+        // Modify the screenX and screenY depending on the size of the window
+        camX -= (camX - x) * 0.15f;
+        camY -= (camY - y) * 0.15f;
     }
 }

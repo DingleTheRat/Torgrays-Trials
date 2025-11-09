@@ -87,6 +87,6 @@ public class UI {
 
     public int getCentreX(String text) {
         int length = (int) graphics.getFontMetrics().getStringBounds(text, graphics).getWidth();
-        return Main.game.screenWidth / 2 - length / 2;
+        return (int) (Main.game.screenWidth / 2 - length / 2f);
     }
 }

@@ -8,7 +8,7 @@ public class Mob extends Entity {
 
     // Properties
     /// How much is added to the entity's X and Y values every update when they move
-    int speed = 1;
+    float speed = 1;
 
     public Mob(String name, float spawnX, float spawnY) {
         // Pass on all the arguments because this class is meant to be extended
