@@ -3,8 +3,6 @@ package net.dingletherat.torgrays_trials.main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.HashMap;
 
 public class InputHandler implements KeyListener {
@@ -26,7 +24,7 @@ public class InputHandler implements KeyListener {
     }};
 
     public InputHandler() {
-        Main.LOGGER.info("Loaded keyboard input handler");
+        Main.LOGGER.info("Loaded input handler");
     }
 
     public void cancelInputs() {
@@ -42,7 +40,6 @@ public class InputHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
         keyMap.put(code, true);
-        System.out.println(e);
     }
 
     @Override

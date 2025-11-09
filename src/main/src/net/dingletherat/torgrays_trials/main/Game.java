@@ -56,8 +56,9 @@ public class Game extends JPanel {
         // Extra window settings
         setPreferredSize(new Dimension(screenWidth, screenHeight));
         setBackground(Color.BLACK);
+        setFocusable(true); // So inputs work
 
-        // Add a keyboard listener and load all tiles
+        // Add a keyboard listener
         addKeyListener(inputHandler = new InputHandler());
         TileManager.loadTiles();
 

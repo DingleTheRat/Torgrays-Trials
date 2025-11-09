@@ -1,6 +1,8 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.rendering;
 
+import net.dingletherat.torgrays_trials.main.Main;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -10,11 +12,12 @@ public class Images {
 
     // Load an image from the drawable folder or, if queried before, from the cache
     public static Image loadImage(String imageName) {
-        if (imageCache.containsKey(imageName)) {
-            return imageCache.get(imageName);
-        }
+        if (imageCache.containsKey(imageName)) return imageCache.get(imageName);
+
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Image image = toolkit.getImage(Images.class.getResource("/drawable/" + imageName + ".png"));
+        image = image.getScaledInstance(Main.game.tileSize, Main.game.tileSize, Image.SCALE_SMOOTH);
+
         imageCache.put(imageName, image);
         return image;
     }
