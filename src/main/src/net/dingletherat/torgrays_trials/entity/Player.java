@@ -10,7 +10,7 @@ import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.rendering.Image;
 
 public class Player extends Mob {
-    public Image eyesSheet = Image.loadImage("disabled");
+    public Image eyesSheet;
     public int eyesColumn = 0;
     public int eyesRow = 0;
     private boolean blinking = false;
@@ -42,8 +42,6 @@ public class Player extends Mob {
         cameraX = x;
         cameraY = y;
         updateOffScreen = true;
-        x = Main.game.tileSize * 23; // Colum 23
-        y = Main.game.tileSize * 21; // Row 21
 
         /* Set onScreen to true, so the player can be drawn
         Since the super class's update method isn't called, and the player is always on Screen, it doesn't update to false*/
@@ -55,22 +53,12 @@ public class Player extends Mob {
     @Override
     public void update() {
         HashMap<Integer, Boolean> keyMap = Main.game.inputHandler.keyMap;
-        StringBuilder newDirection = new StringBuilder();
 
-        /* Depending on the key pressed, append a newDirection with a direction.
-         * If the direction was appended more than once, append the direction with a space
-         this is to let the mob's update method know if the movement is diagonal */
-        if (keyMap.get(KeyEvent.VK_W)) newDirection.append("up");
-        if (keyMap.get(KeyEvent.VK_S)) newDirection.append(!newDirection.isEmpty() ? "" : "down");
-        if (keyMap.get(KeyEvent.VK_A)) newDirection.append(!newDirection.isEmpty() ? " left" : "left");
-        if (keyMap.get(KeyEvent.VK_D)) newDirection.append(!newDirection.isEmpty() ? " right" : "right");
-
-        // If nothing was added to the StringBuilder, meaning the player isn't walking, change his state accordingly
-        if (newDirection.isEmpty()) state = States.MobStates.IDLE;
-        else state = States.MobStates.WALKING;
-
-        // Set the direction to the final newDirection string and let the mod's update method do the rest
-        direction = newDirection.toString().trim();
+        // Check if the player is moving or not to set its state
+        state = (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S) ||
+                keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) ? States.MobStates.WALKING : States.MobStates.IDLE;
+        
+        // If the player is moving diagonally, reduce the movement speed to 1/1.4 of normal speed.
         if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
                 (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
             tryMove((keyMap.get(KeyEvent.VK_D)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_A)?1:0)/1.4f, 0);
@@ -169,6 +157,7 @@ public class Player extends Mob {
         }
     }
     
+    // Move in a direction, if you collide go back
     private void tryMove(float x, float y) {
         this.x += x * speed;
         this.y += y * speed;
