@@ -88,14 +88,6 @@ public class UtilityTool {
         }
     }
 
-    public static BufferedImage scaleImage(BufferedImage original, int width, int height) {
-        BufferedImage scaledImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics graphics = scaledImage.createGraphics();
-        graphics.drawImage(original, 0, 0, width, height, null);
-        graphics.dispose();
-
-        return scaledImage;
-    }
     public static byte[] serializeImage(BufferedImage image) {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

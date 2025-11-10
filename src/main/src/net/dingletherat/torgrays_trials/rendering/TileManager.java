@@ -88,13 +88,18 @@ public class TileManager {
                 collisionArray[col][row] = collision.split("/")[row].charAt(col) == '1';
             }
         }
-        Tile tile = new Tile(Image.loadImage("tile/" + imageName), collisionArray);
+        // Load the image and scale it to the tileSize
+        Image image = Image.loadImage("tile/" + imageName);
+        image.scaleImage(Main.game.tileSize, Main.game.tileSize);
+
+        // Register the tile
+        Tile tile = new Tile(image, collisionArray);
         tileTypes.put(i, tile);
     }
 
     public static void draw(Graphics graphics) {
-        float camX = Main.game.player.camX;
-        float camY = Main.game.player.camY;
+        float camX = Main.game.player.cameraX;
+        float camY = Main.game.player.cameraY;
         int tileSize = Main.game.tileSize;
 
         if (!maps.containsKey(Main.game.currentMap)) {

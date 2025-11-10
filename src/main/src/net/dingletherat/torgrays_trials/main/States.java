@@ -28,6 +28,10 @@ public class States {
 			this.defaultUI = defaultUI;
 		}
 	}
+    public enum MobStates {
+        IDLE,
+        WALKING
+    }
 	public enum DarknessStates {
 		NIGHT,
 		NEW_DUSK,
