@@ -11,8 +11,6 @@ import javax.swing.*;
 
 
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.ArrayList;

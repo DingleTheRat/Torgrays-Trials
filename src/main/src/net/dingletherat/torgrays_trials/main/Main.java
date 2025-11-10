@@ -1,3 +1,4 @@
+// Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ public class Main {
         window.setTitle("Torgray's Trials");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.getContentPane().setBackground(Color.BLACK);
+        window.setResizable(false); // Temporary
 
         game = new Game();
         game.setup();

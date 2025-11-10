@@ -8,34 +8,30 @@ import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.rendering.Image;
 
 public class Player extends Mob {
-    public float camX, camY;
+    public float cameraX, cameraY;
+
     public Player() {
         super("Torgray", 0f, 0f);
 
-        // Load Sprites
-        loadSprites();
+        // Ajust spriteSheet properties
+        spriteSheet = Image.loadImage("entity/player/torgray_sheet");
+        spriteRow = 0;
+        spriteColumn = 0;
+        spriteSheet.scaleImage(Main.game.tileSize * 3, Main.game.tileSize * 4);
+        currentImage = spriteSheet;
 
         // Set some properties
         speed = 4;
         x = Main.game.tileSize * 21; // Colum 21
         y = Main.game.tileSize * 23; // Row 23
-        camX = x;
-        camY = y;
+        cameraX = x;
+        cameraY = y;
 
         /* Set onScreen to true, so the player can be drawn
         Since the super class's update method isn't called, and the player is always on Screen, it doesn't update to false*/
         onScreen = true;
 
         Main.LOGGER.info("Loaded Torgray :D");
-    }
-
-    /// Loads in all the sprites that Torgray (the player) uses
-    public void loadSprites() {
-        up = Image.loadImage("entity/player/walking/torgray_up_1");
-        down = Image.loadImage("entity/player/walking/torgray_down_1");
-        left = Image.loadImage("entity/player/walking/torgray_left_1");
-        right = Image.loadImage("entity/player/walking/torgray_right_1");
-        currentImage = down;
     }
 
     @Override
@@ -53,7 +49,7 @@ public class Player extends Mob {
             if (keyMap.get(KeyEvent.VK_S)) y += speed;
             if (keyMap.get(KeyEvent.VK_D)) x += speed;
         }
-        System.out.println(CollisionChecker.checkEntityColliding(this));
+        // Main.LOGGER.debug("{}", CollisionChecker.checkEntityColliding(this));
         if (CollisionChecker.checkEntityColliding(this)) {
             if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
                     (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
@@ -70,7 +66,7 @@ public class Player extends Mob {
         }
         
         // Modify the screenX and screenY depending on the size of the window
-        camX -= (camX - x) * 0.15f;
-        camY -= (camY - y) * 0.15f;
+        cameraX -= (cameraX - x) * 0.15f;
+        cameraY -= (cameraY - y) * 0.15f;
     }
 }

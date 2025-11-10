@@ -16,6 +16,10 @@ import net.dingletherat.torgrays_trials.rendering.Image;
 public class Entity {
     /// The image that is drawn at the entity's location to represent the entity.
     public Image currentImage = Image.loadImage("disabled");
+    /// If there's a sprite sheet, this is the colum where the sprite would be pulled from. Set to 100 to disable it.
+    public int spriteColumn = 100;
+    /// If there's a sprite sheet, this is the row where the sprite would be pulled from. Set to 100 to disable it.
+    public int spriteRow = 100;
     
     // Positions
     public float x;
@@ -62,8 +66,26 @@ public class Entity {
      **/
     public void draw(Graphics graphics) {
         if (onScreen) {
-            graphics.drawImage(currentImage.getImage(), Math.round(x - Main.game.player.camX + Main.game.screenWidth / 2f),
-                    Math.round(y - Main.game.player.camY + Main.game.screenHeight / 2f), null);
+            /* If spriteSheets are disabled (spriteColumn = 100, spriteRow = 100), draw the currentImage normally.
+             If not, use spriteColumn and spriteRow to figure out what part to draw. */
+            if (spriteColumn == 100 && spriteRow == 100) {
+                graphics.drawImage(currentImage.getImage(), Math.round(x - Main.game.player.cameraX + Main.game.screenWidth / 2f),
+                        Math.round(y - Main.game.player.cameraY + Main.game.screenHeight / 2f), null);
+            } else {
+                graphics.drawImage(currentImage.getImage(),
+                    // Destination rectangle (on screen)
+                    Math.round(x - Main.game.player.cameraX + Main.game.screenWidth / 2f),
+                    Math.round(y - Main.game.player.cameraY + Main.game.screenHeight / 2f),
+                    Math.round(x - Main.game.player.cameraX + Main.game.screenWidth / 2f + Main.game.tileSize),
+                    Math.round(y - Main.game.player.cameraY + Main.game.screenHeight / 2f + Main.game.tileSize),
+
+                    // Source rectangle (from a sprite sheet)
+                    Main.game.tileSize * spriteColumn,
+                    Main.game.tileSize * spriteRow,
+                    Main.game.tileSize * spriteColumn + Main.game.tileSize,
+                    Main.game.tileSize * spriteRow + Main.game.tileSize,
+                    null); // Observer
+            }
         }
     }
 
@@ -77,9 +99,9 @@ public class Entity {
      **/
     public void update() {
         // Check if the entity is on the screen using the player's camera position
-	    onScreen = x + Main.game.tileSize > Main.game.player.camX + Main.game.screenWidth / 2f &&
-			    x - Main.game.tileSize < Main.game.player.camX + Main.game.screenWidth / 2f &&
-			    y + Main.game.tileSize > Main.game.player.camY + Main.game.screenHeight / 2f &&
-			    y - Main.game.tileSize < Main.game.player.camY + Main.game.screenHeight / 2f || updateOffScreen;
+	    onScreen = x + Main.game.tileSize > Main.game.player.cameraX + Main.game.screenWidth / 2f &&
+			    x - Main.game.tileSize < Main.game.player.cameraX + Main.game.screenWidth / 2f &&
+			    y + Main.game.tileSize > Main.game.player.cameraY + Main.game.screenHeight / 2f &&
+			    y - Main.game.tileSize < Main.game.player.cameraY + Main.game.screenHeight / 2f || updateOffScreen;
     }
 }

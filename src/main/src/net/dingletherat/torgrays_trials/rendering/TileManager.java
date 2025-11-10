@@ -81,20 +81,25 @@ public class TileManager {
      * @param collision Determines if you can go through the tile, or not.
      */
     public static void registerTile(int i, String imageName, String collision) {
-        // Create a new tile and add it to the tileTypes HashMap, set it's collision, and load the image
+        // Create a new tile and add it to the tileTypes HashMap, set its collision, and load the image
         boolean[][] collisionArray = new boolean[5][5];
         for (int row = 0; row < collision.split("/").length; row++) {
             for (int col = 0; col < collision.split("/")[row].length(); col++) {
                 collisionArray[row][col] = collision.split("/")[row].charAt(col) == '1';
             }
         }
-        Tile tile = new Tile(Image.loadImage("tile/" + imageName), collisionArray);
+        // Load the image, and scale it to the tileSize
+        Image image = Image.loadImage("tile/" + imageName);
+        image.scaleImage(Main.game.tileSize, Main.game.tileSize);
+
+        // Register the tile
+        Tile tile = new Tile(image, collisionArray);
         tileTypes.put(i, tile);
     }
 
     public static void draw(Graphics graphics) {
-        float camX = Main.game.player.camX;
-        float camY = Main.game.player.camY;
+        float camX = Main.game.player.cameraX;
+        float camY = Main.game.player.cameraY;
         int tileSize = Main.game.tileSize;
 
         if (!maps.containsKey(Main.game.currentMap)) {
