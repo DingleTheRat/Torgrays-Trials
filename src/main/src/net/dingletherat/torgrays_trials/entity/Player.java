@@ -116,21 +116,21 @@ public class Player extends Mob {
 
             // Reset the counter
             counters.put("eyes_blink", 0);
-        } else if (!blinking && eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed) {
+        } else if (!blinking && eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed / 2) {
             // If it hits the lower goal, and we are in the process of blinking, close our eyes (set to non-existent sprite) 
             eyesRow = 2;
 
             // Reset the counter
             counters.put("eyes_blink", 0);
             blinking = true;
-        } else if (eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed) {
+        } else if (eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed / 2) {
             // If it hits the lower goal, and we are in the process of blinking (and almost done), re-open our eyes
             eyesRow = 0;
 
             // Reset the counter and blinking state
             counters.put("eyes_blink", 0);
             blinking = false;
-        } else if (eyesRow == 2 & counters.get("eyes_blink") >= animationSpeed) {
+        } else if (eyesRow == 2 & counters.get("eyes_blink") >= animationSpeed / 2) {
             // If it hits the lower goal, and we have our eyes closed, re-open our eyes 
             eyesRow = 1;
 
