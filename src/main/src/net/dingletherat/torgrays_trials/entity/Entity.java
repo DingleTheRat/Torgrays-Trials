@@ -84,7 +84,7 @@ public class Entity {
                     Main.game.tileSize * spriteRow,
                     Main.game.tileSize * spriteColumn + Main.game.tileSize,
                     Main.game.tileSize * spriteRow + Main.game.tileSize,
-                    null); // Observer
+                    null);
             }
         }
     }
