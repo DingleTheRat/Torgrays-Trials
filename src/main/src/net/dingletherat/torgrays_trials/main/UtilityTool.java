@@ -1,7 +1,6 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -9,13 +8,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-
 import javax.imageio.ImageIO;
-
 import org.json.JSONObject;
-
-import net.dingletherat.torgrays_trials.rendering.Image;
 
 /**
  * The toolbox of the game.

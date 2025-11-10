@@ -16,10 +16,10 @@ import net.dingletherat.torgrays_trials.rendering.Image;
 public class Entity {
     /// The image that is drawn at the entity's location to represent the entity.
     public Image currentImage = Image.loadImage("disabled");
-    /// If there's a sprite sheet, this is the colum where the sprite would be pulled from. Set to 100 to disable it.
-    public int spriteColumn = 100;
-    /// If there's a sprite sheet, this is the row where the sprite would be pulled from. Set to 100 to disable it.
-    public int spriteRow = 100;
+    /// If there's a sprite sheet, this is the colum where the sprite would be pulled from. Set to -1 to disable it.
+    public int spriteColumn = -1;
+    /// If there's a sprite sheet, this is the row where the sprite would be pulled from. Set to -1 to disable it.
+    public int spriteRow = -1;
     
     // Positions
     public float x;
@@ -68,7 +68,7 @@ public class Entity {
         if (onScreen) {
             /* If spriteSheets are disabled (spriteColumn = 100, spriteRow = 100), draw the currentImage normally.
              If not, use spriteColumn and spriteRow to figure out what part to draw. */
-            if (spriteColumn == 100 && spriteRow == 100) {
+            if (spriteColumn == -1 && spriteRow == -1) {
                 graphics.drawImage(currentImage.getImage(), Math.round(x - Main.game.player.cameraX + Main.game.screenWidth / 2f),
                         Math.round(y - Main.game.player.cameraY + Main.game.screenHeight / 2f), null);
             } else {
