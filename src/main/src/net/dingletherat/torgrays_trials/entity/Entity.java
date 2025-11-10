@@ -20,8 +20,8 @@ public class Entity {
     // Positions
     public float x;
     public float y;
-    public float width = 48;
-    public float height = 48;
+    public float width = 16 * Main.game.scale;
+    public float height = 16 * Main.game.scale;
 
     // Updating
     /// Can the entity update while not being on the screen? If it's true, the {@code} onScreen} field will always be set to true inside the main update loop of the entity.
@@ -45,8 +45,8 @@ public class Entity {
         this.name = name;
         x = spawnX;
         y = spawnY;
-        this.width = width;
-        this.height = height;
+        this.width = width * Main.game.scale;
+        this.height = height * Main.game.scale;
     }
 
     /** Called in the main draw method to draw the entity.

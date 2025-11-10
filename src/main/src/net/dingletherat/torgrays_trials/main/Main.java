@@ -19,6 +19,7 @@ public class Main {
         window.setTitle("Torgray's Trials");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.getContentPane().setBackground(Color.BLACK);
+        window.setResizable(false);
 
         game = new Game();
         game.setup();

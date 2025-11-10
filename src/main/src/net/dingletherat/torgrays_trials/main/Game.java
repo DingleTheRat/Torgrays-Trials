@@ -6,13 +6,8 @@ import net.dingletherat.torgrays_trials.entity.Player;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 import net.dingletherat.torgrays_trials.rendering.UI;
-
 import javax.swing.*;
-
-
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -20,7 +15,7 @@ import java.util.ArrayList;
 public class Game extends JPanel {
     // Screen settings
     final int originalTileSize = 16; // 16x16 tile
-    int scale = 3;
+    public int scale = 4;
 
     public int tileSize = originalTileSize * scale; // 48x48 tile
     public final int maxScreenCol = 20;

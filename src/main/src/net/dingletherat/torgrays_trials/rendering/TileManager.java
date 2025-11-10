@@ -20,18 +20,18 @@ public class TileManager {
         // Water
         registerTile(12, "water/water", "00000/00000/00000/00000/00000");
         registerTile(13, "water/white_line_water", "00000/00000/00000/00000/00000");
-        registerTile(14, "water/water_corner_1", "11111/11111/11111/11111/11111");
-        registerTile(15, "water/water_edge_3", "11111/11111/11111/11111/11111");
-        registerTile(16, "water/water_corner_3", "11111/11111/11111/11111/11111");
-        registerTile(17, "water/water_edge_4", "11111/11111/11111/11111/11111");
-        registerTile(18, "water/water_edge_2", "11111/11111/11111/11111/11111");
-        registerTile(19, "water/water_corner_2", "11111/11111/11111/11111/11111");
-        registerTile(20, "water/water_edge_1", "11111/11111/11111/11111/11111");
-        registerTile(21, "water/water_corner_4", "11111/11111/11111/11111/11111");
-        registerTile(22, "water/water_outer_corner_1", "11111/11111/11111/11111/11111");
-        registerTile(23, "water/water_outer_corner_2", "11111/11111/11111/11111/11111");
-        registerTile(24, "water/water_outer_corner_3", "11111/11111/11111/11111/11111");
-        registerTile(25, "water/water_outer_corner_4", "11111/11111/11111/11111/11111");
+        registerTile(14, "water/water_corner_1", "00000/01111/01111/01111/01111");
+        registerTile(19, "water/water_corner_2", "01111/01111/01111/01111/00000");
+        registerTile(16, "water/water_corner_3", "00000/11110/11110/11110/11110");
+        registerTile(21, "water/water_corner_4", "11110/11110/11110/11110/00000");
+        registerTile(20, "water/water_edge_1", "11111/11111/11111/11111/00000");
+        registerTile(18, "water/water_edge_2", "11110/11110/11110/11110/11110");
+        registerTile(15, "water/water_edge_3", "00000/11111/11111/11111/11111");
+        registerTile(17, "water/water_edge_4", "01111/01111/01111/01111/01111");
+        registerTile(22, "water/water_outer_corner_1", "11111/11111/11111/11111/11110");
+        registerTile(23, "water/water_outer_corner_2", "11111/11111/11111/11111/01111");
+        registerTile(24, "water/water_outer_corner_3", "11110/11111/11111/11111/11111");
+        registerTile(25, "water/water_outer_corner_4", "01111/11111/11111/11111/11111");
 
         // Path
         registerTile(26, "path/path", "00000/00000/00000/00000/00000");
@@ -53,7 +53,7 @@ public class TileManager {
         registerTile(40, "planks", "11111/11111/11111/11111/11111");
 
         // Tree
-        registerTile(41, "tree/tree", "11111/11111/11111/11111/11111");
+        registerTile(41, "tree/tree", "01110/11111/11111/11111/01110");
 
         // Event Tiles
         registerTile(42, "path/path_pit", "00000/00000/00000/00000/00000");
@@ -81,11 +81,11 @@ public class TileManager {
      * @param collision Determines if you can go through the tile, or not.
      */
     public static void registerTile(int i, String imageName, String collision) {
-        // Create a new tile and add it to the tileTypes HashMap, set it's collision, and load the image
+        // Create a new tile and add it to the tileTypes HashMap, set its collision, and load the image
         boolean[][] collisionArray = new boolean[5][5];
         for (int row = 0; row < collision.split("/").length; row++) {
             for (int col = 0; col < collision.split("/")[row].length(); col++) {
-                collisionArray[row][col] = collision.split("/")[row].charAt(col) == '1';
+                collisionArray[col][row] = collision.split("/")[row].charAt(col) == '1';
             }
         }
         Tile tile = new Tile(Image.loadImage("tile/" + imageName), collisionArray);
@@ -139,6 +139,18 @@ public class TileManager {
                             worldY - tileSize < camY + Main.game.screenHeight / 2f) {
                         Tile currentTile = tileTypes.get(tileNumber);
                         graphics.drawImage(currentTile.image().getImage(), Math.round(screenX), Math.round(screenY), null);
+                        
+                        // graphics.setColor(new Color(255, 0, 0, 150));
+                        // for (int x = 0; x < 5; x++) {
+                        //    for (int y = 0; y < 5; y++) {
+                        //        // Debugging collision points
+                        //        if (currentTile.collision()[x][y]) {
+                        //            int pointX = Math.round(screenX + (x * (tileSize / 5f)) + (tileSize / 10f));
+                        //            int pointY = Math.round(screenY + (y * (tileSize / 5f)) + (tileSize / 10f));
+                        //            graphics.fillOval(pointX, pointY, 5, 5);
+                        //        }
+                        //    }
+                        //}
                     }
                 })
         );

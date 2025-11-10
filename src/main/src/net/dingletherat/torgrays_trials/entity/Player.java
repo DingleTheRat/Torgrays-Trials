@@ -10,15 +10,15 @@ import net.dingletherat.torgrays_trials.rendering.Image;
 public class Player extends Mob {
     public float camX, camY;
     public Player() {
-        super("Torgray", 0f, 0f);
+        super("Torgray", 0f, 0f, 12f, 16f);
 
         // Load Sprites
         loadSprites();
 
         // Set some properties
         speed = 4;
-        x = Main.game.tileSize * 21; // Colum 21
-        y = Main.game.tileSize * 23; // Row 23
+        x = Main.game.tileSize * 23; // Colum 23
+        y = Main.game.tileSize * 21; // Row 21
         camX = x;
         camY = y;
 
@@ -43,34 +43,24 @@ public class Player extends Mob {
         HashMap<Integer, Boolean> keyMap = Main.game.inputHandler.keyMap;
         if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
                 (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
-            if (keyMap.get(KeyEvent.VK_W)) y -= speed / 1.4f;
-            if (keyMap.get(KeyEvent.VK_A)) x -= speed / 1.4f;
-            if (keyMap.get(KeyEvent.VK_S)) y += speed / 1.4f;
-            if (keyMap.get(KeyEvent.VK_D)) x += speed / 1.4f;
+            tryMove((keyMap.get(KeyEvent.VK_D)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_A)?1:0)/1.4f, 0);
+            tryMove(0, (keyMap.get(KeyEvent.VK_S)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_W)?1:0)/1.4f);
         } else {
-            if (keyMap.get(KeyEvent.VK_W)) y -= speed;
-            if (keyMap.get(KeyEvent.VK_A)) x -= speed;
-            if (keyMap.get(KeyEvent.VK_S)) y += speed;
-            if (keyMap.get(KeyEvent.VK_D)) x += speed;
-        }
-        System.out.println(CollisionChecker.checkEntityColliding(this));
-        if (CollisionChecker.checkEntityColliding(this)) {
-            if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
-                    (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
-                if (keyMap.get(KeyEvent.VK_W)) y += speed / 1.4f;
-                if (keyMap.get(KeyEvent.VK_A)) x += speed / 1.4f;
-                if (keyMap.get(KeyEvent.VK_S)) y -= speed / 1.4f;
-                if (keyMap.get(KeyEvent.VK_D)) x -= speed / 1.4f;
-            } else {
-                if (keyMap.get(KeyEvent.VK_W)) y += speed;
-                if (keyMap.get(KeyEvent.VK_A)) x += speed;
-                if (keyMap.get(KeyEvent.VK_S)) y -= speed;
-                if (keyMap.get(KeyEvent.VK_D)) x -= speed;
-            }
+            tryMove((keyMap.get(KeyEvent.VK_D)?1:0) - (keyMap.get(KeyEvent.VK_A)?1:0), 0);
+            tryMove(0, (keyMap.get(KeyEvent.VK_S)?1:0) - (keyMap.get(KeyEvent.VK_W)?1:0));
         }
         
         // Modify the screenX and screenY depending on the size of the window
         camX -= (camX - x) * 0.15f;
         camY -= (camY - y) * 0.15f;
+    }
+    
+    private void tryMove(float x, float y) {
+        this.x += x * speed;
+        this.y += y * speed;
+        if (CollisionChecker.checkEntityColliding(this)) {
+            this.x -= x * speed;
+            this.y -= y * speed;
+        }
     }
 }
