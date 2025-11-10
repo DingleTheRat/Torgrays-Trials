@@ -88,7 +88,7 @@ public class TileManager {
                 collisionArray[row][col] = collision.split("/")[row].charAt(col) == '1';
             }
         }
-        // Load the image, and scale it to the tileSize
+        // Load the image and scale it to the tileSize
         Image image = Image.loadImage("tile/" + imageName);
         image.scaleImage(Main.game.tileSize, Main.game.tileSize);
 

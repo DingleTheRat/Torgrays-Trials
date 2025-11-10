@@ -12,6 +12,8 @@ import net.dingletherat.torgrays_trials.rendering.Image;
 public class Player extends Mob {
     public Image eyesSheet = Image.loadImage("disabled");
     public int eyesColumn = 0;
+    public int eyesRow = 0;
+    private boolean blinking = false;
 
     public float cameraX, cameraY;
 
@@ -27,10 +29,11 @@ public class Player extends Mob {
 
         // Load the eye sheet
         eyesSheet = Image.loadImage("entity/eyes_sheet");
-        eyesSheet.scaleImage(Main.game.tileSize * 5, Main.game.tileSize);
+        eyesSheet.scaleImage(Main.game.tileSize * 5, Main.game.tileSize * 2);
 
-        // Add an eye idle animation counter
+        // Add counters
         counters.put("eyes_idle", 0);
+        counters.put("eyes_blink", 0);
 
         // Set some properties
         speed = 4;
@@ -102,6 +105,39 @@ public class Player extends Mob {
             };
         }
 
+        // Make the eyes eyes eyes blink
+        // Update the sprite counter
+        counters.put("eyes_blink", counters.get("eyes_blink") + 1);
+
+        // If the counter hits the goal, and it's a high one meaning we're not blinking, make us blink
+        if (counters.get("eyes_blink") >= animationSpeed * 15) {
+            // Change the row to the blinking row
+            eyesRow = 1;
+
+            // Reset the counter
+            counters.put("eyes_blink", 0);
+        } else if (!blinking && eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed) {
+            // If it hits the lower goal, and we are in the process of blinking, close our eyes (set to non-existent sprite) 
+            eyesRow = 2;
+
+            // Reset the counter
+            counters.put("eyes_blink", 0);
+            blinking = true;
+        } else if (eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed) {
+            // If it hits the lower goal, and we are in the process of blinking (and almost done), re-open our eyes
+            eyesRow = 0;
+
+            // Reset the counter and blinking state
+            counters.put("eyes_blink", 0);
+            blinking = false;
+        } else if (eyesRow == 2 & counters.get("eyes_blink") >= animationSpeed) {
+            // If it hits the lower goal, and we have our eyes closed, re-open our eyes 
+            eyesRow = 1;
+
+            // Reset the counter
+            counters.put("eyes_blink", 0);
+        }
+
         // Draw the eyes (as long as the player isn't facing backward)
         if (spriteRow != 0) {
             graphics.drawImage(eyesSheet.getImage(),
@@ -113,9 +149,9 @@ public class Player extends Mob {
 
                 // Source rectangle (from a sprite sheet)
                 Main.game.tileSize * eyesColumn,
-                0,
+                Main.game.tileSize * eyesRow,
                 Main.game.tileSize * eyesColumn + Main.game.tileSize,
-                 Main.game.tileSize,
+                Main.game.tileSize * eyesRow + Main.game.tileSize,
                 null);
         }
     }
