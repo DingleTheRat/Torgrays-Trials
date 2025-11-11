@@ -33,7 +33,7 @@ public class Entity {
     public boolean updateOffScreen = false;
     /// Pretty self-explanatory. It's used to increase performance by not loading the entity while it's off-screen.
     public boolean onScreen = false;
-    public boolean collision;
+    public boolean collision = true;
 
     public Properties properties = new Properties();
 
