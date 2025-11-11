@@ -96,25 +96,6 @@ public class Mob extends Entity {
             if (CollisionChecker.checkEntityColliding(this)) y -= moveY * movementSpeed;
         }
     }
-//        // If the player is moving diagonally, reduce the movement speed to 1/1.4 of normal speed.
-//        if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
-//                (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
-//            tryMove((keyMap.get(KeyEvent.VK_D)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_A)?1:0)/1.4f, 0);
-//            tryMove(0, (keyMap.get(KeyEvent.VK_S)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_W)?1:0)/1.4f);
-//        } else {
-//            tryMove((keyMap.get(KeyEvent.VK_D)?1:0) - (keyMap.get(KeyEvent.VK_A)?1:0), 0);
-//            tryMove(0, (keyMap.get(KeyEvent.VK_S)?1:0) - (keyMap.get(KeyEvent.VK_W)?1:0));
-//        }
-//
-    // Move in a direction, if you collide, go back
-    private void tryMove(float x, float y) {
-        this.x += x * speed;
-        this.y += y * speed;
-        if (CollisionChecker.checkEntityColliding(this)) {
-            this.x -= x * speed;
-            this.y -= y * speed;
-        }
-    }
 
     @Override
     public void draw(Graphics graphics) {
