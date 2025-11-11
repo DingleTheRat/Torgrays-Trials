@@ -53,21 +53,24 @@ public class Player extends Mob {
     @Override
     public void update() {
         HashMap<Integer, Boolean> keyMap = Main.game.inputHandler.keyMap;
+        StringBuilder newDirection = new StringBuilder();
 
-        // Check if the player is moving or not to set its state
-        state = (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S) ||
-                keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) ? States.MobStates.WALKING : States.MobStates.IDLE;
-        
-        // If the player is moving diagonally, reduce the movement speed to 1/1.4 of normal speed.
-        if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
-                (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
-            tryMove((keyMap.get(KeyEvent.VK_D)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_A)?1:0)/1.4f, 0);
-            tryMove(0, (keyMap.get(KeyEvent.VK_S)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_W)?1:0)/1.4f);
-        } else {
-            tryMove((keyMap.get(KeyEvent.VK_D)?1:0) - (keyMap.get(KeyEvent.VK_A)?1:0), 0);
-            tryMove(0, (keyMap.get(KeyEvent.VK_S)?1:0) - (keyMap.get(KeyEvent.VK_W)?1:0));
-        }
-        
+        /* Depending on the key pressed, append a newDirection with a direction.
+         * If the direction was appended more than once, append the direction with a space
+         this is to let the mob's update method know if the movement is diagonal */
+        if (keyMap.get(KeyEvent.VK_W)) newDirection.append("up");
+        if (keyMap.get(KeyEvent.VK_S)) newDirection.append(!newDirection.isEmpty() ? "" : "down");
+        if (keyMap.get(KeyEvent.VK_A)) newDirection.append(!newDirection.isEmpty() ? " left" : "left");
+        if (keyMap.get(KeyEvent.VK_D)) newDirection.append(!newDirection.isEmpty() ? " right" : "right");
+
+        // If nothing was added to the StringBuilder, meaning the player isn't walking, change his state accordingly
+        if (newDirection.isEmpty()) state = States.MobStates.IDLE;
+        else state = States.MobStates.WALKING;
+
+        // Set the direction to the final newDirection string and let the mod's update method do the rest
+        direction = newDirection.toString().trim();
+        super.update();
+
         // Modify the screenX and screenY depending on the size of the window
         cameraX -= (cameraX - x) * 0.15f;
         cameraY -= (cameraY - y) * 0.15f;
@@ -108,9 +111,9 @@ public class Player extends Mob {
 
         // Make the eyes eyes eyes blink
         // Update the sprite counter
-        counters.put("eyes_blink", counters.get("eyes_blink") + 1);
+       counters.put("eyes_blink", counters.get("eyes_blink") + 1);
 
-        // If the counter hits the goal, and it's a high one meaning we're not blinking, make us blink
+        // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
         if (counters.get("eyes_blink") >= animationSpeed * 15) {
             // Change the row to the blinking row
             eyesRow = 1;
@@ -154,16 +157,6 @@ public class Player extends Mob {
                 Main.game.tileSize * eyesColumn + Main.game.tileSize,
                 Main.game.tileSize * eyesRow + Main.game.tileSize,
                 null);
-        }
-    }
-    
-    // Move in a direction, if you collide go back
-    private void tryMove(float x, float y) {
-        this.x += x * speed;
-        this.y += y * speed;
-        if (CollisionChecker.checkEntityColliding(this)) {
-            this.x -= x * speed;
-            this.y -= y * speed;
         }
     }
 }

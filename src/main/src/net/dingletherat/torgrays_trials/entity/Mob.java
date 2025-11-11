@@ -65,30 +65,54 @@ public class Mob extends Entity {
 
             /* If the direction string contains a space, it means it has 2 words and 2 directions.
              * 2 directions mean that the mob is going diagonally, which means they are going diagonally
-              Diagonal movement makes the mob faster, so we decrease the speed accordingly*/
+             Diagonal movement makes the mob faster, so we decrease the speed accordingly*/
             float movementSpeed = direction.contains(" ") ? speed / 1.4f : speed;
 
-            // Now, move forward depending on the direction
-            for (String iDirection : directionWords) {
-                switch (iDirection) {
-                    case "up" -> y -= movementSpeed;
-                    case "down" -> y += movementSpeed;
-                    case "left" -> x -= movementSpeed;
-                    case "right" -> x += movementSpeed;
+            // Initialize movement offsets for both X and Y axes that will store the movement direction.
+            float moveX = 0f;
+            float moveY = 0f;
+
+            // Convert directions to movement offsets
+            for (String singleDirection : directionWords) {
+                switch (singleDirection) {
+                    case "up" -> moveY -= 1;
+                    case "down" -> moveY += 1;
+                    case "left" -> moveX -= 1;
+                    case "right" -> moveX += 1;
                 }
             }
 
-            // However, if the mob collides with something, undo the movement
-            if (CollisionChecker.checkEntityColliding(this)) {
-                for (String iDirection : directionWords) {
-                    switch (iDirection) {
-                        case "up" -> y += movementSpeed;
-                        case "down" -> y -= movementSpeed;
-                        case "left" -> x += movementSpeed;
-                        case "right" -> x -= movementSpeed;
-                    }
-                }
-            }
+            /* Apply the movement to the entity’s position individually.
+             * If moving in one direction collides. If it does, undo the movement, so the entity remains in a valid position.
+             * This will make it so if you are moving diagonally, and you only collide with something on the X axis, you will still move on the Y. 
+              The movement also offsets are scaled by the movementSpeed to produce smooth movement.*/
+
+            // First, X
+            x += moveX * movementSpeed;
+            if (CollisionChecker.checkEntityColliding(this)) x -= moveX * movementSpeed;
+
+            // Then, Y
+            y += moveY * movementSpeed;
+            if (CollisionChecker.checkEntityColliding(this)) y -= moveY * movementSpeed;
+        }
+    }
+//        // If the player is moving diagonally, reduce the movement speed to 1/1.4 of normal speed.
+//        if ((keyMap.get(KeyEvent.VK_A) || keyMap.get(KeyEvent.VK_D)) &&
+//                (keyMap.get(KeyEvent.VK_W) || keyMap.get(KeyEvent.VK_S))) {
+//            tryMove((keyMap.get(KeyEvent.VK_D)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_A)?1:0)/1.4f, 0);
+//            tryMove(0, (keyMap.get(KeyEvent.VK_S)?1:0)/1.4f - (keyMap.get(KeyEvent.VK_W)?1:0)/1.4f);
+//        } else {
+//            tryMove((keyMap.get(KeyEvent.VK_D)?1:0) - (keyMap.get(KeyEvent.VK_A)?1:0), 0);
+//            tryMove(0, (keyMap.get(KeyEvent.VK_S)?1:0) - (keyMap.get(KeyEvent.VK_W)?1:0));
+//        }
+//
+    // Move in a direction, if you collide, go back
+    private void tryMove(float x, float y) {
+        this.x += x * speed;
+        this.y += y * speed;
+        if (CollisionChecker.checkEntityColliding(this)) {
+            this.x -= x * speed;
+            this.y -= y * speed;
         }
     }
 
@@ -100,7 +124,7 @@ public class Mob extends Entity {
 
             // If the counter hits the goal, reset the mob's sprite to their main one
             if (counters.get("sprite_idle") >= animationSpeed * 2) {
-                spriteColumn = 1;
+                spriteColumn = 0;
                 spriteRow = 1;
 
                 // Reset The counter
