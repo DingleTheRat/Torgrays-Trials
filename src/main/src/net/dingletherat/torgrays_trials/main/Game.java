@@ -3,6 +3,7 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.entity.Entity;
 import net.dingletherat.torgrays_trials.entity.Player;
+import net.dingletherat.torgrays_trials.rendering.Darkness;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 import net.dingletherat.torgrays_trials.rendering.UI;
@@ -11,6 +12,7 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Game extends JPanel {
     // Screen settings
@@ -29,6 +31,8 @@ public class Game extends JPanel {
     // Classes
     public UI ui;
     public InputHandler inputHandler;
+    public Darkness darkness;
+    public Random random = new Random();
 
     // Entities
     public Player player;
@@ -64,11 +68,39 @@ public class Game extends JPanel {
 
         // Change the layout to Box, then load in UI
         setLayout(new BoxLayout(Main.game, BoxLayout.Y_AXIS));
-        //ui = new UI(this);
+        ui = new UI(this);
+        darkness = new Darkness();
 
         // Load in Torgray :D
         player = new Player();
         entities.add(player);
+        darkness.addLightSource(player);
+        
+        // Light test fireflies
+        for (int i = 0; i < 100; i++) {
+            Entity entity = new Entity("wassup", Main.game.tileSize * Main.game.random.nextInt(50),
+                    Main.game.tileSize * Main.game.random.nextInt(50)){
+                float vX, vY = 0;
+                public void update() {
+                    if (Main.game.random.nextFloat() > 0.5) properties.put("light_intensity", 0.3f * ((Main.game.random.nextFloat() - 0.5f) / 5f + 1));
+                    if (Main.game.random.nextFloat() > 0.9) {
+                        vX += (Main.game.random.nextFloat() - 0.5f) * 2;
+                        vY += (Main.game.random.nextFloat() - 0.5f) * 2;
+                        if (vX > 2) vX = 2;
+                        if (vX < -2) vX = -2;
+                        if (vY > 2) vY = 2;
+                        if (vY < -2) vY = -2;
+                    }
+                    x += vX;
+                    y += vY;
+                }
+            };
+            entity.collision = false;
+            entity.properties.put("light_radius", (float) Main.game.random.nextInt(15) + 1);
+            entity.properties.put("light_intensity", 0.3f);
+            entities.add(entity);
+            darkness.addLightSource(entity);
+        }
 
         // Load sound library and play music
         Sound.loadLibrary();
@@ -112,6 +144,8 @@ public class Game extends JPanel {
 
             // Draw every entity inside the entities hashmap
             entities.forEach(entity -> entity.draw(graphics));
+            
+            darkness.draw(graphics);
         }
 
         if (gameState == States.GameStates.TITLE) ui.draw(graphics);

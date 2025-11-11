@@ -49,7 +49,7 @@ public class CollisionChecker {
 	// Check if an entity is colliding with any other entity or block
 	public static boolean checkEntityColliding(Entity e) {
 		for (Entity other : Main.game.entities) {
-			if (other != e) {
+			if (other != e && other.collision) {
 				if (check2EntityCollision(e, other)) {
 					return true;
 				}

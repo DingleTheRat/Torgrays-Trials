@@ -2,6 +2,7 @@
 package net.dingletherat.torgrays_trials.entity;
 
 import java.awt.Graphics;
+import java.util.Properties;
 
 import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.rendering.Image;
@@ -32,7 +33,9 @@ public class Entity {
     public boolean updateOffScreen = false;
     /// Pretty self-explanatory. It's used to increase performance by not loading the entity while it's off-screen.
     public boolean onScreen = false;
+    public boolean collision;
 
+    public Properties properties = new Properties();
 
     // Other
     public String name;

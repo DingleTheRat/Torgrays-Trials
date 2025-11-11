@@ -4,7 +4,6 @@ package net.dingletherat.torgrays_trials.entity;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
-
 import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.rendering.Image;
@@ -42,6 +41,8 @@ public class Player extends Mob {
         cameraX = x;
         cameraY = y;
         updateOffScreen = true;
+        properties.put("light_radius", 150f);
+        properties.put("light_intensity", 0.8f);
 
         /* Set onScreen to true, so the player can be drawn
         Since the super class's update method isn't called, and the player is always on Screen, it doesn't update to false*/
@@ -52,6 +53,7 @@ public class Player extends Mob {
 
     @Override
     public void update() {
+        if (Main.game.random.nextFloat() > 0.5) properties.put("light_intensity", 0.8f * ((Main.game.random.nextFloat() - 0.5f) / 5f + 1));
         HashMap<Integer, Boolean> keyMap = Main.game.inputHandler.keyMap;
         StringBuilder newDirection = new StringBuilder();
 
