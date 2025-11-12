@@ -3,6 +3,7 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.entity.Entity;
 import net.dingletherat.torgrays_trials.entity.Player;
+import net.dingletherat.torgrays_trials.main.States.GameStates;
 import net.dingletherat.torgrays_trials.rendering.Darkness;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
@@ -38,9 +39,8 @@ public class Game extends JPanel {
     public Player player;
     public ArrayList<Entity> entities = new ArrayList<>();
 
-    // States
-    public States.GameStates gameState = States.GameStates.PLAY;
-    public States.UIStates uiState = States.UIStates.NONE;
+    // State
+    public States.GameStates gameState = States.GameStates.TITLE;
 
     // Game settings
     public String difficulty;
@@ -73,8 +73,6 @@ public class Game extends JPanel {
 
         // Load in Torgray :D
         player = new Player();
-        entities.add(player);
-        darkness.addLightSource(player);
         
         // Light test fireflies
         for (int i = 0; i < 100; i++) {
@@ -139,10 +137,15 @@ public class Game extends JPanel {
     protected void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        if (gameState == States.GameStates.PLAY) {
+        if (gameState == States.GameStates.TITLE) {
+            TileManager.draw(graphics); // TEMPORARY! will relace this with better code later
+            darkness.draw(graphics);
+            entities.forEach(entity -> entity.draw(graphics));
+        } else if (gameState == States.GameStates.PLAY) {
             TileManager.draw(graphics); // TEMPORARY! will relace this with better code later
 
-            // Draw every entity inside the entities hashmap
+            // Draw every entity inside the entities hashmap and the player
+            player.draw(graphics);
             entities.forEach(entity -> entity.draw(graphics));
             
             darkness.draw(graphics);
@@ -152,10 +155,28 @@ public class Game extends JPanel {
     }
 
     private void update() {
-        // Update every entity inside the entities hashmap
-        entities.forEach(Entity::update);
+        // Update UI
+        ui.update();
+
+        if (gameState == States.GameStates.TITLE) {
+            entities.forEach(Entity::update);
+        } else if (gameState == States.GameStates.PLAY) {
+            // Update every entity inside the entities hashmap and the player
+            player.update();
+            entities.forEach(Entity::update);
+        }
     }
 
-    public void adjustDifficulty() {
+    public void loadGame() {
+        // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
+        gameState = GameStates.PLAY;
+        ui.uiState = "Play";
+
+        // TODO: Whenever there is an inventory system, make this only work with items
+        darkness.addLightSource(player);
+
+        // Change the music to the "playing music"
+        Sound.stopMusic();
+        Sound.playMusic("Umbral Force");
     }
 }

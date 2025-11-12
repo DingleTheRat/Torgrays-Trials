@@ -16,7 +16,7 @@ public class CollisionChecker {
 	
 	// Check if an entity is colliding with a block defined by collisionPoints at world position (x, y)
 	public static boolean checkBlockCollision(Entity e, boolean[][] collisionPoints, float x, float y) {
-		// tile positions are from the top-left corner; use tile center for broad-phase
+		// tile positions are from the top-left corner; use a tile center for broad-phase
 		float tileHalfW = Main.game.tileSize / 2f;
 		float tileCenterX = x + tileHalfW;
 		float tileCenterY = y + tileHalfW;
@@ -35,7 +35,7 @@ public class CollisionChecker {
 					if (collisionPoints[i][j]) {
 						float halfW = e.width / 2f;
 						float halfH = e.height / 2f;
-						// compute world-space center of the sub-cell (tile top-left + cell offset)
+						// compute a world-space center of the subcell (tile top-left + cell offset)
 						float px = x + i * cellW + cellW / 2f;
 						float py = y + j * cellH + cellH / 2f;
 						if (Math.abs(px - e.x) <= halfW && Math.abs(py - e.y) <= halfH) return true;

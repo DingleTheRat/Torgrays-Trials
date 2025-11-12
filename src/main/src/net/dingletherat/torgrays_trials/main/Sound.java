@@ -9,11 +9,10 @@ import java.util.HashMap;
 
 public class Sound {
     public static final HashMap<String, URL> SOUND_LIBRARY = new HashMap<>();
-    
-	ArrayList<Clip> clips = new ArrayList<>();
-	FloatControl floatControl;
-	int volumeScale = 3;
-	float volume;
+    ArrayList<Clip> clips = new ArrayList<>();
+    FloatControl floatControl;
+    int volumeScale = 3;
+    float volume;
 
     public static void loadLibrary() {
         // Music

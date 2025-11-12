@@ -35,9 +35,10 @@ public class Player extends Mob {
         counters.put("eyes_blink", 0);
 
         // Set some properties
+        // TODO: Make position dependent on the map
         speed = 4;
-        x = Main.game.tileSize * 21; // Colum 21
-        y = Main.game.tileSize * 23; // Row 23
+        x = Main.game.tileSize * 23; // Colum 23
+        y = Main.game.tileSize * 21; // Row 21
         cameraX = x;
         cameraY = y;
         updateOffScreen = true;

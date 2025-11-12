@@ -11,7 +11,7 @@ public class Darkness {
 	/// Add entities that emit light here. These entities must have the "light_radius" and "light_intensity"
 	/// properties in the {@code properties} variable set to proper float values.
 	private final ArrayList<Entity> lightSources = new ArrayList<>();
-	public float ambientDarkness = 0.9f;  // How dark is it without lights (0.0 = no darkness, 1.0 = complete darkness)
+	public float ambientDarkness = 0.9f;  // How dark it is without lights (0.0 = no darkness, 1.0 = complete darkness)
 	
 	public void addLightSource(Entity entity) {
 		lightSources.add(entity);

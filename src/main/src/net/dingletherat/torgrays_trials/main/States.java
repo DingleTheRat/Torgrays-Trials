@@ -9,28 +9,9 @@ public class States {
 		GAME_END,
 		EXCEPTION,
 	}
-	public enum UIStates {
-		NONE(false, false), // No UI
-		JUST_DEFAULT(true, true), // Only default HUD
-		DIALOGUE(true, true), // Dialogue box
-		INTERACT(true, true), // Interacting with an interactable object
-		PAUSE(true, true), // Pause menu
-		CHARACTER(false, false),
-		TRADE(false, false), // Trading menu
-		MAP(false, false), // Map screen
-		SAVE(false, false); // Save menu
-		
-		final boolean defaultKeyboardInput;
-		final boolean defaultUI;
-		
-		UIStates(boolean defaultKeyboardInput, boolean defaultUI) {
-			this.defaultKeyboardInput = defaultKeyboardInput;
-			this.defaultUI = defaultUI;
-		}
-	}
     public enum MobStates {
-        IDLE,
-        WALKING
+	IDLE,
+	WALKING
     }
 	public enum DarknessStates {
 		NIGHT,
