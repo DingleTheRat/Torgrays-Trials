@@ -7,6 +7,9 @@ import java.util.HashMap;
 import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.rendering.Image;
+import net.dingletherat.torgrays_trials.rendering.Map;
+import net.dingletherat.torgrays_trials.rendering.MapHandler;
+import net.dingletherat.torgrays_trials.rendering.TileManager;
 
 public class Player extends Mob {
     public Image eyesSheet;
@@ -77,6 +80,15 @@ public class Player extends Mob {
         // Modify the screenX and screenY depending on the size of the window
         cameraX -= (cameraX - x) * 0.15f;
         cameraY -= (cameraY - y) * 0.15f;
+        
+        // Clamp the camera to the map bounds
+        Map map = TileManager.maps.get(Main.game.currentMap);
+        int maxCameraX = map.x() * Main.game.tileSize - Main.game.screenWidth / 2;
+        int maxCameraY = map.y() * Main.game.tileSize - Main.game.screenHeight / 2;
+        if (cameraX < Main.game.screenWidth / 2f) cameraX = Main.game.screenWidth / 2f;
+        if (cameraY < Main.game.screenHeight / 2f) cameraY = Main.game.screenHeight / 2f;
+        if (cameraX > maxCameraX) cameraX = maxCameraX;
+        if (cameraY > maxCameraY) cameraY = maxCameraY;
     }
 
     @Override
