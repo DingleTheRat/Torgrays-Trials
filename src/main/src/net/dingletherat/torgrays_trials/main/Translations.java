@@ -19,7 +19,7 @@ public class Translations {
      * @param key This could be anything you want, as long as it's a different thing as something else under the same identifier.
      * This is what's added to the end of the {@code translationKey}, so the format would be identifier + ":" + key (which is this parameter)
      * @return The result of what's found in the translation file with the translation key.
-     * If something is not found, it returns the {@code translationKey} for debbuging.
+     * If something is not found, it returns the {@code translationKey} for debugging.
      **/
     public static String translatableText(String identifier, String key) {
         // Firstly get the json file of the current language, and get translationKey by combining the caller and key strings

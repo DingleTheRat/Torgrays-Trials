@@ -10,9 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-
 import net.dingletherat.torgrays_trials.main.Translations;
-import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.main.Sound;
 
@@ -32,7 +30,7 @@ public class UI {
     Font maruMonica;
     Graphics graphics;
 
-    public UI(Game game) {
+    public UI() {
         // Load in the font
         try {
             InputStream inputStream = getClass().getResourceAsStream("/font/Maru_Monica.ttf");
@@ -145,7 +143,7 @@ public class UI {
 
         return label;
     }
-
+    
     /**
      * Creates a button with hover effects.
      * Using the {@code createBasicText} method, this method creates a basic text label.
@@ -158,31 +156,80 @@ public class UI {
      * @return The label that is created. Feel free to modify it further.
      **/
     public JLabel createBasicButton(String text, float size, Runnable action) {
-        // Create a label using createBasicText because it does most of the stuff we need
-        JLabel label = createBasicText(text, size);
+        Font font = maruMonica.deriveFont(size);
+        return new HoverButton(text, font, action);
+    }
+}
 
-        // Now for what this method is actually about, hover animations :D
-        label.addMouseListener(new MouseAdapter() {
-           @Override
-           public void mouseEntered(MouseEvent event) {
-               // If the mouse entered, let the player know they can press it by putting arrows around it and playing a sound
-               label.setText("> " + text + " <");
-               Sound.playSFX("Cursor");
-           }
-
-           @Override
-           public void mouseExited(MouseEvent event) {
-               // Once the cursor leaves, undo the last method's work
-               label.setText(text);
-           }
-
-           @Override
-           public void mouseClicked(MouseEvent event) {
-               // Just run the lambda for clicking
-               action.run();
-           }
+/**
+ * JLabel that draws left/right arrow glyphs when hovered without changing the text,
+ * avoiding any relayout / 1px shift caused by swapping the label text.
+ */
+class HoverButton extends JLabel {
+    private boolean hovered = false;
+	private final String leftArrow = ">";
+    private final String rightArrow = "<";
+    
+    public HoverButton(String text, Font font, Runnable action) {
+        super(text);
+        setFont(font);
+        setForeground(Color.WHITE);
+        setHorizontalAlignment(SwingConstants.CENTER);
+        setAlignmentX(Component.CENTER_ALIGNMENT);
+        setAlignmentY(Component.CENTER_ALIGNMENT);
+        
+        FontMetrics fm = getFontMetrics(getFont());
+        int textWidth = fm.stringWidth(text);
+        int arrowWidth = Math.max(fm.stringWidth(leftArrow), fm.stringWidth(rightArrow));
+	    int horizontalPadding = 20;
+	    int width = textWidth + arrowWidth * 2 + horizontalPadding * 2;
+        int height = fm.getHeight() + 6;
+        
+        Dimension fixedSize = new Dimension(width, height);
+        setPreferredSize(fixedSize);
+        setMinimumSize(fixedSize);
+        setMaximumSize(fixedSize);
+        
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                hovered = true;
+                repaint();
+                Sound.playSFX("Cursor");
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) {
+                hovered = false;
+                repaint();
+            }
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                action.run();
+            }
         });
-
-        return label;
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        FontMetrics fm = g.getFontMetrics(getFont());
+        int textWidth = fm.stringWidth(getText());
+        int centerX = getWidth() / 2;
+        int textStartX = centerX - textWidth / 2;
+        int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+        
+        if (hovered) {
+            g.setColor(getForeground());
+            
+            // Place arrows relative to the text edges with arrowSpacing
+            int leftX = textStartX - 20 - fm.stringWidth(leftArrow);
+            g.drawString(leftArrow, leftX, y);
+            
+            int rightX = textStartX + textWidth + 20;
+            g.drawString(rightArrow, rightX, y);
+        }
     }
 }

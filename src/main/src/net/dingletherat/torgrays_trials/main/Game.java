@@ -68,7 +68,7 @@ public class Game extends JPanel {
 
         // Change the layout to Box, then load in UI
         setLayout(new BoxLayout(Main.game, BoxLayout.Y_AXIS));
-        ui = new UI(this);
+        ui = new UI();
         darkness = new Darkness();
 
         // Load in Torgray :D
