@@ -8,7 +8,6 @@ import net.dingletherat.torgrays_trials.main.Main;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.rendering.Image;
 import net.dingletherat.torgrays_trials.rendering.Map;
-import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 
 public class Player extends Mob {
@@ -31,7 +30,7 @@ public class Player extends Mob {
 
         // Load the eye sheet
         eyesSheet = Image.loadImage("entity/eyes_sheet");
-        eyesSheet.scaleImage(Main.game.tileSize * 5, Main.game.tileSize * 2);
+        eyesSheet.scaleImage(Main.game.tileSize * 6, Main.game.tileSize * 2);
 
         // Add counters
         counters.put("eyes_idle", 0);
@@ -97,7 +96,13 @@ public class Player extends Mob {
 
         // Set which eyes
         if (state == States.MobStates.IDLE) {
-            // Update the sprite counter
+            /*
+             * If the eyes are set to the "walking right", set them to the "idle right" eyes
+             * The idle ones fit the idle sprite better, the walking ones set the right walking sprite better
+             */
+            if (eyesColumn == 3) eyesColumn = 2;
+
+            //Update the sprite counter
             counters.put("eyes_idle", counters.get("eyes_idle") + 1);
 
             // If the counter hits the goal, change the position of the eyes
@@ -119,7 +124,7 @@ public class Player extends Mob {
             // Based on the current displayed sprite, change eyes
             eyesColumn = switch (spriteRow) {
                 case 2 -> 1;
-                case 3 -> 2;
+                case 3 -> 3;
                 default -> 0;
             };
         }
