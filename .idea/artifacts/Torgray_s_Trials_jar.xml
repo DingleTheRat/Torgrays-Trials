@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="Torgray's Trials:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Torgray_s_Trials_jar</output-path>
-    <root id="archive" name="Torgray's Trials.jar">
-      <element id="module-output" name="main" />
-      <element id="module-output" name="Torgray's-Trials" />
-    </root>
-  </artifact>
-</component>
