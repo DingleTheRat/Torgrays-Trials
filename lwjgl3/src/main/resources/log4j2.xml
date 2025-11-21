@@ -5,10 +5,6 @@
             <PatternLayout disableAnsi="false" noConsoleNoAnsi="false"
                            pattern="%style{[%d{HH:mm:ss}]}{blue} %highlight{[%t/%level]}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=magenta, TRACE=red} %style{(%logger{0})}{cyan} %msg{nolookups}%n"/>
         </Console>
-        <Queue name="ServerGuiConsole">
-            <PatternLayout disableAnsi="false" noConsoleNoAnsi="false"
-                           pattern="%style{[%d{HH:mm:ss}]}{blue} %highlight{[%t/%level]}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=magenta, TRACE=red} %style{(%logger{0})}{cyan} %msg{nolookups}%n"/>
-        </Queue>
         <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout disableAnsi="false" noConsoleNoAnsi="false"
                            pattern="%style{[%d{HH:mm:ss}]}{blue} %highlight{[%t/%level]}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=magenta, TRACE=red} %style{(%logger{0})}{cyan} %msg{nolookups}%n"/>
@@ -25,7 +21,6 @@
             </filters>
             <AppenderRef ref="SysOut"/>
             <AppenderRef ref="File"/>
-            <AppenderRef ref="ServerGuiConsole"/>
         </Root>
     </Loggers>
 </Configuration>
