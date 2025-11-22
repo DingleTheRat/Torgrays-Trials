@@ -1,16 +1,16 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.rendering;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import net.dingletherat.torgrays_trials.Main;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Objects;
 
 /** A class that holds data of BufferedImages, and a BufferedImage
  * BufferedImages are not serializable, meaning if we want to save the game, we can't, it will throw an exception.
@@ -52,28 +52,26 @@ public class Image implements Serializable {
         The catch also has a NullPointerException because "requireNonNull" is used in the code*/
         try {
             // Get the imageStream that we will use for the image. It's separately instantiated as it will be used for null checking
-            InputStream imageStream = Image.class.getResourceAsStream("/drawable/" + imageName + ".png");
+            FileHandle file = Gdx.files.internal("drawable/" + imageName + ".png");
 
             /* Make sure the imageStream is a member of "/drawable/" and is a png. If not, use the disabled imageStream and warn.
             * The way we find out that is by checking if the imageStream is null. If it is, it's likely not a valid member.
             * However, if the imageName was just "", don't warn as it may be a result of an error
             In any of these cases, we use a placeholder image called "disabled" to indicate that something went wrong. */
             if (imageName.isEmpty()) {
-                image = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream("/drawable/disabled.png")));
+                image = ImageIO.read(Gdx.files.internal("drawable/disabled.png").read());
                 data = serializeImage(image);
                 return;
             }
-            if (imageStream == null) {
+            if (file == null) {
                 Main.LOGGER.warn("{} is not a valid member of \"/drawable/\". ", imageName);
-                image = ImageIO.read(Objects.requireNonNull(
-                    getClass().getResourceAsStream("/drawable/disabled.png")));
+                image = ImageIO.read(Gdx.files.internal("drawable/disabled.png").read());
                 data = serializeImage(image);
                 return;
             }
 
             // If all checks have passed, then set the image
-            image = ImageIO.read(imageStream);
+            image = ImageIO.read(file.read());
         } catch (IOException | NullPointerException e) {
             Main.handleException(e);
         }
@@ -148,6 +146,7 @@ public class Image implements Serializable {
         // Update the image and data to the new dimensions
         image = scaledImage;
         data = serializeImage(image);
+        texture = bufferedImageToTexture(image);
     }
 
     public static byte[] serializeImage(BufferedImage image) {

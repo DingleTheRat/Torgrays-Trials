@@ -19,38 +19,31 @@ public class UtilityTool {
     /**
      * Converts a given JSON file into a {@code JSONObject}.
      *
-     * @param filePath The file path for the file, which has to be a JSON, that is going to be converted to a {@code JSONObject}. {@code EX: "values/translations/english.json"}
+     * @param path The file path for the file, which has to be a JSON, that is going to be converted to a {@code
+     * JSONObject}. {@code EX: "values/translations/english.json"}
      * @return Returns a {@code JSONObject} that was made from the file
      **/
-    public static JSONObject getJsonObject(String filePath) {
-        // Firstly, get the inputStream from the filePath given
-        try (InputStream inputStream = UtilityTool.class.getResourceAsStream(filePath)) {
-            // Warn if the inputStream is null, meaning it couldn't find the path
-            if (inputStream == null) {
-                Main.LOGGER.warn("From: getJsonObject(), \"{}\" is not a valid path", filePath);
+    public static JSONObject getJsonObject(String path) {
+        try {
+            FileHandle file = Gdx.files.internal(path);
+
+            if (!file.exists()) {
+                Main.LOGGER.error("Warning: \"{}\" is not a valid path.", path);
                 return null;
             }
 
             // Warn if the filePath does not contain ".json", meaning it's not a JSON file
-            if (!filePath.endsWith(".json")) {
-                Main.LOGGER.warn("From: getJsonObject(): \"{}\" does not lead to a json file", filePath);
+            if (!file.name().endsWith(".json")) {
+                Main.LOGGER.warn("From: getJsonObject(): \"{}\" does not lead to a json file", file);
                 return null;
             }
 
-            /* Next, with the BufferedReader, read the contents of the inputStream (the file).
-             * The buffered reader reads the contents of the file line by line and adds it to a StringBuilder
-             * The stringBuilder is later converted into a JSONObject and returned
-             */
-            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
+            String content = file.readString("UTF-8");
+            return new JSONObject(content);
 
-                while ((line = bufferedReader.readLine()) != null) stringBuilder.append(line);
-                return new JSONObject(stringBuilder.toString());
-            }
-        } catch (IOException exception) {
-            Main.handleException(exception);
-            return null;
+        } catch (Exception e) {
+            Main.handleException(e);
+            return new JSONObject();
         }
     }
 

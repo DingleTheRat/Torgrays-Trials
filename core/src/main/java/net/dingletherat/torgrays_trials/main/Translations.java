@@ -3,7 +3,6 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 
 public class Translations {
@@ -46,19 +45,13 @@ public class Translations {
      **/
     public static void loadFiles() {
         // Get the names of all the files in "/values/translations"
-        String[] translationFiles = UtilityTool.getFileNames("/values/translations");
-
-        // Error, and return if something when wrong while getting the file names
-        if (translationFiles == null) {
-            Main.LOGGER.error("Cannot load translation files because \"translationFiles\" is null");
-            return;
-        }
+        String[] translationFiles = UtilityTool.getFileNames("values/translations");
 
         // Loop through the translation files and add them to the TRANSLATION_FILES HashMap
         for (String file : translationFiles) {
             /* Get the filePath of the file, and use it to convert the contents of the file
             into a getJsonObject to be able to add it to the TRANSLATION_FILES HashMap */
-            String filePath = "/values/translations/" + file;
+            String filePath = "values/translations/" + file;
             JSONObject jsonObject = UtilityTool.getJsonObject(filePath);
             if (jsonObject != null) TRANSLATION_FILES.put(file.replace(".json", ""), jsonObject);
         }
