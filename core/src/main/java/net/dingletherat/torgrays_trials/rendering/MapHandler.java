@@ -1,6 +1,8 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.rendering;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import net.dingletherat.torgrays_trials.Main;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class MapHandler {
@@ -126,19 +129,16 @@ public class MapHandler {
 	}
 
 	public static String[] getResourceFileNames(String directoryPath) {
-		try (InputStream inputStream = MapHandler.class.getResourceAsStream(directoryPath)) {
-			if (inputStream == null) {
-				Main.LOGGER.warn("Warning: \"{}\" is not a valid path.", directoryPath);
-				return new String[0];
-			}
+        // This is the LibGDX way of getting files
+        FileHandle dir = Gdx.files.internal(directoryPath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            Main.LOGGER.warn("Invalid directory: {}", directoryPath);
+            return new String[0];
+        }
 
-			try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
-				return bufferedReader.lines().toArray(String[]::new);
-			}
-		} catch (IOException e) {
-			Main.handleException(e);
-			return new String[0];
-		}
+        return Arrays.stream(dir.list())
+            .map(FileHandle::name)
+            .toArray(String[]::new);
 	}
 
 	public static JSONObject getJsonObject(String filePath) {

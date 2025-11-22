@@ -1,12 +1,15 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import net.dingletherat.torgrays_trials.Main;
 import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * The toolbox of the game.
@@ -57,26 +60,16 @@ public class UtilityTool {
      * @return A String array of all the names of the files contained in the directory
      **/
     public static String[] getFileNames(String directoryPath) {
-        // Make an input stream from the directoryPath
-        try (InputStream inputStream = UtilityTool.class.getResourceAsStream(directoryPath)) {
-            // If the inputStream is null, meaning something is wrong with the directoryPath, then return and warn
-            if (inputStream == null) {
-                Main.LOGGER.warn("From: getFileNames(): \"{}\" is not a valid path.", directoryPath);
-                return null;
-            }
-
-            /*
-             * Make a bufferedReader for the directory in the inputStream
-             * With the reader, we can get all the lines (contents) of the directoryPath
-             * The contents are simply the fileNames, and nothing else
-             * Those contents are converted into an arrayList of Strings
-             */
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            return bufferedReader.lines().toArray(String[]::new);
-        } catch (IOException exception) {
-            Main.handleException(exception);
-            return null;
+        // This is the LibGDX way of getting files
+        FileHandle dir = Gdx.files.internal(directoryPath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            Main.LOGGER.warn("Invalid directory: {}", directoryPath);
+            return new String[0];
         }
+
+        return Arrays.stream(dir.list())
+            .map(FileHandle::name)
+            .toArray(String[]::new);
     }
 
     public static byte[] serializeImage(BufferedImage image) {
