@@ -2,6 +2,8 @@
 package net.dingletherat.torgrays_trials;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -40,6 +42,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        LOGGER.info("Ending game...");
         batch.dispose();
         shapes.dispose();
         UI.dispose();
@@ -50,6 +53,6 @@ public class Main extends ApplicationAdapter {
         LOGGER.error("Torgray's Trials has encountered an error!");
         LOGGER.error("This is likely not your fault, please create an issue on GitHub with the error below.");
         LOGGER.error("---------------------------------------------------------------------------------------", exception);
-        System.exit(1);
+        Gdx.app.exit();
     }
 }

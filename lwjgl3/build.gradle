@@ -38,18 +38,22 @@ dependencies {
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-backend-lwjgl3:$graalHelperVersion"
-
-    }
+  }
 }
 
-def os = System.properties['os.name'].toLowerCase(Locale.ROOT)
+def os = org.gradle.internal.os.OperatingSystem.current()
 
 run {
-  workingDir = rootProject.file('assets').path
-// You can uncomment the next line if your IDE claims a build failure even when the app closed properly.
-  //setIgnoreExitValue(true)
+  // Set working directory to your assets folder
+  workingDir = rootProject.file("assets")
 
-  if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
+  // macOS requires this to avoid GLFW init errors
+  if (os.isMacOsX()) {
+    jvmArgs += "-XstartOnFirstThread"
+  }
+
+  // Prevent IDE false-positive “build failed” error
+  // setIgnoreExitValue(true)
 }
 
 jar {

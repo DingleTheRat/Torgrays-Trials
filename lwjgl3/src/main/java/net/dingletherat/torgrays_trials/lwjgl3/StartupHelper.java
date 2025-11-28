@@ -18,6 +18,7 @@ package net.dingletherat.torgrays_trials.lwjgl3;
 
 import com.badlogic.gdx.Version;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
+import net.dingletherat.torgrays_trials.Main;
 import org.lwjgl.system.macosx.LibC;
 import org.lwjgl.system.macosx.ObjCRuntime;
 
@@ -77,12 +78,14 @@ public class StartupHelper {
         String osName = System.getProperty("os.name").toLowerCase(java.util.Locale.ROOT);
         if (!osName.contains("mac")) {
             if (osName.contains("windows")) {
-// Here, we are trying to work around an issue with how LWJGL3 loads its extracted .dll files.
-// By default, LWJGL3 extracts to the directory specified by "java.io.tmpdir", which is usually the user's home.
-// If the user's name has non-ASCII (or some non-alphanumeric) characters in it, that would fail.
-// By extracting to the relevant "ProgramData" folder, which is usually "C:\ProgramData", we avoid this.
-// We also temporarily change the "user.name" property to one without any chars that would be invalid.
-// We revert our changes immediately after loading LWJGL3 natives.
+                /*
+                 * Here, we are trying to work around an issue with how LWJGL3 loads its extracted .dll files.
+                 * By default, LWJGL3 extracts to the directory specified by "java.io.tmpdir", which is usually the user's home.
+                 * If the user's name has non-ASCII (or some non-alphanumeric) characters in it, that would fail.
+                 * By extracting to the relevant "ProgramData" folder, which is usually "C:\ProgramData", we avoid this.
+                 * We also temporarily change the "user.name" property to one without any chars that would be invalid.
+                 * We revert our changes immediately after loading LWJGL3 natives.
+                 */
                 String programData = System.getenv("ProgramData");
                 if(programData == null) programData = "C:\\Temp\\"; // if ProgramData isn't set, try some fallback.
                 String prevTmpDir = System.getProperty("java.io.tmpdir", programData);
@@ -103,7 +106,7 @@ public class StartupHelper {
 
         // Checks if we are already on the main thread, such as from running via Construo.
         long objc_msgSend = ObjCRuntime.getLibrary().getFunctionAddress("objc_msgSend");
-        long NSThread      = objc_getClass("NSThread");
+        long NSThread = objc_getClass("NSThread");
         long currentThread = invokePPP(NSThread, sel_getUid("currentThread"), objc_msgSend);
         boolean isMainThread = invokePPZ(currentThread, sel_getUid("isMainThread"), objc_msgSend);
         if(isMainThread) return false;
@@ -118,7 +121,7 @@ public class StartupHelper {
         // check whether the JVM was previously restarted
         // avoids looping, but most certainly leads to a crash
         if ("true".equals(System.getProperty(JVM_RESTARTED_ARG))) {
-            System.err.println(
+            Main.LOGGER.error(
                     "There was a problem evaluating whether the JVM was started with the -XstartOnFirstThread argument.");
             return false;
         }
@@ -132,7 +135,7 @@ public class StartupHelper {
         //String javaExecPath = ProcessHandle.current().info().command().orElseThrow();
 
         if (!(new File(javaExecPath)).exists()) {
-            System.err.println(
+            Main.LOGGER.error(
                     "A Java installation could not be found. If you are distributing this app with a bundled JRE, be sure to set the -XstartOnFirstThread argument manually!");
             return false;
         }
@@ -149,7 +152,7 @@ public class StartupHelper {
             if (trace.length > 0) {
                 mainClass = trace[trace.length - 1].getClassName();
             } else {
-                System.err.println("The main class could not be determined.");
+                Main.LOGGER.error("The main class could not be determined.");
                 return false;
             }
         }
@@ -173,8 +176,8 @@ public class StartupHelper {
                 process.waitFor();
             }
         } catch (Exception e) {
-            System.err.println("There was a problem restarting the JVM");
-            e.printStackTrace();
+            Main.LOGGER.error("There was a problem restarting the JVM");
+            Main.handleException(e);
         }
 
         return true;
