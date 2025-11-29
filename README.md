@@ -1,5 +1,6 @@
 # Torgray's Trials
-Torgray's Trials is an in-development survival game based on a ghost trapped in darkness. Itch.io page soon!
+An in-development, currently RPG-like game, about a ghost trapped in eternal darkness. Itch.io page coming soon!
+More description stuff will be added upon an itch.io release, trust.
 
 ## Updates
 - ### Alpha-1.0 - Initial Release
