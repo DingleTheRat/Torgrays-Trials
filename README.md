@@ -1,33 +1,42 @@
-# TorgraysTrials
+# Torgray's Trials
+Torgray's Trials is an in-development survival game based on a ghost trapped in darkness. Itch.io page soon!
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+## Updates
+- ### Alpha-1.0 - Initial Release
+  - Tile rendering and movement
+- ### Alpha-1.1 - The Darkness Update
+  - The general shape of the map that will stay for a while
+  - Darkness radius
+- ### Alpha-1.2 - The Object Update
+  - Object system, with keys, gates, and an ending
+  - Music! Added Journey as the main music
+- ### Alpha-1.3 - The Texture Update
+  - New textures
+  - Slightly different map
+- ### Alpha-2.0 + 2.0.1 - The Dracore Update
+  - Pause menu and main menu
+  - Gatekeeper NPC
+  - Game is actually named Torgray's Trials now
+  - New path texture
+  - Attacking
+  - Monsters (dracores)
+  - Torgray's Soup
+  - Lantern
+- ### Alpha-2.1 + 2.1.1 - The Update of Death
+  - Death
+  - Diagonal movement
+  - Drops
+  - Particles
+  - Coins
+  - Settings menu
+  - Fullscreen mode
+  - BRendering
+- ### Alpha-2.2 - Plentiful Coins Update
+  - Coiner, Coiner's Hut and trading system
+  - Knockback
+  - Map and Stick items
+  - Pathfinding framework
+  - Agro pathfinding
+  - Darkness cycle (gloom, night, dusk)
+  - New soup tips
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
-
-## Platforms
-
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
-
-## Gradle
-
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
-
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
