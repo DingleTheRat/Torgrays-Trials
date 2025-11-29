@@ -27,7 +27,6 @@ public class Main extends ApplicationAdapter {
 
         game = new Game();
         game.setup();
-        game.setup();
 
         LOGGER.info("Window enabled");
     }
