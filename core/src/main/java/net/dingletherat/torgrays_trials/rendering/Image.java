@@ -6,7 +6,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import net.dingletherat.torgrays_trials.Main;
-
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -94,23 +93,37 @@ public class Image implements Serializable {
         // Ensure the pixmap is available
         if (!image.getTextureData().isPrepared()) image.getTextureData().prepare();
 
-        Pixmap pixmap = image.getTextureData().consumePixmap();
+        Pixmap originalPixmap = image.getTextureData().consumePixmap();
 
-        // Create new empty pixmap with target size
+        // First, scale the image normally
         Pixmap scaledPixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-
-        // Draw and scale the original image into the new pixmap
         scaledPixmap.setFilter(Pixmap.Filter.NearestNeighbour);
-        scaledPixmap.drawPixmap(pixmap,
-            0, 0, pixmap.getWidth(), pixmap.getHeight(), // source
-            0, 0, width, height // destination
+        scaledPixmap.drawPixmap(originalPixmap,
+            0, 0, originalPixmap.getWidth(), originalPixmap.getHeight(),
+            0, 0, width, height
         );
+
+        // If flipping is needed, create a flipped version
+        Pixmap flippedPixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+
+        // Copy each row from bottom to top
+        for (int y = 0; y < height; y++) {
+            flippedPixmap.drawPixmap(scaledPixmap,
+                0, y,            // destination position
+                0, height-1-y,   // source position (flipped)
+                width, 1         // copy one full row
+            );
+        }
+
+        // Replace the scaled pixmap with the flipped one
+        scaledPixmap.dispose();
+        scaledPixmap = flippedPixmap;
 
         // Create an image from the scaled pixmap
         Texture scaledImage = new Texture(scaledPixmap);
 
         // Cleanup
-        pixmap.dispose();
+        originalPixmap.dispose();
         scaledPixmap.dispose();
 
         // Update height and width
