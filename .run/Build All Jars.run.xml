@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build All Jars" type="CompoundRunConfigurationType">
-    <toRun name="Torgrays-Trials [jarLinux]" type="GradleRunConfiguration" />
-    <toRun name="Torgrays-Trials [jarMac]" type="GradleRunConfiguration" />
-    <toRun name="Torgrays-Trials [jarWin]" type="GradleRunConfiguration" />
-    <toRun name="Torgrays-Trials [jar]" type="GradleRunConfiguration" />
-    <method v="2" />
-  </configuration>
-</component>

@@ -100,6 +100,7 @@ public class Image implements Serializable {
         Pixmap scaledPixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
 
         // Draw and scale the original image into the new pixmap
+        scaledPixmap.setFilter(Pixmap.Filter.NearestNeighbour);
         scaledPixmap.drawPixmap(pixmap,
             0, 0, pixmap.getWidth(), pixmap.getHeight(), // source
             0, 0, width, height // destination
