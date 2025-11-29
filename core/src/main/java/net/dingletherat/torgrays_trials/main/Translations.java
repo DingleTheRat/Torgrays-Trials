@@ -22,11 +22,11 @@ public class Translations {
      * If something is not found, it returns the {@code translationKey} for debugging.
      **/
     public static String get(String identifier, String key) {
-        // Firstly get the json file of the current language, and get translationKey by combining the caller and key strings
+        // Firstly, get the JSON file of the current language and get translationKey by combining the caller and key strings
         JSONObject languageFile = TRANSLATION_FILES.get(Main.game.language);
         String translationKey = identifier + ":" + key;
 
-        // If a language files does not contain a translation for that key: warn, and return the translationKey
+        // If language files do not contain a translation for that key: warn, and return the translationKey
         if (languageFile.getString(translationKey) == null) {
 	        Main.LOGGER.warn("Couldn't find translation for {} in {}", translationKey, languageFile);
             return translationKey;
@@ -49,7 +49,7 @@ public class Translations {
 
         // Loop through the translation files and add them to the TRANSLATION_FILES HashMap
         for (String file : translationFiles) {
-            /* Get the filePath of the file, and use it to convert the contents of the file
+            /* Get the filePath of the file and use it to convert the contents of the file
             into a getJsonObject to be able to add it to the TRANSLATION_FILES HashMap */
             String filePath = "values/translations/" + file;
             JSONObject jsonObject = UtilityTool.getJsonObject(filePath);

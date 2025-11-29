@@ -68,9 +68,8 @@ public class Entity {
     public void draw() {
         if (onScreen) {
             Texture texture = currentImage.getTexture();
-            int srcX = Game.tileSize * spriteColumn;
-            int srcY = Game.tileSize * spriteRow;
 
+            // Where to draw the image on screen
             float screenX = x - Main.game.player.cameraX + Game.screenWidth / 2f;
             float screenY = y - Main.game.player.cameraY + Game.screenHeight / 2f;
 
@@ -79,17 +78,17 @@ public class Entity {
             if (spriteColumn == -1 && spriteRow == -1) {
                 Main.batch.draw(currentImage.getTexture(), Math.round(screenX), Math.round(screenY));
             } else {
+                // Store what part of the sprite sheet to draw
+                int imageX = Game.tileSize * spriteColumn;
+                int imageY = Game.tileSize * spriteRow;
+
                 Main.batch.draw(currentImage.getTexture(),
-                    Math.round(screenX),                           // dest x
-                    Math.round(screenY),                           // dest y
-                    Game.tileSize,                                 // dest width
-                    Game.tileSize,                                 // dest height
-                    srcX,                                          // src x
-                    texture.getWidth() - srcY,                     // src y
-                    Game.tileSize,                                 // src width
-                    Game.tileSize,                                 // src height
-                    false,                                         // flipX
-                    false);                                        // flipY
+                    // Image position in the world
+                    Math.round(screenX), Math.round(screenY), Game.tileSize, Game.tileSize,
+                    // Image position in the sprite sheet
+                    imageX, texture.getWidth() - imageY, Game.tileSize, Game.tileSize,
+                    // Flip X and Y
+                    false, false);
             }
         }
     }

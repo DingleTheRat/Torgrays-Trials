@@ -5,18 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import net.dingletherat.torgrays_trials.Main;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
-/** A class that holds data of BufferedImages, and a BufferedImage
- * BufferedImages are not serializable, meaning if we want to save the game, we can't, it will throw an exception.
- * This class aims to solve that. Every instance of this class stores the image and also a BufferedImage that can't be saved.
- * You can get the BufferedImage using the {@code getImage} method.
+/** A class that holds data of {@link Texture}
+ * {@link Texture} is not serializable, meaning if we want to save the game, we can't, it will throw an exception.
+ * This class aims to solve that. Every instance of this class stores the image and also a {@link Texture} that can't be saved.
+ * You can get the {@link Texture} using the {@code getImage} method.
  * An instance of this class is created using the {@code loadImage} method in the static version of this class, because the constructor is private.
  * It's private because this method uses a cache system which is more efficient than crating a bunch of new instances of this class **/
 public class Image implements Serializable {
@@ -50,12 +48,12 @@ public class Image implements Serializable {
     }
 
     private Image(String imageName) {
-        // Get the imageStream that we will use for the image. It's separately instantiated as it will be used for null checking
+        // Get the file that we will use for the image. It's separately instantiated as it will be used for null checking
         FileHandle file = Gdx.files.internal("drawable/" + imageName + ".png");
 
         /*
-         * Make sure the imageStream is a member of "/drawable/" and is a png. If not, use the disabled imageStream and warn.
-         * The way we find out that is by checking if the imageStream is null. If it is, it's likely not a valid member.
+         * Make sure the file is a member of "/drawable/" and is a png. If not, use the disabled file and warn.
+         * The way we find out that is by checking if the file is null. If it is, it's likely not a valid member.
          * However, if the imageName was just "", don't warn as it may be a result of an error
          * In any of these cases, we use a placeholder image called "disabled" to indicate that something went wrong.
          */
@@ -79,7 +77,7 @@ public class Image implements Serializable {
         data = serializeImage(image);
     }
 
-    /** @return A texture that is stored in instances the {@code Image} class.
+    /** @return A texture that is stored in instances the {@link Image} class.
     If a game was loaded in, it turns the data into a texture, then returns it. **/
     public Texture getTexture() {
         // In the case that the game was loaded (meaning the image is null), set the image to the unserialized data

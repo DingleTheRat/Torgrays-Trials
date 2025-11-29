@@ -41,11 +41,11 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void dispose() {
-        LOGGER.info("Ending game...");
+        LOGGER.info("Ending program...");
         batch.dispose();
         shapes.dispose();
         UI.dispose();
-        LOGGER.info("Game ended");
+        LOGGER.info("Program ended");
     }
 
     public static void handleException(Exception exception) {

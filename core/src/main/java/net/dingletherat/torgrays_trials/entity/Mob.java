@@ -60,9 +60,11 @@ public class Mob extends Entity {
             String[] directionWords = direction.split(" ");
             if (directionWords.length > 2) return;
 
-            /* If the direction string contains a space, it means it has 2 words and 2 directions.
+            /*
+             If the direction string contains a space, it means it has 2 words and 2 directions.
              * 2 directions mean that the mob is going diagonally, which means they are going diagonally
-             Diagonal movement makes the mob faster, so we decrease the speed accordingly*/
+             * Diagonal movement makes the mob faster, so we decrease the speed accordingly
+             */
             float movementSpeed = direction.contains(" ") ? speed / 1.4f : speed;
 
             // Initialize movement offsets for both X and Y axes that will store the movement direction.
@@ -79,11 +81,12 @@ public class Mob extends Entity {
                 }
             }
 
-            /* Apply the movement to the entity’s position individually.
+            /*
+             * Apply the movement to the entity’s position individually.
              * If moving in one direction collides. If it does, undo the movement, so the entity remains in a valid position.
              * This will make it so if you are moving diagonally, and you only collide with something on the X axis, you will still move on the Y.
-              The movement also offsets are scaled by the movementSpeed to produce smooth movement.*/
-
+             * The movement also offsets are scaled by the movementSpeed to produce smooth movement.
+             */
             // First, X
             x += moveX * movementSpeed;
             if (CollisionChecker.checkEntityColliding(this)) x -= moveX * movementSpeed;
