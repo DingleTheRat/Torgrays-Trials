@@ -3,12 +3,10 @@ package net.dingletherat.torgrays_trials;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import net.dingletherat.torgrays_trials.main.Game;
-import net.dingletherat.torgrays_trials.rendering.UI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +42,7 @@ public class Main extends ApplicationAdapter {
         LOGGER.info("Ending program...");
         batch.dispose();
         shapes.dispose();
-        UI.dispose();
+        //UI.dispose();
         LOGGER.info("Program ended");
     }
 

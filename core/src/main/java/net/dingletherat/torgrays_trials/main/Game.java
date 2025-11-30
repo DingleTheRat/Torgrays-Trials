@@ -23,6 +23,7 @@ public class Game {
     public static final int maxScreenRow = 12;
     public static int screenWidth = tileSize * maxScreenCol; // 960 pixels
     public static int screenHeight = tileSize * maxScreenRow; // 576 pixels
+    public static String identifier = "vanilla";
 
     // Classes
     public Darkness darkness;
@@ -38,7 +39,6 @@ public class Game {
     // Game settings
     public String difficulty;
     public String language = "english"; // English is the default
-    public String identifier = "vanilla";
 
     public String currentMap = "Main Island";
 
@@ -53,7 +53,7 @@ public class Game {
         MapHandler.loadMaps();
 
         // Initialize UI
-        UI.init();
+        UI.setup();
         darkness = new Darkness();
 
         // Load in Torgray :D
@@ -112,7 +112,7 @@ public class Game {
         }
 
         Main.batch.setProjectionMatrix(original);    // Unflips the y-axis so UI is drawn correctly
-        if (gameState == States.GameStates.TITLE) UI.drawTitle();
+        UI.stage.draw();
     }
 
     public void update() {
