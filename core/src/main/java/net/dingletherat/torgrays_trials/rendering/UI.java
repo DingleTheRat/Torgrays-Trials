@@ -32,6 +32,14 @@ public class UI {
     private static String currentUIstate = "";
     public static Stage stage;
 
+    /**
+     * Sets up the UI class, so it functions properly.
+     * <p>
+     * First of all, this method loads the {@link Stage} that will display UI elements.
+     * The stage is also added as an input processor to process mouse clicks.
+     * Secondly, the method calls setup methods for each UI state.
+     * These methods initialize their state's elements and add them to the {@code UIStates} hashmap to be displayed.
+     **/
     public static void setup() {
         // Create the stage
         stage = new Stage();
@@ -40,17 +48,28 @@ public class UI {
         // Setup all uiStates
         titleScreen();
 
-        Main.LOGGER.info("Loaded UI class");
+        Main.LOGGER.info("Loaded UI");
     }
 
-    public static BitmapFont getFont(String name, int size) {
+    /**
+     * Generates a specific font with a specific size, if one isn't in a cache already.
+     * <p>
+     * @param fileName The name of the font's file (.ttf). The font is taken from
+     * the {@code font} directory inside of the assets directory.
+     * <p>
+     * @param size The size of the font that will be generated.
+     * <p>
+     * @return A {@link BitmapFont} which is the generated font (the final product).
+     * If the font was already generated, it will be taken from a cache to save resources.
+     **/
+    public static BitmapFont getFont(String fileName, int size) {
         // If the font has already been created, get it from the cache
-        if (fontCache.containsKey(name) && fontCache.get(name).containsKey(size))
-            return fontCache.get(name).get(size);
+        if (fontCache.containsKey(fileName) && fontCache.get(fileName).containsKey(size))
+            return fontCache.get(fileName).get(size);
 
         // If not, we'll have to make it
         // Load in the font
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/" + name + ".ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/" + fileName + ".ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
         // Set the parameters (only one right now)
@@ -61,8 +80,8 @@ public class UI {
         generator.dispose();
 
         // Store the font in a fontCache
-        fontCache.putIfAbsent(name, new HashMap<>());
-        fontCache.get(name).put(size, font);
+        fontCache.putIfAbsent(fileName, new HashMap<>());
+        fontCache.get(fileName).put(size, font);
 
         return font;
     }
@@ -90,6 +109,7 @@ public class UI {
         stage.act();
     }
 
+    /// Sets up the elements for the title screen.
     public static void titleScreen() {
         // Create a new table to hold all the items
         Table table = new Table();
@@ -140,6 +160,21 @@ public class UI {
         // Create the uiState
         uiStates.put("Title", table);
     }
+
+    /**
+     * Creates a {@link TextButton} with effects when you hover over it.
+     * <p>
+     * The effects are a sound when you hover over the button and also arrows that surround the text on hover.
+     * @param text The text that will be on the button. Change it with the {@code setText} function.
+     * <p>
+     * @param style The style of the button. This might be the background, the font, the color.
+     * Use {@link TextButton.TextButtonStyle}.
+     * <p>
+     * @param action A lambda of the action you want to take. Example of what to put in:
+     * {@code () -> Gdx.app.exit()} (Closes the app).
+     * <p>
+     * @return The resulting button with hover effects.
+     **/
     public static TextButton createButton(String text, TextButton.TextButtonStyle style, Runnable action) {
         // Create the button
         TextButton button = new TextButton(text, style);
