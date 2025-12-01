@@ -1,9 +1,12 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.entity;
 
+import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.main.States.MobStates;
 import net.dingletherat.torgrays_trials.rendering.Image;
 import java.util.HashMap;
+
+import com.badlogic.gdx.graphics.Texture;
 
 public class Mob extends Entity {
     public HashMap<String, Integer> counters = new HashMap<>();
@@ -17,6 +20,12 @@ public class Mob extends Entity {
 
     public MobStates state = MobStates.WALKING;
     public String direction = "down";
+
+    // Eyes
+    /// If this is true, the main loop will call the {@code drawEyes} method
+    public Image eyesSheet = Image.loadImage("disabled");
+    public boolean drawEyes = false;
+    private boolean blinking = false;
 
     // Properties
     /// How much is added to the entity's X and Y values every update when they move
@@ -34,9 +43,15 @@ public class Mob extends Entity {
         spriteRow = 0;
         spriteColumn = 0;
 
+        // Eyes sheet setup
+        eyesSheet = Image.loadImage("entity/eyes_sheet");
+        eyesSheet.scaleImage(Game.tileSize * 6, Game.tileSize * 2);
+
         // Add counters
         counters.put("sprite_idle", 0);
         counters.put("sprite_walk", 0);
+        counters.put("eyes_idle", 0);
+        counters.put("eyes_blink", 0);
     }
     public Mob(String name, float spawnX, float spawnY, float width, float height) {
         // Pass on all the arguments because this class is meant to be extended
@@ -136,5 +151,90 @@ public class Mob extends Entity {
         }
 
         super.draw();
+
+        // Draw eyes (if enabled)
+        if (drawEyes) drawEyes();
+    }
+
+    /**
+     * Draws the classic two white lines eyes that 99.99% of entites have
+     * <p>
+     * These are drawn with different animations depending on the state. If the mob is idle,
+     * the eyes are drawn looking around. However, if the mob is walking, they face the direction.
+     * They also have a blinkining animation of which the speed can be ajusted.
+     **/
+    public void drawEyes() {
+        currentImage = eyesSheet;
+
+        // Set which eyes
+        if (state == MobStates.IDLE) {
+            /*
+             * If the eyes are set to the "walking right", set them to the "idle right" eyes
+             * The idle ones fit the idle sprite better, the walking ones set the right walking sprite better
+             */
+            if (spriteColumn == 3) spriteColumn = 2;
+
+            //Update the sprite counter
+            counters.put("eyes_idle", counters.get("eyes_idle") + 1);
+
+            // If the counter hits the goal, change the position of the eyes
+            if (counters.get("eyes_idle") >= animationSpeed * 12) {
+                // To show Torgray is bored, his eyes will look around in this sequence:
+                switch (spriteColumn) {
+                    case 0 -> spriteColumn = 1; // Look left
+                    case 1 -> spriteColumn = 2; // Look right
+                    case 2 -> spriteColumn = 0; // Look back
+                }
+
+                // Reset The counter
+                counters.put("eyes_idle", 0);
+            }
+        } else if (state == MobStates.WALKING) {
+            // Reset the eye counter
+            counters.put("eyes_idle", 0);
+
+            // Based on the current displayed sprite, change eyes
+            spriteColumn = switch (spriteRow) {
+                case 2 -> 1;
+                case 3 -> 3;
+                default -> 0;
+            };
+        }
+
+        // Make the eyes eyes eyes blink
+        // Update the sprite counter
+       counters.put("eyes_blink", counters.get("eyes_blink") + 1);
+
+        // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
+        if (counters.get("eyes_blink") >= animationSpeed * 15) {
+            // Change the row to the blinking row
+            spriteRow = 1;
+
+            // Reset the counter
+            counters.put("eyes_blink", 0);
+        } else if (!blinking && spriteRow == 1 && counters.get("eyes_blink") >= animationSpeed / 2) {
+            // If it hits the lower goal, and we are in the process of blinking, close our eyes (set to non-existent sprite)
+            spriteRow = 2;
+
+            // Reset the counter
+            counters.put("eyes_blink", 0);
+            blinking = true;
+        } else if (spriteRow == 1 && counters.get("eyes_blink") >= animationSpeed / 2) {
+            // If it hits the lower goal, and we are in the process of blinking (and almost done), re-open our eyes
+            spriteRow = 0;
+
+            // Reset the counter and blinking state
+            counters.put("eyes_blink", 0);
+            blinking = false;
+        } else if (spriteRow == 2 & counters.get("eyes_blink") >= animationSpeed / 2) {
+            // If it hits the lower goal, and we have our eyes closed, re-open our eyes
+            spriteRow = 1;
+
+            // Reset the counter
+            counters.put("eyes_blink", 0);
+        }
+
+        // Draw the eyes (as long as the player isn't facing backward)
+        if (spriteRow != 0) super.draw();
     }
 }

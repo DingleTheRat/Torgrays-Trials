@@ -28,14 +28,7 @@ public class Player extends Mob {
         spriteColumn = 0;
         spriteSheet.scaleImage(Game.tileSize * 3, Game.tileSize * 4);
         currentImage = spriteSheet;
-
-        // Load the eye sheet
-        eyesSheet = Image.loadImage("entity/eyes_sheet");
-        eyesSheet.scaleImage(Game.tileSize * 6, Game.tileSize * 2);
-
-        // Add counters
-        counters.put("eyes_idle", 0);
-        counters.put("eyes_blink", 0);
+        drawEyes = true;
 
         // Set some properties
         // TODO: Make position dependent on the map
@@ -94,95 +87,5 @@ public class Player extends Mob {
     public void draw() {
         super.draw();
 
-        // Set which eyes
-        if (state == States.MobStates.IDLE) {
-            /*
-             * If the eyes are set to the "walking right", set them to the "idle right" eyes
-             * The idle ones fit the idle sprite better, the walking ones set the right walking sprite better
-             */
-            if (eyesColumn == 3) eyesColumn = 2;
-
-            //Update the sprite counter
-            counters.put("eyes_idle", counters.get("eyes_idle") + 1);
-
-            // If the counter hits the goal, change the position of the eyes
-            if (counters.get("eyes_idle") >= animationSpeed * 12) {
-                // To show Torgray is bored, his eyes will look around in this sequence:
-                switch (eyesColumn) {
-                    case 0 -> eyesColumn = 1; // Look left
-                    case 1 -> eyesColumn = 2; // Look right
-                    case 2 -> eyesColumn = 0; // Look back
-                }
-
-                // Reset The counter
-                counters.put("eyes_idle", 0);
-            }
-        } else if (state == States.MobStates.WALKING) {
-            // Reset the eye counter
-            counters.put("eyes_idle", 0);
-
-            // Based on the current displayed sprite, change eyes
-            eyesColumn = switch (spriteRow) {
-                case 2 -> 1;
-                case 3 -> 3;
-                default -> 0;
-            };
-        }
-
-        // Make the eyes eyes eyes blink
-        // Update the sprite counter
-       counters.put("eyes_blink", counters.get("eyes_blink") + 1);
-
-        // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
-        if (counters.get("eyes_blink") >= animationSpeed * 15) {
-            // Change the row to the blinking row
-            eyesRow = 1;
-
-            // Reset the counter
-            counters.put("eyes_blink", 0);
-        } else if (!blinking && eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed / 2) {
-            // If it hits the lower goal, and we are in the process of blinking, close our eyes (set to non-existent sprite)
-            eyesRow = 2;
-
-            // Reset the counter
-            counters.put("eyes_blink", 0);
-            blinking = true;
-        } else if (eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed / 2) {
-            // If it hits the lower goal, and we are in the process of blinking (and almost done), re-open our eyes
-            eyesRow = 0;
-
-            // Reset the counter and blinking state
-            counters.put("eyes_blink", 0);
-            blinking = false;
-        } else if (eyesRow == 2 & counters.get("eyes_blink") >= animationSpeed / 2) {
-            // If it hits the lower goal, and we have our eyes closed, re-open our eyes
-            eyesRow = 1;
-
-            // Reset the counter
-            counters.put("eyes_blink", 0);
-        }
-
-        // Draw the eyes (as long as the player isn't facing backward)
-        if (spriteRow != 0) {
-            float screenX = x - Main.game.player.cameraX + Game.screenWidth / 2f;
-            float screenY = y - Main.game.player.cameraY + Game.screenHeight / 2f;
-
-            // Draw a subregion from eyes sprite sheet
-            Texture texture = eyesSheet.getTexture();
-            int srcX = Game.tileSize * eyesColumn;
-            int srcY = Game.tileSize * (1 - eyesRow);
-
-            Main.batch.draw(texture,
-                Math.round(screenX),        // dest x
-                Math.round(screenY),        // dest y
-                Game.tileSize,              // dest width
-                Game.tileSize,              // dest height
-                srcX,                       // src x
-                srcY,                       // src y
-                Game.tileSize,              // src width
-                Game.tileSize,              // src height
-                false,                      // flipX
-                false);                     // flipY
-        }
     }
 }
