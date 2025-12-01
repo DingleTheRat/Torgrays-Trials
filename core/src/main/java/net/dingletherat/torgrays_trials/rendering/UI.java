@@ -35,7 +35,7 @@ public class UI {
     /**
      * Sets up the UI class, so it functions properly.
      * <p>
-     * First of all, this method loads the {@link Stage} that will display UI elements.
+     * First, this method loads the {@link Stage} that will display UI elements.
      * The stage is also added as an input processor to process mouse clicks.
      * Secondly, the method calls setup methods for each UI state.
      * These methods initialize their state's elements and add them to the {@code UIStates} hashmap to be displayed.
@@ -52,10 +52,10 @@ public class UI {
     }
 
     /**
-     * Generates a specific font with a specific size, if one isn't in a cache already.
+     * Generates a specific font with a specific size if one isn't in a cache already.
      * <p>
      * @param fileName The name of the font's file (.ttf). The font is taken from
-     * the {@code font} directory inside of the assets directory.
+     * the {@code font} directory inside the assets' directory.
      * <p>
      * @param size The size of the font that will be generated.
      * <p>
@@ -100,8 +100,9 @@ public class UI {
             // Clear the stage to prepare for the next table
             stage.clear();
 
-            // Update the table to the new one
-            stage.addActor(uiStates.get(uiState));
+            // Update the table to the new one (if it exists)
+            if (uiStates.containsKey(uiState))
+                stage.addActor(uiStates.get(uiState));
 
             // Finally, update the currentUIstate
             currentUIstate = uiState;
@@ -115,7 +116,7 @@ public class UI {
         Table table = new Table();
 
         // Position it on the Y axis (e.g., 200 px from bottom)
-        table.setY(300);
+        table.setY(350);
 
         // Center the table
         table.setPosition((stage.getWidth() - table.getPrefWidth()) / 2f, table.getY());

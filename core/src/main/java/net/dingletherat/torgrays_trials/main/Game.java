@@ -131,6 +131,7 @@ public class Game {
     public void loadGame() {
         // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
         gameState = GameStates.PLAY;
+        UI.uiState = "Play";
 
         // TODO: Whenever there is an inventory system, make this only work with items
         darkness.addLightSource(player);

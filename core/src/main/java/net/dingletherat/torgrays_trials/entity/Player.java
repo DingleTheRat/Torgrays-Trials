@@ -3,7 +3,6 @@ package net.dingletherat.torgrays_trials.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.main.States;
@@ -12,11 +11,6 @@ import net.dingletherat.torgrays_trials.rendering.Map;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 
 public class Player extends Mob {
-    public Image eyesSheet;
-    public int eyesColumn = 0;
-    public int eyesRow = 0;
-    private boolean blinking = false;
-
     public float cameraX, cameraY;
 
     public Player() {
@@ -81,11 +75,5 @@ public class Player extends Mob {
         if (cameraY < Game.screenHeight / 2f) cameraY = Game.screenHeight / 2f;
         if (cameraX > maxCameraX) cameraX = maxCameraX;
         if (cameraY > maxCameraY) cameraY = maxCameraY;
-    }
-
-    @Override
-    public void draw() {
-        super.draw();
-
     }
 }
