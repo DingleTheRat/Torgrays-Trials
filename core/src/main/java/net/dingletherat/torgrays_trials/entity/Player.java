@@ -18,8 +18,6 @@ public class Player extends Mob {
 
         // Ajust spriteSheet properties
         spriteSheet = Image.loadImage("entity/player/torgray_sheet");
-        spriteRow = 0;
-        spriteColumn = 0;
         spriteSheet.scaleImage(Game.tileSize * 3, Game.tileSize * 4);
         currentImage = spriteSheet;
         drawEyes = true;
@@ -44,7 +42,6 @@ public class Player extends Mob {
 
     @Override
     public void update() {
-        // if (Main.random.nextFloat() > 0.5) properties.put("light_intensity", 0.8f * ((Main.Main.random.nextFloat() - 0.5f) / 5f + 1));
         StringBuilder newDirection = new StringBuilder();
 
         /* Depending on the key pressed, append a newDirection with a direction.

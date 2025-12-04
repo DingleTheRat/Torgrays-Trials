@@ -7,8 +7,6 @@ import net.dingletherat.torgrays_trials.main.States.MobStates;
 import net.dingletherat.torgrays_trials.rendering.Image;
 import java.util.HashMap;
 
-import com.badlogic.gdx.graphics.Texture;
-
 public class Mob extends Entity {
     public HashMap<String, Integer> counters = new HashMap<>();
 
@@ -17,14 +15,14 @@ public class Mob extends Entity {
      * Required layout: Positions on the column, and animation part of the row.
      * Positions must be in this order: up, down, left, right.
      **/
-    public Image spriteSheet = Image.loadImage("disabled");
+    public Image spriteSheet = Image.loadImage(null);
 
-    public MobStates state = MobStates.WALKING;
+    public MobStates state = MobStates.IDLE;
     public String direction = "down";
 
     // Eyes
     /// If this is true, the main loop will call the {@code drawEyes} method
-    public Image eyesSheet = Image.loadImage("disabled");
+    public Image eyesSheet = Image.loadImage(null);
     public int eyesColumn = 0;
     public int eyesRow = 0;
     public boolean drawEyes = false;
@@ -35,26 +33,11 @@ public class Mob extends Entity {
     public float speed = 1;
     ///  How much does the draw method have to wait before continuing an animation
     public int animationSpeed = 10;
-    /// How many rows for animation does your sprite sheet have
+    /// How many rows for animation does your sprite sheet have?
     public int animationFrames = 3;
 
     public Mob(String name, float spawnX, float spawnY) {
-        // Pass on all the arguments because this class is meant to be extended
-        super(name, spawnX, spawnY);
-
-        // Extra spriteSheet setup
-        spriteRow = 0;
-        spriteColumn = 0;
-
-        // Eyes sheet setup
-        eyesSheet = Image.loadImage("entity/eyes_sheet");
-        eyesSheet.scaleImage(Game.tileSize * 6, Game.tileSize * 2);
-
-        // Add counters
-        counters.put("sprite_idle", 0);
-        counters.put("sprite_walk", 0);
-        counters.put("eyes_idle", 0);
-        counters.put("eyes_blink", 0);
+        this(name, spawnX, spawnY, 0, 0);
     }
     public Mob(String name, float spawnX, float spawnY, float width, float height) {
         // Pass on all the arguments because this class is meant to be extended
@@ -66,7 +49,7 @@ public class Mob extends Entity {
 
         // Eyes sheet setup
         eyesSheet = Image.loadImage("entity/eyes_sheet");
-        eyesSheet.scaleImage(Game.tileSize * 6, Game.tileSize * 2);
+        eyesSheet.scaleImage(Game.tileSize * 5, Game.tileSize * 2);
 
         // Add counters
         counters.put("sprite_idle", 0);
@@ -78,6 +61,11 @@ public class Mob extends Entity {
     @Override
     public void update() {
         super.update();
+        if (!onScreen) return;
+
+        // Flicker the light
+        if (Game.random.nextFloat() > 0.5)
+            properties.put("light_intensity", 0.8f * ((Game.random.nextFloat() - 0.5f) / 5f + 1));
 
         if (state == MobStates.WALKING) {
             // Return if the direction is more than 2 words to not confuse the code
@@ -123,6 +111,8 @@ public class Mob extends Entity {
 
     @Override
     public void draw() {
+        if (!onScreen) return;
+
         if (state == MobStates.IDLE) {
             // Update the sprite counter
             counters.put("sprite_idle", counters.get("sprite_idle") + 1);
@@ -175,22 +165,17 @@ public class Mob extends Entity {
     public void drawEyes() {
         // Set which eyes
         if (state == MobStates.IDLE) {
-            /*
-             * If the eyes are set to the "walking right", set them to the "idle right" eyes
-             * The idle ones fit the idle sprite better, the walking ones set the right walking sprite better
-             */
-            if (eyesColumn == 3) eyesColumn = 2;
-
             //Update the sprite counter
             counters.put("eyes_idle", counters.get("eyes_idle") + 1);
 
-            // If the counter hits the goal, change the position of the eyes
-            if (counters.get("eyes_idle") >= animationSpeed * 12) {
+            /* If the counter hits the goal, change the position of the eyes
+            */
+            if (counters.get("eyes_idle") >= animationSpeed * (8 + Game.random.nextInt(6))) {
                 // To show Torgray is bored, his eyes will look around in this sequence:
                 switch (eyesColumn) {
                     case 0 -> eyesColumn = 1; // Look left
                     case 1 -> eyesColumn = 2; // Look right
-                    case 2 -> eyesColumn = 0; // Look back
+                    case 2 -> eyesColumn = 0; // Look straight again
                 }
 
                 // Reset The counter
@@ -202,18 +187,18 @@ public class Mob extends Entity {
 
             // Based on the current displayed sprite, change eyes
             eyesColumn = switch (spriteRow) {
-                case 2 -> 1;
-                case 3 -> 3;
-                default -> 0;
+                case 2 -> 1; // Look left
+                case 3 -> 2; // Look right
+                default -> 0; // Look straight
             };
         }
 
-        // Make the eyes eyes eyes blink
+        // Make the eyes blink
         // Update the sprite counter
        counters.put("eyes_blink", counters.get("eyes_blink") + 1);
 
         // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
-        if (counters.get("eyes_blink") >= animationSpeed * 15) {
+        if (counters.get("eyes_blink") >= animationSpeed * (10 + Game.random.nextInt(10))) {
             // Change the row to the blinking row
             eyesRow = 1;
 

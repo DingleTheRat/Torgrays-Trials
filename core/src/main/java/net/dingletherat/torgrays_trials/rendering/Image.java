@@ -6,6 +6,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.main.Game;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
@@ -35,6 +37,13 @@ public class Image implements Serializable {
      * @return An instance of this class, Image. If you try to use this to render an image, it likely won't work.
      * Instead, call the {@code getImage} method from the instance of the class to get a buffered image. This will work if you try to draw it. **/
     public static Image loadImage(String imageName) {
+        // If the image is null, that means it is requesting a disabled image, so load it
+        if (imageName == null) {
+          Image image = loadImage("disabled");
+          image.scaleImage(Game.tileSize, Game.tileSize);
+          return image;
+        }
+
         // Check if the image is located in the image cache, if it is, return it to save resources
         if (imageCache.containsKey(imageName)) return imageCache.get(imageName);
 
@@ -90,6 +99,9 @@ public class Image implements Serializable {
      * @param height The height you want the scaled image to be.
      **/
     public void scaleImage(int width, int height) {
+        // Do not scale image if it's already the specific height and width
+        if (width == image.getWidth() && height == image.getHeight()) return;
+
         // Ensure the pixmap is available
         if (!image.getTextureData().isPrepared()) image.getTextureData().prepare();
 

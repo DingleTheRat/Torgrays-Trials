@@ -4,7 +4,9 @@ package net.dingletherat.torgrays_trials.main;
 import com.badlogic.gdx.math.Matrix4;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.Entity;
+import net.dingletherat.torgrays_trials.entity.Mob;
 import net.dingletherat.torgrays_trials.entity.Player;
+import net.dingletherat.torgrays_trials.entity.npc.GateKeeper;
 import net.dingletherat.torgrays_trials.main.States.GameStates;
 import net.dingletherat.torgrays_trials.rendering.Darkness;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
@@ -24,14 +26,16 @@ public class Game {
     public static int screenWidth = tileSize * maxScreenCol; // 960 pixels
     public static int screenHeight = tileSize * maxScreenRow; // 576 pixels
     public static String identifier = "vanilla";
+    public static Random random = new Random();
 
     // Classes
     public Darkness darkness;
-    public Random random = new Random();
 
     // Entities
+    private final ArrayList<Entity> entitiesDrawn = new ArrayList<>();
     public Player player;
     public ArrayList<Entity> entities = new ArrayList<>();
+    public ArrayList<Mob> mobs = new ArrayList<>();
 
     // State
     public States.GameStates gameState = States.GameStates.TITLE;
@@ -61,14 +65,14 @@ public class Game {
 
         // Light test fireflies
         for (int i = 0; i < 100; i++) {
-            Entity entity = new Entity("wassup", Game.tileSize * Main.game.random.nextInt(50),
-                Game.tileSize * Main.game.random.nextInt(50)){
+            Entity entity = new Entity("wassup", Game.tileSize * Game.random.nextInt(50),
+                Game.tileSize * Game.random.nextInt(50)){
                 float vX, vY = 0;
                 public void update() {
-                    if (Main.game.random.nextFloat() > 0.5) properties.put("light_intensity", 0.3f * ((Main.game.random.nextFloat() - 0.5f) / 5f + 1));
-                    if (Main.game.random.nextFloat() > 0.9) {
-                        vX += (Main.game.random.nextFloat() - 0.5f) * 2;
-                        vY += (Main.game.random.nextFloat() - 0.5f) * 2;
+                    if (Game.random.nextFloat() > 0.5) properties.put("light_intensity", 0.3f * ((Game.random.nextFloat() - 0.5f) / 5f + 1));
+                    if (Game.random.nextFloat() > 0.9) {
+                        vX += (Game.random.nextFloat() - 0.5f) * 2;
+                        vY += (Game.random.nextFloat() - 0.5f) * 2;
                         if (vX > 2) vX = 2;
                         if (vX < -2) vX = -2;
                         if (vY > 2) vY = 2;
@@ -79,7 +83,7 @@ public class Game {
                 }
             };
             entity.collision = false;
-            entity.properties.put("light_radius", (float) Main.game.random.nextInt(15) + 1);
+            entity.properties.put("light_radius", (float) Game.random.nextInt(15) + 1);
             entity.properties.put("light_intensity", 0.3f);
             entities.add(entity);
             darkness.addLightSource(entity);
@@ -95,6 +99,7 @@ public class Game {
     public void draw() {
         Matrix4 original = new Matrix4(Main.batch.getProjectionMatrix());    // Flips the y-axis
         Main.batch.getProjectionMatrix().setToOrtho(0, Game.screenWidth, Game.screenHeight, 0, 0, 1);
+
         if (gameState == States.GameStates.TITLE) {
             TileManager.draw(); // TEMPORARY! will relace this with better code later
             darkness.draw();
@@ -102,10 +107,24 @@ public class Game {
         } else if (gameState == States.GameStates.PLAY) {
             TileManager.draw(); // TEMPORARY! will relace this with better code later
 
-            // Draw every entity inside the entities hashmap and the player
+            /*
+             * For entities, they will be drawn slightly differently than everything else.
+             * Entities will be added to an ArrayList called entities drawn.
+             * All entities in that ArrayList will later be sorted depending on their y position.
+             * This allows entities to be behind something, but also in front, depending on their y position.
+             */
+            // Add in all entities
+            entitiesDrawn.add(player);
+            entitiesDrawn.addAll(entities);
+            entitiesDrawn.addAll(mobs);
+
+            // Sort the entities by y position
+            entitiesDrawn.sort((entity, entity2) -> Float.compare(entity.y, entity2.y));
+
+            // Draw the entities and clear the Arraylist (for the next frame)
             Main.batch.begin();
-            player.draw();
-            entities.forEach(Entity::draw);
+            entitiesDrawn.forEach(Entity::draw);
+            entitiesDrawn.clear();
             Main.batch.end();
 
             darkness.draw();
@@ -122,9 +141,10 @@ public class Game {
         if (gameState == States.GameStates.TITLE) {
             entities.forEach(Entity::update);
         } else if (gameState == States.GameStates.PLAY) {
-            // Update every entity inside the entities hashmap and the player
+            // Update every entity inside the entities hashmap, hashmaps alike, and the player
             player.update();
             entities.forEach(Entity::update);
+            mobs.forEach(Mob::update);
         }
     }
 
@@ -135,6 +155,9 @@ public class Game {
 
         // TODO: Whenever there is an inventory system, make this only work with items
         darkness.addLightSource(player);
+
+        // TODO: Make an AssetSetter
+        mobs.add(new GateKeeper(Game.tileSize * 21, Game.tileSize * 23));
 
         // Change the music to the "playing music"
         Sound.stopMusic();
