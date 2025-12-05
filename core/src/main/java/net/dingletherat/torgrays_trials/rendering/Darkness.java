@@ -16,7 +16,7 @@ public class Darkness {
     /// Add entities that emit light here. These entities must have the "light_radius" and "light_intensity"
     /// properties in the {@code properties} variable set to proper float values.
     private final ArrayList<Entity> lightSources = new ArrayList<>();
-    public float ambientDarkness = 0.92f;  // How dark is it without lights (0.0 = no darkness, 1.0 = complete darkness)
+    public float ambientDarkness = 0.92f;  // How dark it is without lights (0.0 = no darkness, 1.0 = complete darkness)
     Texture radialLightTexture = createRadialLight(128);
 
     public static Texture createRadialLight(int radius) {
@@ -84,7 +84,7 @@ public class Darkness {
 
     // Draws the darkness overlay
     public void draw() {
-        // Save current batch state and end it
+        // Save the current batch state and end it
         Main.batch.flush();
 
         // 1. Create FBO for darkness
@@ -95,7 +95,7 @@ public class Darkness {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Start batch for drawing lights
+        // Start a batch for drawing lights
         Main.batch.begin();
 
         // Use blending that allows lights to "cut holes" in the darkness

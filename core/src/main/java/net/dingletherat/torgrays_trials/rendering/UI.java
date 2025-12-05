@@ -4,12 +4,14 @@ package net.dingletherat.torgrays_trials.rendering;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -27,6 +29,7 @@ public class UI {
      * All the components listed in the ArrayList will be enabled once the UIState variable is equal to the name.
      **/
     public static final HashMap<String, Table> uiStates = new HashMap<>();
+    public static final HashMap<String, Runnable> uiUpdates = new HashMap<>();
     /// Depending on what the string is, it will display the corresponding components inside the uiStates HashMap.
     public static String uiState = "Title";
     private static String currentUIstate = "";
@@ -47,6 +50,8 @@ public class UI {
 
         // Setup all uiStates
         titleScreen();
+        playState();
+        debugState();
 
         Main.LOGGER.info("Loaded UI");
     }
@@ -94,19 +99,26 @@ public class UI {
     public static void update() {
         /*
          * If the currentUIstate isn't equal to the uiState, meaning the uiState has changed, so update the active table.
-         * This is done to save performance, as there is no point in updating table after the uiState changed.
+         * This is done to save performance, as there is no point in updating the table after the uiState changed.
          */
         if (!currentUIstate.equals(uiState)) {
             // Clear the stage to prepare for the next table
             stage.clear();
 
-            // Update the table to the new one (if it exists)
-            if (uiStates.containsKey(uiState))
-                stage.addActor(uiStates.get(uiState));
+            // Update the stage with all the actors that are in the uiState if they have a table in the uiStates HashMap
+            uiStates.entrySet().stream()
+                .filter(entry -> uiState.contains(entry.getKey()))
+                .forEach(entry -> stage.addActor(entry.getValue()));
 
             // Finally, update the currentUIstate
             currentUIstate = uiState;
         }
+
+        // Run updates for the current actors in the uiState if they have an update method in the uiUpdates HashMap
+        uiUpdates.entrySet().stream()
+            .filter(entry -> uiState.contains(entry.getKey()))
+            .forEach(entry -> entry.getValue().run());
+
         stage.act();
     }
 
@@ -122,7 +134,7 @@ public class UI {
         table.setPosition((stage.getWidth() - table.getPrefWidth()) / 2f, table.getY());
 
         // Create the style that will be used for the title
-        TextButton.TextButtonStyle titleStyle = new TextButton.TextButtonStyle();
+        Label.LabelStyle titleStyle = new Label.LabelStyle();
         titleStyle.fontColor = Color.valueOf("#932525");
         titleStyle.font = getFont("Maru_Monica", 140);
 
@@ -132,7 +144,7 @@ public class UI {
         buttonStyle.font = getFont("Maru_Monica", 80);
 
         // Create the title
-        TextButton title = new TextButton(Translations.get(Game.identifier, "title"), titleStyle);
+        Label title = new Label(Translations.get(Game.identifier, "title"), titleStyle);
         table.add(title);
 
         // New Row
@@ -160,6 +172,93 @@ public class UI {
 
         // Create the uiState
         uiStates.put("Title", table);
+    }
+
+    /// Sets up the elements for the play state.
+    public static void playState() {
+        /* If F3 is pressed, and it's not enabled, enable it by adding "Debug" to the uiState
+           If it was already enabled, disable it by removing the "Debug" part */
+        uiUpdates.put("Play", () -> {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
+                if (uiState.contains("Debug")) uiState = uiState.replace("Debug", "");
+                else uiState = uiState + " Debug";
+            }
+        });
+    }
+
+    /// Sets up the elements for the debug state.
+    public static void debugState() {
+        // Create a new table to hold all the items and align its contents to the left
+        Table table = new Table();
+        table.setFillParent(true);
+        table.left().padLeft(10); // Padding is added to make the labels not stick to the edge
+
+        // Make the style used for the labels
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.fontColor = Color.WHITE;
+        style.font = getFont("Maru_Monica", 25);
+
+        // Create a divider label
+        Label divider = new Label("", style);
+
+        // Create the labels that will display the current position of the player
+        Label x = new Label("X: null", style);
+        Label y = new Label("Y: null", style);
+        Label col = new Label("Col: null", style);
+        Label row = new Label("Row: null", style);
+
+        // States (in general)
+        Label ui = new Label("UI: null", style);
+        Label player = new Label("Player: null", style);
+
+        // Player Sprite Stuff
+        Label scol = new Label("SCol: null", style);
+        Label srow = new Label("SRow: null", style);
+        Label ecol = new Label("SCol: null", style);
+        Label erow = new Label("SRow: null", style);
+
+        // Add all the labels to the table (The .left() aligns the text to the left)
+        // Position
+        table.add(col).left().row();
+        table.add(row).left().row();
+        table.add(x).left().row();
+        table.add(y).left().row();
+
+        table.add(divider).left().row(); // Divider
+
+        // States
+        table.add(ui).left().row();
+        table.add(player).left().row();
+
+        table.add(divider).left().row(); // Divider
+
+        // Player Sprite Stuff
+        table.add(scol).left().row();
+        table.add(srow).left().row();
+        table.add(ecol).left().row();
+        table.add(erow).left().row();
+
+        // Create the uiState
+        uiStates.put("Debug", table);
+
+        // Set up an update method to update the labels when the actors are active
+        uiUpdates.put("Debug", () -> {
+            // Position
+            x.setText("X: " + Main.game.player.x);
+            y.setText("Y: " + Main.game.player.y);
+            col.setText("Col: " + Main.game.player.x / Game.tileSize);
+            row.setText("Row: " + Main.game.player.y / Game.tileSize);
+
+            // States
+            ui.setText("UI: " + uiState);
+            player.setText("Player: " + Main.game.player.state);
+
+            // Player Sprite Stuff
+            scol.setText("SCol: " + Main.game.player.spriteColumn);
+            srow.setText("SRow: " + Main.game.player.spriteRow);
+            ecol.setText("ECol: " + Main.game.player.eyesColumn);
+            erow.setText("ERow: " + Main.game.player.eyesRow);
+        });
     }
 
     /**
