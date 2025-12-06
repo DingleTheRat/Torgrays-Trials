@@ -35,13 +35,11 @@ public class Game {
     private final ArrayList<Entity> entitiesDrawn = new ArrayList<>();
     public Player player;
     public ArrayList<Entity> entities = new ArrayList<>();
-    public ArrayList<Mob> mobs = new ArrayList<>();
 
     // State
     public States.GameStates gameState = States.GameStates.TITLE;
 
     // Game settings
-    public String difficulty;
     public String language = "english"; // English is the default
 
     public String currentMap = "Main Island";
@@ -116,7 +114,6 @@ public class Game {
             // Add in all entities
             entitiesDrawn.add(player);
             entitiesDrawn.addAll(entities);
-            entitiesDrawn.addAll(mobs);
 
             // Sort the entities by y position
             entitiesDrawn.sort((entity, entity2) -> Float.compare(entity.y, entity2.y));
@@ -144,7 +141,6 @@ public class Game {
             // Update every entity inside the entities hashmap, hashmaps alike, and the player
             player.update();
             entities.forEach(Entity::update);
-            mobs.forEach(Mob::update);
         }
     }
 
@@ -157,7 +153,7 @@ public class Game {
         darkness.addLightSource(player);
 
         // TODO: Make an AssetSetter
-        mobs.add(new GateKeeper(Game.tileSize * 21, Game.tileSize * 23));
+        entities.add(new GateKeeper(Game.tileSize * 21, Game.tileSize * 23));
 
         // Change the music to the "playing music"
         Sound.stopMusic();
