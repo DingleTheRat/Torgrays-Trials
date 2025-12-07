@@ -25,7 +25,6 @@ public class Mob extends Entity {
     public Image eyesSheet = Image.loadImage(null);
     public int eyesColumn = 0;
     public int eyesRow = 0;
-    public boolean drawEyes = false;
     private boolean blinking = false;
 
     // Properties
@@ -50,18 +49,15 @@ public class Mob extends Entity {
         // Eyes sheet setup
         eyesSheet = Image.loadImage("entity/eyes_sheet");
         eyesSheet.scaleImage(Game.tileSize * 5, Game.tileSize * 2);
-
-        // Add counters
-        counters.put("sprite_idle", 0);
-        counters.put("sprite_walk", 0);
-        counters.put("eyes_idle", 0);
-        counters.put("eyes_blink", 0);
     }
 
     @Override
     public void update() {
         super.update();
         if (!onScreen) return;
+
+        // If wander is enabled (the wanderSpeed is higher than 0), wander
+        if ((int) properties.getOrDefault("wander_speed", 0) != 0) wander();
 
         // Flicker the light
         if (Game.random.nextFloat() > 0.5)
@@ -101,11 +97,64 @@ public class Mob extends Entity {
              */
             // First, X
             x += moveX * movementSpeed;
-            if (CollisionChecker.checkEntityColliding(this)) x -= moveX * movementSpeed;
+            if (CollisionChecker.checkEntityColliding(this)) {
+                x -= moveX * movementSpeed;
+
+                // If wandering is enable, update the direction
+                if (properties.containsKey("wander_speed"))
+                    direction = (moveX == 1) ?
+                        direction.replace("right", "left") : direction.replace("left", "right");
+            }
 
             // Then, Y
             y += moveY * movementSpeed;
-            if (CollisionChecker.checkEntityColliding(this)) y -= moveY * movementSpeed;
+            if (CollisionChecker.checkEntityColliding(this)) {
+                y -= moveY * movementSpeed;
+
+                // If wandering is enable, update the direction
+                if (properties.containsKey("wander_speed"))
+                    direction = (moveY == 1) ?
+                        direction.replace("down", "up") : direction.replace("up", "down");
+            }
+
+
+        }
+    }
+
+    public void wander() {
+        // If the function was called, but the wander property wasn't set, warn.
+        if (!properties.containsKey("wander_speed")) {
+            Main.LOGGER.warn("wanderSpeed property not set, but wander method was still called!");
+            return;
+        }
+
+        // Increment wander counter until it reaches the wanderSpeed goal
+        int wander_count = counters.getOrDefault("wander", -1) + 1;
+        counters.put("wander", wander_count);
+
+        // If it does reach the goal, then either make the entity idle or walk in a direction
+        if (wander_count >= (int) properties.get("wander_speed")) {
+            // Reset the counter
+            counters.put("wander", 0);
+
+            // Have a 2/3 chance to keep a position
+            if (Game.random.nextInt(3) != 0) return;
+
+            // If the position isn't kept, update the state to walking
+            state = MobStates.WALKING;
+
+            // Choose a direction, if 8 or 9 are chosen, change the state to idle
+            switch (Game.random.nextInt(9)) {
+                case 0 -> direction = "up";
+                case 1 -> direction = "down";
+                case 2 -> direction = "left";
+                case 3 -> direction = "right";
+                case 4 -> direction = "up left";
+                case 5 -> direction = "up right";
+                case 6 -> direction = "down left";
+                case 7 -> direction = "down right";
+                case 8 -> state = MobStates.IDLE;
+            }
         }
     }
 
@@ -114,11 +163,12 @@ public class Mob extends Entity {
         if (!onScreen) return;
 
         if (state == MobStates.IDLE) {
-            // Update the sprite counter
-            counters.put("sprite_idle", counters.get("sprite_idle") + 1);
+            // Increment the sprite counter
+            int sprite_idle = counters.getOrDefault("sprite_idle", -1) + 1;
+            counters.put("sprite_idle", sprite_idle);
 
             // If the counter hits the goal, reset the mob's sprite to their main one
-            if (counters.get("sprite_idle") >= animationSpeed * 2) {
+            if (sprite_idle >= animationSpeed * 2) {
                 spriteColumn = 0;
                 spriteRow = 1;
 
@@ -127,11 +177,12 @@ public class Mob extends Entity {
                 counters.put("sprite_walk", 0);
             }
         } else if (state == MobStates.WALKING) {
-            // Update the sprite counter
-            counters.put("sprite_walk", counters.get("sprite_walk") + 1);
+            // Increment the sprite counter
+            int sprite_walk = counters.getOrDefault("sprite_walk", -1) + 1;
+            counters.put("sprite_walk", sprite_walk);
 
             // If the counter hits the goal, move to the next frame of the animation
-            if (counters.get("sprite_walk") >= animationSpeed * 2) {
+            if (sprite_walk >= animationSpeed * 2) {
                 spriteColumn++;
 
                 // If the spriteColumn surpasses the number of sprites on the spriteSheet, reset it
@@ -152,7 +203,7 @@ public class Mob extends Entity {
         super.draw();
 
         // Draw eyes (if enabled)
-        if (drawEyes) drawEyes();
+        if ((boolean) properties.getOrDefault("draw_eyes", false)) drawEyes();
     }
 
     /**
@@ -165,12 +216,13 @@ public class Mob extends Entity {
     public void drawEyes() {
         // Set which eyes
         if (state == MobStates.IDLE) {
-            //Update the sprite counter
-            counters.put("eyes_idle", counters.get("eyes_idle") + 1);
+            // Increment the eyes idle counter
+            int eyes_idle = counters.getOrDefault("eyes_idle", -1) + 1;
+            counters.put("eyes_idle", eyes_idle);
 
             /* If the counter hits the goal, change the position of the eyes
             */
-            if (counters.get("eyes_idle") >= animationSpeed * (8 + Game.random.nextInt(6))) {
+            if (eyes_idle >= animationSpeed * (8 + Game.random.nextInt(6))) {
                 // To show Torgray is bored, his eyes will look around in this sequence:
                 switch (eyesColumn) {
                     case 0 -> eyesColumn = 1; // Look left
@@ -193,32 +245,33 @@ public class Mob extends Entity {
             };
         }
 
-        // Make the eyes blink
-        // Update the sprite counter
-       counters.put("eyes_blink", counters.get("eyes_blink") + 1);
+        // Make the eyes blink :D
+        // Increment the eyes blink counter
+        int eyes_blink = counters.getOrDefault("eyes_blink", -1) + 1;
+        counters.put("eyes_blink", eyes_blink);
 
         // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
-        if (counters.get("eyes_blink") >= animationSpeed * (10 + Game.random.nextInt(10))) {
+        if (eyes_blink >= animationSpeed * (10 + Game.random.nextInt(10))) {
             // Change the row to the blinking row
             eyesRow = 1;
 
             // Reset the counter
             counters.put("eyes_blink", 0);
-        } else if (!blinking && eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed / 2) {
+        } else if (!blinking && eyesRow == 1 && eyes_blink >= animationSpeed / 2) {
             // If it hits the lower goal, and we are in the process of blinking, close our eyes (set to non-existent sprite)
             eyesRow = 2;
 
             // Reset the counter
             counters.put("eyes_blink", 0);
             blinking = true;
-        } else if (eyesRow == 1 && counters.get("eyes_blink") >= animationSpeed / 2) {
+        } else if (eyesRow == 1 && eyes_blink >= animationSpeed / 2) {
             // If it hits the lower goal, and we are in the process of blinking (and almost done), re-open our eyes
             eyesRow = 0;
 
             // Reset the counter and blinking state
             counters.put("eyes_blink", 0);
             blinking = false;
-        } else if (eyesRow == 2 & counters.get("eyes_blink") >= animationSpeed / 2) {
+        } else if (eyesRow == 2 & eyes_blink >= animationSpeed / 2) {
             // If it hits the lower goal, and we have our eyes closed, re-open our eyes
             eyesRow = 1;
 

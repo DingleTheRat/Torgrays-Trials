@@ -1,7 +1,6 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.entity.npc;
 
-import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.Mob;
 import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.rendering.Image;
@@ -16,7 +15,8 @@ public class GateKeeper extends Mob {
         currentImage = spriteSheet;
 
         // Set some properties
-        drawEyes = true;
+        properties.put("draw_eyes", true);
+        properties.put("wander_speed", 60);
         animationSpeed = 13;
     }
 }

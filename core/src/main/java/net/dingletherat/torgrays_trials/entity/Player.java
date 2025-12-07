@@ -20,7 +20,7 @@ public class Player extends Mob {
         spriteSheet = Image.loadImage("entity/player/torgray_sheet");
         spriteSheet.scaleImage(Game.tileSize * 3, Game.tileSize * 4);
         currentImage = spriteSheet;
-        drawEyes = true;
+        properties.put("draw_eyes", true);
 
         // Set some properties
         // TODO: Make position dependent on the map

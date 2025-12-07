@@ -8,21 +8,21 @@ import net.dingletherat.torgrays_trials.rendering.TileManager;
 
 public class CollisionChecker {
     // Check if two entities are colliding
-    public static boolean check2EntityCollision(Entity a, Entity b) {
-        float aLeft = a.x;
-        float aTop = a.y;
-        float aRight = a.x + a.width;
-        float aBottom = a.y + a.height;
+    public static boolean check2EntityCollision(Entity entity1, Entity entity2) {
+        float aLeft = entity1.x;
+        float aTop = entity1.y;
+        float aRight = entity1.x + entity1.width;
+        float aBottom = entity1.y + entity1.height;
 
-        float bLeft = b.x;
-        float bTop = b.y;
-        float bRight = b.x + b.width;
-        float bBottom = b.y + b.height;
+        float bLeft = entity2.x;
+        float bTop = entity2.y;
+        float bRight = entity2.x + entity2.width;
+        float bBottom = entity2.y + entity2.height;
 
         return aLeft < bRight && aRight > bLeft && aTop < bBottom && aBottom > bTop;
     }
 
-    public static boolean checkBlockCollision(Entity e, boolean[][] collisionPoints, float x, float y) {
+    public static boolean checkBlockCollision(Entity entity, boolean[][] collisionPoints, float x, float y) {
         int gridX = collisionPoints.length;      // number of columns in collision grid
         int gridY = collisionPoints[0].length;   // number of rows in collision grid
         float cellW = Game.tileSize / (float) gridX;
@@ -31,12 +31,12 @@ public class CollisionChecker {
         for (int i = 0; i < gridX; i++) {
             for (int j = 0; j < gridY; j++) {
                 if (collisionPoints[i][j]) {
-                    float halfW = e.width / 2f;
-                    float halfH = e.height / 2f;
+                    float halfW = entity.width / 2f;
+                    float halfH = entity.height / 2f;
 
                     float px = x + i * cellW + cellW / 2f;
                     float py = y + j * cellH + cellH / 2f;
-                    if (Math.abs(px - e.x) <= halfW && Math.abs(py - e.y) <= halfH) return true;
+                    if (Math.abs(px - entity.x) <= halfW && Math.abs(py - entity.y) <= halfH) return true;
                 }
             }
         }
@@ -45,12 +45,16 @@ public class CollisionChecker {
     }
 
     // Check if entity collides with any other entity or any tile on layer2
-    public static boolean checkEntityColliding(Entity e) {
+    public static boolean checkEntityColliding(Entity entity) {
         for (Entity other : Main.game.entities) {
-            if (other != e && other.collision) {
-                if (check2EntityCollision(e, other)) return true;
+            if (other != entity && other.collision) {
+                if (check2EntityCollision(entity, other)) return true;
             }
         }
+
+        // Check collision with player too (if it's not the player)
+        if (!(entity instanceof Player))
+            if (check2EntityCollision(entity, Main.game.player)) return true;
 
         Map map = TileManager.maps.get(Main.game.currentMap);
         if (map == null) return false;
@@ -65,7 +69,7 @@ public class CollisionChecker {
                 int worldX = col * Game.tileSize - Game.tileSize / 2; // tile top-left X
                 int worldY = row * Game.tileSize - Game.tileSize / 2; // tile top-left Y
 
-                if (checkBlockCollision(e, collisionPoints, worldX, worldY)) return true;
+                if (checkBlockCollision(entity, collisionPoints, worldX, worldY)) return true;
             }
         }
 
