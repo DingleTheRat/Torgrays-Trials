@@ -4,7 +4,6 @@ package net.dingletherat.torgrays_trials.main;
 import com.badlogic.gdx.math.Matrix4;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.Entity;
-import net.dingletherat.torgrays_trials.entity.Mob;
 import net.dingletherat.torgrays_trials.entity.Player;
 import net.dingletherat.torgrays_trials.entity.npc.GateKeeper;
 import net.dingletherat.torgrays_trials.main.States.GameStates;
@@ -46,6 +45,11 @@ public class Game {
 
     public void setup() {
         Main.LOGGER.info("--Setting up game--");
+
+        // Setup exception handler to handle any future exception caused by this method or something else
+        Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+            Main.handleException(new Exception(exception));
+        });
 
         // Add a keyboard listener
         TileManager.loadTiles();

@@ -42,14 +42,11 @@ public class Main extends ApplicationAdapter {
         LOGGER.info("Ending program...");
         batch.dispose();
         shapes.dispose();
-        //UI.dispose();
         LOGGER.info("Program ended");
     }
 
     public static void handleException(Exception exception) {
-        LOGGER.error("Torgray's Trials has encountered an error!");
-        LOGGER.error("This is likely not your fault, please create an issue on GitHub with the error below.");
-        LOGGER.error("---------------------------------------------------------------------------------------", exception);
+        QueueAppender.printError(exception);
         Gdx.app.exit();
     }
 }
