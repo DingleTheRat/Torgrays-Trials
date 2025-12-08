@@ -143,8 +143,7 @@ public class Game {
             entities.forEach(Entity::update);
         } else if (gameState == States.GameStates.PLAY) {
             // Update every entity inside the entities hashmap, hashmaps alike, and the player
-            player.update();
-            entities.forEach(Entity::update);
+            player.update(); entities.forEach(Entity::update);
         }
     }
 

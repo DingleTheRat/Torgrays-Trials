@@ -4,10 +4,14 @@ package net.dingletherat.torgrays_trials.main;
 import net.dingletherat.torgrays_trials.Main;
 
 import javax.sound.sampled.*;
+
+import com.badlogic.gdx.Gdx;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Sound {
     public static final HashMap<String, URL> SOUND_LIBRARY = new HashMap<>();
@@ -17,24 +21,21 @@ public class Sound {
     float volume;
 
     public static void loadLibrary() {
-        // Music
-        SOUND_LIBRARY.put("Tech Geek", Sound.class.getResource("/sound/music/tech_geek.wav"));
-        SOUND_LIBRARY.put("Umbral Force", Sound.class.getResource("/sound/music/umbral_force.wav"));
-        SOUND_LIBRARY.put("Coin Toss", Sound.class.getResource("/sound/music/coin_toss.wav"));
-        SOUND_LIBRARY.put("Gloom Over Torgray", Sound.class.getResource("/sound/music/gloom_over_torgray.wav"));
-        Main.LOGGER.info("Loaded all music files");
+        // Add in all sound files in the music folder to the SOUND_LIBRARY
+		List<String> musicFiles = UtilityTool.getFileNames("sound/music");
+        musicFiles.forEach(fileName -> {
+            String name = fileName.replace(".wav", "");
+            SOUND_LIBRARY.put(name, Sound.class.getResource("/sound/music/" + fileName));
+        });
+        Main.LOGGER.info("Loaded " + musicFiles.size() + " music files");
 
-        // SFX
-        SOUND_LIBRARY.put("Coin", Sound.class.getResource("/sound/sfx/coin.wav"));
-        SOUND_LIBRARY.put("Power Up", Sound.class.getResource("/sound/sfx/power_up.wav"));
-        SOUND_LIBRARY.put("Unlock", Sound.class.getResource("/sound/sfx/unlock.wav"));
-        SOUND_LIBRARY.put("Hit Monster", Sound.class.getResource("/sound/sfx/hit_monster.wav"));
-        SOUND_LIBRARY.put("Receive Damage", Sound.class.getResource("/sound/sfx/receive_damage.wav"));
-        SOUND_LIBRARY.put("Cursor", Sound.class.getResource("/sound/sfx/cursor.wav"));
-        SOUND_LIBRARY.put("Game Over", Sound.class.getResource("/sound/sfx/game_over.wav"));
-        SOUND_LIBRARY.put("Teleport", Sound.class.getResource("/sound/sfx/teleport.wav"));
-        SOUND_LIBRARY.put("Swing", Sound.class.getResource("/sound/sfx/swing.wav"));
-        Main.LOGGER.info("Loaded all sound files");
+        // Add in all sound files in the SFX folder to the SOUND_LIBRARY
+		List<String> sfxFiles = UtilityTool.getFileNames("sound/sfx");
+        sfxFiles.forEach(fileName -> {
+            String name = fileName.replace(".wav", "");
+            SOUND_LIBRARY.put(name, Sound.class.getResource("/sound/sfx/" + fileName));
+        });
+        Main.LOGGER.info("Loaded " + sfxFiles.size() + " sfx files");
     }
 
 	public int getFile(String soundName) {

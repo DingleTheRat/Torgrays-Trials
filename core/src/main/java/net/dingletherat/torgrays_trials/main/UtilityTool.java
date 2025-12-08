@@ -6,10 +6,9 @@ import com.badlogic.gdx.files.FileHandle;
 import net.dingletherat.torgrays_trials.Main;
 import org.json.JSONObject;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.Arrays;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The toolbox of the game.
@@ -52,36 +51,16 @@ public class UtilityTool {
      * @param directoryPath The path to the directory you want the method to get the names of the contents of. {@code EX: "values/translations"}
      * @return A String array of all the names of the files contained in the directory
      **/
-    public static String[] getFileNames(String directoryPath) {
+    public static List<String> getFileNames(String directoryPath) {
         // This is the LibGDX way of getting files
         FileHandle dir = Gdx.files.internal(directoryPath);
         if (!dir.exists() || !dir.isDirectory()) {
             Main.LOGGER.warn("Invalid directory: {}", directoryPath);
-            return new String[0];
+            return Collections.emptyList();
         }
 
         return Arrays.stream(dir.list())
             .map(FileHandle::name)
-            .toArray(String[]::new);
-    }
-
-    public static byte[] serializeImage(BufferedImage image) {
-        try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            ImageIO.write(image, "png", byteArrayOutputStream); // You can use "jpg", "bmp", etc.
-            return byteArrayOutputStream.toByteArray();
-        } catch (IOException exception) {
-            Main.handleException(exception);
-            return null;
-        }
-    }
-    public static BufferedImage deserializeImage(byte[] data) {
-        try {
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
-            return ImageIO.read(byteArrayInputStream);
-        } catch (IOException exception) {
-            Main.handleException(exception);
-            return null;
-        }
+            .collect(Collectors.toList());
     }
 }

@@ -4,25 +4,27 @@ package net.dingletherat.torgrays_trials.rendering;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.main.UtilityTool;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class MapHandler {
 	public static final HashMap<String, JSONObject> mapFiles = new HashMap<>();
 	public static ArrayList<String> maps = new ArrayList<>();
 
 	public static void loadMaps() {
-		String[] mapFiles = getResourceFileNames("values/maps");
+		List<String> mapFiles = UtilityTool.getFileNames("values/maps");
 		for (String mapFile : mapFiles) {
 			if (mapFile.endsWith(".json")) {
 				String mapName = mapFile.substring(0, mapFile.lastIndexOf(".json"));
 				loadMap(mapName);
 			} else if (!mapFile.contains(".")) { // Check if it's a directory
-				String[] subFiles = getResourceFileNames("values/maps/" + mapFile);
+				List<String> subFiles = UtilityTool.getFileNames("values/maps/" + mapFile);
 				for (String subFile : subFiles) {
 					if (subFile.endsWith(".json")) {
 						String mapName = subFile.substring(0, subFile.lastIndexOf(".json"));
@@ -36,10 +38,10 @@ public class MapHandler {
 
 	public static void loadMap(String fileName) {
 		// Get the file and check if it exists
-		JSONObject file = getJsonObject("values/maps/" + fileName + ".json");
+		JSONObject file = UtilityTool.getJsonObject("values/maps/" + fileName + ".json");
 		if (file == null) {
 			Main.LOGGER.error("Couldn't find values/maps/{}.json", fileName);
-			file = getJsonObject("maps/disabled.json");
+			file = UtilityTool.getJsonObject("maps/disabled.json");
 			if (file == null) {
 				Main.LOGGER.error("Couldn't find /values/maps/disabled.json");
 				return;
@@ -57,7 +59,7 @@ public class MapHandler {
 			ground = map.getJSONArray("ground");
 		} catch (JSONException jsonException) {
 			Main.LOGGER.error("Failed to find essential map data in {}.json. Using default map.", fileName);
-			file = getJsonObject("/maps/disabled.json");
+			file = UtilityTool.getJsonObject("/maps/disabled.json");
 			if (file == null) {
 				Main.LOGGER.error("Couldn't find /values/maps/disabled.json after choosing default map.");
 				return;
@@ -123,35 +125,4 @@ public class MapHandler {
 		mapFiles.put(name, file);
 		maps.add(name);
 	}
-
-	public static String[] getResourceFileNames(String directoryPath) {
-        // This is the LibGDX way of getting files
-        FileHandle dir = Gdx.files.internal(directoryPath);
-        if (!dir.exists() || !dir.isDirectory()) {
-            Main.LOGGER.warn("Invalid directory: {}", directoryPath);
-            return new String[0];
-        }
-
-        return Arrays.stream(dir.list())
-            .map(FileHandle::name)
-            .toArray(String[]::new);
-	}
-
-    public static JSONObject getJsonObject(String path) {
-        try {
-            FileHandle file = Gdx.files.internal(path);
-
-            if (!file.exists()) {
-                Main.LOGGER.error("Warning: \"{}\" is not a valid path.", path);
-                return null;
-            }
-
-            String content = file.readString("UTF-8");
-            return new JSONObject(content);
-
-        } catch (Exception e) {
-            Main.handleException(e);
-            return new JSONObject();
-        }
-    }
 }

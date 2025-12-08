@@ -3,7 +3,10 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Translations {
     private static final HashMap<String, JSONObject> TRANSLATION_FILES = new HashMap<>();
@@ -45,7 +48,7 @@ public class Translations {
      **/
     public static void loadFiles() {
         // Get the names of all the files in "/values/translations"
-        String[] translationFiles = UtilityTool.getFileNames("values/translations");
+        List<String> translationFiles = UtilityTool.getFileNames("values/translations");
 
         // Loop through the translation files and add them to the TRANSLATION_FILES HashMap
         for (String file : translationFiles) {
