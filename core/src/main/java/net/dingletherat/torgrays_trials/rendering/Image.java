@@ -37,7 +37,6 @@ public class Image implements Serializable {
      * @return An instance of this class, Image. If you try to use this to render an image, it likely won't work.
      * Instead, call the {@code getImage} method from the instance of the class to get a buffered image. This will work if you try to draw it. **/
     public static Image loadImage(String imageName) {
-        // If the image is null, that means it is requesting a disabled image, so load it
         if (imageName == null) {
           Image image = loadImage("disabled");
           image.scaleImage(Game.tileSize, Game.tileSize);
@@ -61,7 +60,7 @@ public class Image implements Serializable {
 
         /*
          * Make sure the file is a member of "/drawable/" and is a png. If not, use the disabled file and warn.
-         * The way we find out that is by checking if the file is null. If it is, it's likely not a valid member.
+         * The way we find out that is by checking if the file "exists". If it doesn't, it's likely not a valid member.
          * However, if the imageName was just "", don't warn as it may be a result of an error
          * In any of these cases, we use a placeholder image called "disabled" to indicate that something went wrong.
          */
@@ -70,7 +69,7 @@ public class Image implements Serializable {
             data = serializeImage(image);
             return;
         }
-        if (file == null) {
+        if (!file.exists()) {
             Main.LOGGER.warn("{} is not a valid member of \"/drawable/\". ", imageName);
             image = new Texture(Gdx.files.internal("drawable/disabled.png"));
             data = serializeImage(image);

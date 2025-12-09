@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import net.dingletherat.torgrays_trials.main.Game;
+import net.dingletherat.torgrays_trials.main.Sounds;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +44,7 @@ public class Main extends ApplicationAdapter {
         LOGGER.info("Ending program...");
         batch.dispose();
         shapes.dispose();
+        Sounds.dispose();
         LOGGER.info("Program ended");
     }
 

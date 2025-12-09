@@ -40,7 +40,7 @@ public class Game {
 
     // Game settings
     public String language = "english"; // English is the default
-
+    public long currentSong;
     public String currentMap = "Main Island";
 
     public void setup() {
@@ -92,8 +92,8 @@ public class Game {
         }
 
         // Load sound library and play music
-        Sound.loadLibrary();
-        Sound.playMusic("Tech Geek");
+        Sounds.loadLibrary();
+        currentSong = Sounds.playMusic("Tech Geek");
 
         Main.LOGGER.info("--Completed setup for game--");
     }
@@ -159,7 +159,7 @@ public class Game {
         entities.add(new GateKeeper(Game.tileSize * 21, Game.tileSize * 23));
 
         // Change the music to the "playing music"
-        Sound.stopMusic();
-        Sound.playMusic("Umbral Force");
+        Sounds.stopMusic("Tech Geek", currentSong);
+        currentSong = Sounds.playMusic("Umbral Force");
     }
 }

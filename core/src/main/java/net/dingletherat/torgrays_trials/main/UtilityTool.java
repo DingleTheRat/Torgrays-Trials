@@ -33,7 +33,7 @@ public class UtilityTool {
 
             // Warn if the filePath does not contain ".json", meaning it's not a JSON file
             if (!file.name().endsWith(".json")) {
-                Main.LOGGER.warn("From: getJsonObject(): \"{}\" does not lead to a json file", file);
+                Main.LOGGER.warn("From getJsonObject(): \"{}\" does not lead to a json file", file);
                 return null;
             }
 
@@ -47,20 +47,50 @@ public class UtilityTool {
     }
 
     /**
-     * Gets all the names of the contents of a given directory.
-     * @param directoryPath The path to the directory you want the method to get the names of the contents of. {@code EX: "values/translations"}
-     * @return A String array of all the names of the files contained in the directory
+     * Gets all the names of the files in a given directory.
+     * <p>
+     * @param directoryPath The path to the directory you want the method to get the names of the files of. EX: {@code "values/translations"}
+     * @return A {@link List} of Strings with all the names of the files contained in the directory
      **/
     public static List<String> getFileNames(String directoryPath) {
-        // This is the LibGDX way of getting files
-        FileHandle dir = Gdx.files.internal(directoryPath);
-        if (!dir.exists() || !dir.isDirectory()) {
-            Main.LOGGER.warn("Invalid directory: {}", directoryPath);
+        // Get the directory that of which we need to get the file names of
+        FileHandle directory = Gdx.files.internal(directoryPath);
+
+        // Make sure that the directory exists and that it's a directory. If not, warn
+        if (!directory.exists() || !directory.isDirectory()) {
+            Main.LOGGER.warn("From getFileNames(): {} is not a directory!", directoryPath);
             return Collections.emptyList();
         }
 
-        return Arrays.stream(dir.list())
+        /*
+         * Get the names of the files in the directory.
+         * This is done by turning the directory into an array of the files in the directory.
+         * Then, we get the names of those files and turn it into a list.
+         */
+        List<String> returnList = Arrays.stream(directory.list())
             .map(FileHandle::name)
             .collect(Collectors.toList());
+
+        return returnList;
+    }
+
+    /**
+     * Gets all the names of the files in a given directory, as long as they are the required file type.
+     * <p>
+     * @param directoryPath The path to the directory you want the method to get the names of the files of. EX: {@code "values/translations"}
+     * @param fileType The type of file you want to get the names of. For instance, {@code .json}.
+     * @return A {@link List} of Strings with all the names of the files contained in the directory
+     **/
+    public static List<String> getFileNames(String directoryPath, String fileType) {
+        // Get the fileNames by using the other version of the method
+        List<String> fileNames = getFileNames(directoryPath);
+
+        /* Remove every string in the list that doesn't contain the fileType
+           This is done by filtering out all the ones that don't contain it, and remove eahc of the remaining */
+        fileNames.stream()
+            .filter(fileName -> !fileName.contains(fileType))
+            .forEach(fileName -> fileNames.remove(fileName));
+
+        return fileNames;
     }
 }

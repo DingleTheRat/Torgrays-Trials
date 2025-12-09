@@ -16,7 +16,7 @@ import java.util.Properties;
  **/
 public class Entity {
     /// The image that is drawn at the entity's location to represent the entity.
-    public Image currentImage = Image.loadImage(null);
+    public Image currentImage = Image.loadImage("E");
     /// If there's a sprite sheet, this is the colum where the sprite would be pulled from. Set to -1 to disable it.
     public int spriteColumn = -1;
     /// If there's a sprite sheet, this is the row where the sprite would be pulled from. Set to -1 to disable it.

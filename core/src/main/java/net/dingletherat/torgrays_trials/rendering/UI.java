@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.main.Game;
-import net.dingletherat.torgrays_trials.main.Sound;
+import net.dingletherat.torgrays_trials.main.Sounds;
 import net.dingletherat.torgrays_trials.main.Translations;
 
 public class UI {
@@ -290,7 +290,7 @@ public class UI {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 // If the mouse entered, let the player know they can press it by putting arrows around it and playing a sound
-                Sound.playSFX("Cursor");
+                Sounds.playSFX("Cursor");
                 button.setText("> " + text + " <");
             }
 
