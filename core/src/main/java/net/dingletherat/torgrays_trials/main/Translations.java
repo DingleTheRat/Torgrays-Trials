@@ -4,7 +4,6 @@ package net.dingletherat.torgrays_trials.main;
 import net.dingletherat.torgrays_trials.Main;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class Translations {
      **/
     public static String get(String identifier, String key) {
         // Firstly, get the JSON file of the current language and get translationKey by combining the caller and key strings
-        JSONObject languageFile = TRANSLATION_FILES.get(Main.game.language);
+        JSONObject languageFile = TRANSLATION_FILES.get(Main.language);
         String translationKey = identifier + ":" + key;
 
         // If language files do not contain a translation for that key: warn, and return the translationKey

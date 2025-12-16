@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.Entity;
-import net.dingletherat.torgrays_trials.main.Game;
 import java.util.ArrayList;
 
 public class Darkness {
@@ -88,7 +87,7 @@ public class Darkness {
         Main.batch.flush();
 
         // 1. Create FBO for darkness
-        FrameBuffer darknessFbo = new FrameBuffer(Pixmap.Format.RGBA8888, Game.screenWidth, Game.screenHeight, false);
+        FrameBuffer darknessFbo = new FrameBuffer(Pixmap.Format.RGBA8888, Main.screenWidth, Main.screenHeight, false);
         darknessFbo.begin();
 
         // Clear with black at full opacity
@@ -107,8 +106,8 @@ public class Darkness {
             float intensity = ((Number) lightSource.properties.get("light_intensity")).floatValue();
             intensity = Math.max(0f, Math.min(1f, intensity));
 
-            float x = lightSource.x - Main.game.player.cameraX + Game.screenWidth / 2f + 24 - radius;
-            float y = lightSource.y - Main.game.player.cameraY + Game.screenHeight / 2f + 24 - radius;
+            float x = lightSource.x - (Main.game != null ? Main.game.player.cameraX : 0) + Main.screenWidth / 2f + 24 - radius;
+            float y = lightSource.y - (Main.game != null ? Main.game.player.cameraY : 0) + Main.screenHeight / 2f + 24 - radius;
 
             Main.batch.setColor(1f, 1f, 1f, intensity);
             Main.batch.draw(radialLightTexture, x, y, radius * 2, radius * 2);

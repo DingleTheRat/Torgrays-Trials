@@ -144,29 +144,29 @@ public class UI {
         buttonStyle.font = getFont("Maru_Monica", 80);
 
         // Create the title
-        Label title = new Label(Translations.get(Game.identifier, "title"), titleStyle);
+        Label title = new Label(Translations.get(Main.identifier, "title"), titleStyle);
         table.add(title);
 
         // New Row
         table.row().pad(5);
 
         // Create the first actual button that creates a new game
-        TextButton newGame = createButton(Translations.get(Game.identifier, "new_game"),
-            buttonStyle, () -> Main.game.loadGame());
-        table.add(newGame);
+        TextButton newMain = createButton(Translations.get(Main.identifier, "new_game"),
+            buttonStyle, () -> Main.game = new Game());
+        table.add(newMain);
 
         // New Row
         table.row().pad(5);
 
         // A load button (no functionality for now)
-        TextButton loadGame = new TextButton(Translations.get(Game.identifier, "load_game"), buttonStyle);
-        table.add(loadGame);
+        TextButton loadMain = new TextButton(Translations.get(Main.identifier, "load_game"), buttonStyle);
+        table.add(loadMain);
 
         // New Row
         table.row().pad(5);
 
         // Finally, a quit button, so players can touch grass
-        TextButton quit = createButton(Translations.get(Game.identifier, "quit"),
+        TextButton quit = createButton(Translations.get(Main.identifier, "quit"),
             buttonStyle, () -> Gdx.app.exit());
         table.add(quit);
 
@@ -246,8 +246,8 @@ public class UI {
             // Position
             x.setText("X: " + Main.game.player.x);
             y.setText("Y: " + Main.game.player.y);
-            col.setText("Col: " + Main.game.player.x / Game.tileSize);
-            row.setText("Row: " + Main.game.player.y / Game.tileSize);
+            col.setText("Col: " + Main.game.player.x / Main.tileSize);
+            row.setText("Row: " + Main.game.player.y / Main.tileSize);
 
             // States
             ui.setText("UI: " + uiState);

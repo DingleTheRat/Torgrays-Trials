@@ -2,7 +2,6 @@
 package net.dingletherat.torgrays_trials.entity;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.rendering.Map;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 
@@ -25,8 +24,8 @@ public class CollisionChecker {
     public static boolean checkBlockCollision(Entity entity, boolean[][] collisionPoints, float x, float y) {
         int gridX = collisionPoints.length;      // number of columns in collision grid
         int gridY = collisionPoints[0].length;   // number of rows in collision grid
-        float cellW = Game.tileSize / (float) gridX;
-        float cellH = Game.tileSize / (float) gridY;
+        float cellW = Main.tileSize / (float) gridX;
+        float cellH = Main.tileSize / (float) gridY;
 
         for (int i = 0; i < gridX; i++) {
             for (int j = 0; j < gridY; j++) {
@@ -66,8 +65,8 @@ public class CollisionChecker {
                 if (tile == null) continue;
 
                 boolean[][] collisionPoints = tile.collision();
-                int worldX = col * Game.tileSize - Game.tileSize / 2; // tile top-left X
-                int worldY = row * Game.tileSize - Game.tileSize / 2; // tile top-left Y
+                int worldX = col * Main.tileSize - Main.tileSize / 2; // tile top-left X
+                int worldY = row * Main.tileSize - Main.tileSize / 2; // tile top-left Y
 
                 if (checkBlockCollision(entity, collisionPoints, worldX, worldY)) return true;
             }

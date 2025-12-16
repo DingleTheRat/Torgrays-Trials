@@ -6,7 +6,6 @@ import com.badlogic.gdx.files.FileHandle;
 import net.dingletherat.torgrays_trials.Main;
 import org.json.JSONObject;
 
-import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 

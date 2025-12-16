@@ -6,7 +6,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.Game;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -39,7 +38,7 @@ public class Image implements Serializable {
     public static Image loadImage(String imageName) {
         if (imageName == null) {
           Image image = loadImage("disabled");
-          image.scaleImage(Game.tileSize, Game.tileSize);
+          image.scaleImage(Main.tileSize, Main.tileSize);
           return image;
         }
 
@@ -69,7 +68,7 @@ public class Image implements Serializable {
             data = serializeImage(image);
             return;
         }
-        if (!file.exists()) {
+        if (!file.exists() || file == null) {
             Main.LOGGER.warn("{} is not a valid member of \"/drawable/\". ", imageName);
             image = new Texture(Gdx.files.internal("drawable/disabled.png"));
             data = serializeImage(image);

@@ -3,7 +3,6 @@ package net.dingletherat.torgrays_trials.entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.rendering.Image;
 import java.util.Properties;
 
@@ -16,7 +15,7 @@ import java.util.Properties;
  **/
 public class Entity {
     /// The image that is drawn at the entity's location to represent the entity.
-    public Image currentImage = Image.loadImage("E");
+    public Image currentImage = Image.loadImage(null);
     /// If there's a sprite sheet, this is the colum where the sprite would be pulled from. Set to -1 to disable it.
     public int spriteColumn = -1;
     /// If there's a sprite sheet, this is the row where the sprite would be pulled from. Set to -1 to disable it.
@@ -25,8 +24,8 @@ public class Entity {
     // Positions
     public float x;
     public float y;
-    public float width = 16 * Game.scale;
-    public float height = 16 * Game.scale;
+    public float width = 16 * Main.scale;
+    public float height = 16 * Main.scale;
 
     // Updating
     /// Can the entity update while not being on the screen? If it's true, the {@code} onScreen} field will always be set to true inside the main update loop of the entity.
@@ -49,8 +48,8 @@ public class Entity {
         this.name = name;
         x = spawnX;
         y = spawnY;
-        this.width = width * Game.scale;
-        this.height = height * Game.scale;
+        this.width = width * Main.scale;
+        this.height = height * Main.scale;
     }
 
     /** Called in the main draw method to draw the entity.
@@ -68,23 +67,23 @@ public class Entity {
         Texture texture = currentImage.getTexture();
 
         // Where to draw the image on screen
-        float screenX = x - Main.game.player.cameraX + Game.screenWidth / 2f;
-        float screenY = y - Main.game.player.cameraY + Game.screenHeight / 2f;
+        float screenX = x - Main.game.player.cameraX + Main.screenWidth / 2f;
+        float screenY = y - Main.game.player.cameraY + Main.screenHeight / 2f;
 
-            /* If spriteSheets are disabled (spriteColumn = -1, spriteRow = -1), draw the currentImage normally.
-             If not, use spriteColumn and spriteRow to figure out what part to draw. */
+        /* If spriteSheets are disabled (spriteColumn = -1, spriteRow = -1), draw the currentImage normally.
+         If not, use spriteColumn and spriteRow to figure out what part to draw. */
         if (spriteColumn == -1 && spriteRow == -1) {
             Main.batch.draw(currentImage.getTexture(), Math.round(screenX), Math.round(screenY));
         } else {
             // Store what part of the sprite sheet to draw
-            int imageX = Game.tileSize * spriteColumn;
-            int imageY = Game.tileSize * spriteRow;
+            int imageX = Main.tileSize * spriteColumn;
+            int imageY = Main.tileSize * spriteRow;
 
             Main.batch.draw(currentImage.getTexture(),
                 // Image position in the world
-                Math.round(screenX), Math.round(screenY), Game.tileSize, Game.tileSize,
+                Math.round(screenX), Math.round(screenY), Main.tileSize, Main.tileSize,
                 // Image position in the sprite sheet
-                imageX, texture.getWidth() - imageY, Game.tileSize, Game.tileSize,
+                imageX, texture.getWidth() - imageY, Main.tileSize, Main.tileSize,
                 // Flip X and Y
                 false, false);
         }
@@ -100,9 +99,9 @@ public class Entity {
      **/
     public void update() {
         // Check if the entity is on the screen using the player's camera position
-        onScreen = x + width > Main.game.player.cameraX - Game.screenWidth / 2f &&
-            x < Main.game.player.cameraX + Game.screenWidth / 2f &&
-            y + height > Main.game.player.cameraY - Game.screenHeight / 2f &&
-            y < Main.game.player.cameraY + Game.screenHeight / 2f || updateOffScreen;
+        onScreen = x + width > Main.game.player.cameraX - Main.screenWidth / 2f &&
+            x < Main.game.player.cameraX + Main.screenWidth / 2f &&
+            y + height > Main.game.player.cameraY - Main.screenHeight / 2f &&
+            y < Main.game.player.cameraY + Main.screenHeight / 2f || updateOffScreen;
     }
 }

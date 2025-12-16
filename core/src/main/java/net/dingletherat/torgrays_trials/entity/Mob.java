@@ -2,7 +2,6 @@
 package net.dingletherat.torgrays_trials.entity;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.main.States.MobStates;
 import net.dingletherat.torgrays_trials.rendering.Image;
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class Mob extends Entity {
 
         // Eyes sheet setup
         eyesSheet = Image.loadImage("entity/eyes_sheet");
-        eyesSheet.scaleImage(Game.tileSize * 5, Game.tileSize * 2);
+        eyesSheet.scaleImage(Main.tileSize * 5, Main.tileSize * 2);
     }
 
     @Override
@@ -60,8 +59,8 @@ public class Mob extends Entity {
         if ((int) properties.getOrDefault("wander_speed", 0) != 0) wander();
 
         // Flicker the light
-        if (Game.random.nextFloat() > 0.5)
-            properties.put("light_intensity", 0.8f * ((Game.random.nextFloat() - 0.5f) / 5f + 1));
+        if (Main.random.nextFloat() > 0.5)
+            properties.put("light_intensity", 0.8f * ((Main.random.nextFloat() - 0.5f) / 5f + 1));
 
         if (state == MobStates.WALKING) {
             // Return if the direction is more than 2 words to not confuse the code
@@ -138,13 +137,13 @@ public class Mob extends Entity {
             counters.put("wander", 0);
 
             // Have a 2/3 chance to keep a position
-            if (Game.random.nextInt(3) != 0) return;
+            if (Main.random.nextInt(3) != 0) return;
 
             // If the position isn't kept, update the state to walking
             state = MobStates.WALKING;
 
             // Choose a direction, if 8 or 9 are chosen, change the state to idle
-            switch (Game.random.nextInt(9)) {
+            switch (Main.random.nextInt(9)) {
                 case 0 -> direction = "up";
                 case 1 -> direction = "down";
                 case 2 -> direction = "left";
@@ -222,7 +221,7 @@ public class Mob extends Entity {
 
             /* If the counter hits the goal, change the position of the eyes
             */
-            if (eyes_idle >= animationSpeed * (8 + Game.random.nextInt(6))) {
+            if (eyes_idle >= animationSpeed * (8 + Main.random.nextInt(6))) {
                 // To show Torgray is bored, his eyes will look around in this sequence:
                 switch (eyesColumn) {
                     case 0 -> eyesColumn = 1; // Look left
@@ -251,7 +250,7 @@ public class Mob extends Entity {
         counters.put("eyes_blink", eyes_blink);
 
         // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
-        if (eyes_blink >= animationSpeed * (10 + Game.random.nextInt(10))) {
+        if (eyes_blink >= animationSpeed * (10 + Main.random.nextInt(10))) {
             // Change the row to the blinking row
             eyesRow = 1;
 
@@ -281,18 +280,18 @@ public class Mob extends Entity {
 
         // Draw the eyes (as long as the mob isn't facing backward)
         if (spriteRow != 0) {
-            float screenX = x - Main.game.player.cameraX + Game.screenWidth / 2f;
-            float screenY = y - Main.game.player.cameraY + Game.screenHeight / 2f;
+            float screenX = x - Main.game.player.cameraX + Main.screenWidth / 2f;
+            float screenY = y - Main.game.player.cameraY + Main.screenHeight / 2f;
 
             // Store what part of the sprite sheet to draw
-            int imageX = Game.tileSize * eyesColumn;
-            int imageY = Game.tileSize * (1 - eyesRow);
+            int imageX = Main.tileSize * eyesColumn;
+            int imageY = Main.tileSize * (1 - eyesRow);
 
             Main.batch.draw(eyesSheet.getTexture(),
                 // Image position in the world
-                Math.round(screenX), Math.round(screenY), Game.tileSize, Game.tileSize,
+                Math.round(screenX), Math.round(screenY), Main.tileSize, Main.tileSize,
                 // Image position in the sprite sheet
-                imageX, imageY, Game.tileSize, Game.tileSize,
+                imageX, imageY, Main.tileSize, Main.tileSize,
                 // Flip X and Y
                 false, false);
         }

@@ -4,7 +4,6 @@ package net.dingletherat.torgrays_trials.entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.Game;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.rendering.Image;
 import net.dingletherat.torgrays_trials.rendering.Map;
@@ -18,15 +17,15 @@ public class Player extends Mob {
 
         // Ajust spriteSheet properties
         spriteSheet = Image.loadImage("entity/player/torgray_sheet");
-        spriteSheet.scaleImage(Game.tileSize * 3, Game.tileSize * 4);
+        spriteSheet.scaleImage(Main.tileSize * 3, Main.tileSize * 4);
         currentImage = spriteSheet;
         properties.put("draw_eyes", true);
 
         // Set some properties
         // TODO: Make position dependent on the map
         speed = 4;
-        x = Game.tileSize * 23; // Colum 23
-        y = Game.tileSize * 21; // Row 21
+        x = Main.tileSize * 23; // Colum 23
+        y = Main.tileSize * 21; // Row 21
         cameraX = x;
         cameraY = y;
         updateOffScreen = true;
@@ -66,10 +65,10 @@ public class Player extends Mob {
 
         // Clamp the camera to the map bounds
         Map map = TileManager.maps.get(Main.game.currentMap);
-        int maxCameraX = map.x() * Game.tileSize - Game.screenWidth / 2;
-        int maxCameraY = map.y() * Game.tileSize - Game.screenHeight / 2;
-        if (cameraX < Game.screenWidth / 2f) cameraX = Game.screenWidth / 2f;
-        if (cameraY < Game.screenHeight / 2f) cameraY = Game.screenHeight / 2f;
+        int maxCameraX = map.x() * Main.tileSize - Main.screenWidth / 2;
+        int maxCameraY = map.y() * Main.tileSize - Main.screenHeight / 2;
+        if (cameraX < Main.screenWidth / 2f) cameraX = Main.screenWidth / 2f;
+        if (cameraY < Main.screenHeight / 2f) cameraY = Main.screenHeight / 2f;
         if (cameraX > maxCameraX) cameraX = maxCameraX;
         if (cameraY > maxCameraY) cameraY = maxCameraY;
     }

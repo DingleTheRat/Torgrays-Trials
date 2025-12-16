@@ -2,7 +2,6 @@
 package net.dingletherat.torgrays_trials.rendering;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.Game;
 
 import java.util.HashMap;
 
@@ -93,7 +92,7 @@ public class TileManager {
         }
         // Load the image and scale it to the tileSize
         Image image = Image.loadImage("tile/" + imageName);
-        image.scaleImage(Game.tileSize, Game.tileSize);
+        image.scaleImage(Main.tileSize, Main.tileSize);
 
         // Register the tile
         Tile tile = new Tile(image, collisionArray);
@@ -135,20 +134,20 @@ public class TileManager {
     private static void drawLayer(Map map, HashMap<Pair, Integer> layer) {
         float camX = Main.game.player.cameraX;
         float camY = Main.game.player.cameraY;
-        int tileSize = Game.tileSize;
+        int tileSize = Main.tileSize;
         for (int worldRow = 0; worldRow < map.y(); worldRow++) {
             for (int worldCol = 0; worldCol < map.x(); worldCol++) {
                 int tileNumber = layer.get(new Pair(worldCol, worldRow));
                 int worldX = worldCol * tileSize;
                 int worldY = worldRow * tileSize;
-                float screenX = worldX - camX + Game.screenWidth / 2f;
-                float screenY = worldY - camY + Game.screenHeight / 2f;
+                float screenX = worldX - camX + Main.screenWidth / 2f;
+                float screenY = worldY - camY + Main.screenHeight / 2f;
 
                 // Check if the tile is within the visible screen
-                if (worldX + tileSize > camX - Game.screenWidth / 2f &&
-                    worldX - tileSize < camX + Game.screenWidth / 2f &&
-                    worldY + tileSize > camY - Game.screenHeight / 2f &&
-                    worldY - tileSize < camY + Game.screenHeight / 2f) {
+                if (worldX + tileSize > camX - Main.screenWidth / 2f &&
+                    worldX - tileSize < camX + Main.screenWidth / 2f &&
+                    worldY + tileSize > camY - Main.screenHeight / 2f &&
+                    worldY - tileSize < camY + Main.screenHeight / 2f) {
                     Tile currentTile = TileManager.tileTypes.get(tileNumber);
                     Main.batch.draw(currentTile.image().getTexture(), Math.round(screenX), Math.round(screenY));
                 }
