@@ -91,7 +91,7 @@ public class TileManager {
             }
         }
         // Load the image and scale it to the tileSize
-        Image image = Image.loadImage("tile/" + imageName);
+        DataImage image = DataImage.loadImage("tile/" + imageName);
         image.scaleImage(Main.tileSize, Main.tileSize);
 
         // Register the tile

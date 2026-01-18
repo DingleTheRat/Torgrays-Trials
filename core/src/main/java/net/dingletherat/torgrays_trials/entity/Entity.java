@@ -3,7 +3,7 @@ package net.dingletherat.torgrays_trials.entity;
 
 import com.badlogic.gdx.graphics.Texture;
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.rendering.Image;
+import net.dingletherat.torgrays_trials.rendering.DataImage;
 import java.util.Properties;
 
 /** Extend this class to create an Entity.
@@ -15,7 +15,7 @@ import java.util.Properties;
  **/
 public class Entity {
     /// The image that is drawn at the entity's location to represent the entity.
-    public Image currentImage = Image.loadImage(null);
+    public DataImage currentImage = DataImage.loadImage(null);
     /// If there's a sprite sheet, this is the colum where the sprite would be pulled from. Set to -1 to disable it.
     public int spriteColumn = -1;
     /// If there's a sprite sheet, this is the row where the sprite would be pulled from. Set to -1 to disable it.

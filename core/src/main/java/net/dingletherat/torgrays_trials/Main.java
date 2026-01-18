@@ -15,7 +15,7 @@ import net.dingletherat.torgrays_trials.main.Sounds;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.main.Translations;
 import net.dingletherat.torgrays_trials.rendering.Darkness;
-import net.dingletherat.torgrays_trials.rendering.Image;
+import net.dingletherat.torgrays_trials.rendering.DataImage;
 import net.dingletherat.torgrays_trials.rendering.UI;
 
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class Main extends ApplicationAdapter {
     public static final Logger LOGGER = LoggerFactory.getLogger("Torgray's Trials");
 
     // Title screen elements
-    static Image backdrop;
+    static DataImage backdrop;
     public static Darkness titleDarkness;
     public static ArrayList<Entity> titleFireflies = new ArrayList<>();
     public static long titleMusic;
@@ -92,7 +92,7 @@ public class Main extends ApplicationAdapter {
         }
 
         // Lastly, load the backdrop
-        backdrop = Image.loadImage("backdrop");
+        backdrop = DataImage.loadImage("backdrop");
 
         LOGGER.info("--Setup complete!--");
         LOGGER.info("Window enabled");

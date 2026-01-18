@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.main.States;
-import net.dingletherat.torgrays_trials.rendering.Image;
+import net.dingletherat.torgrays_trials.rendering.DataImage;
 import net.dingletherat.torgrays_trials.rendering.Map;
 import net.dingletherat.torgrays_trials.rendering.TileManager;
 
@@ -16,7 +16,7 @@ public class Player extends Mob {
         super("Torgray", 0f, 0f, 12f, 16f);
 
         // Ajust spriteSheet properties
-        spriteSheet = Image.loadImage("entity/player/torgray_sheet");
+        spriteSheet = DataImage.loadImage("entity/player/torgray_sheet");
         spriteSheet.scaleImage(Main.tileSize * 3, Main.tileSize * 4);
         currentImage = spriteSheet;
         properties.put("draw_eyes", true);

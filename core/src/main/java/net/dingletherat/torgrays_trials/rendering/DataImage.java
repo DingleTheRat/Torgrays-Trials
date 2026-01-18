@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+
 import net.dingletherat.torgrays_trials.Main;
 
 import java.io.*;
@@ -17,8 +18,8 @@ import java.util.HashMap;
  * You can get the {@link Texture} using the {@code getImage} method.
  * An instance of this class is created using the {@code loadImage} method in the static version of this class, because the constructor is private.
  * It's private because this method uses a cache system which is more efficient than crating a bunch of new instances of this class **/
-public class Image implements Serializable {
-    private static final HashMap<String, Image> imageCache = new HashMap<>();
+public class DataImage implements Serializable {
+    private static final HashMap<String, DataImage> imageCache = new HashMap<>();
 
     private final byte[] data;
     private transient Texture image;
@@ -35,9 +36,9 @@ public class Image implements Serializable {
      * <p>
      * @return An instance of this class, Image. If you try to use this to render an image, it likely won't work.
      * Instead, call the {@code getImage} method from the instance of the class to get a buffered image. This will work if you try to draw it. **/
-    public static Image loadImage(String imageName) {
+    public static DataImage loadImage(String imageName) {
         if (imageName == null) {
-          Image image = loadImage("disabled");
+          DataImage image = loadImage("disabled");
           image.scaleImage(Main.tileSize, Main.tileSize);
           return image;
         }
@@ -46,14 +47,14 @@ public class Image implements Serializable {
         if (imageCache.containsKey(imageName)) return imageCache.get(imageName);
 
         // Sadly, there is no way around this; we have to load an image D:
-        Image image = new Image(imageName);
+        DataImage image = new DataImage(imageName);
 
         // Added to the cache, so we don't have to do this again and return the image
         imageCache.put(imageName, image);
         return image;
     }
 
-    private Image(String imageName) {
+    private DataImage(String imageName) {
         // Get the file that we will use for the image. It's separately instantiated as it will be used for null checking
         FileHandle file = Gdx.files.internal("drawable/" + imageName + ".png");
 
@@ -83,7 +84,7 @@ public class Image implements Serializable {
         data = serializeImage(image);
     }
 
-    /** @return A texture that is stored in instances the {@link Image} class.
+    /** @return A texture that is stored in instances the {@link DataImage} class.
     If a game was loaded in, it turns the data into a texture, then returns it. **/
     public Texture getTexture() {
         // In the case that the game was loaded (meaning the image is null), set the image to the unserialized data

@@ -3,7 +3,7 @@ package net.dingletherat.torgrays_trials.entity;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.main.States.MobStates;
-import net.dingletherat.torgrays_trials.rendering.Image;
+import net.dingletherat.torgrays_trials.rendering.DataImage;
 import java.util.HashMap;
 
 public class Mob extends Entity {
@@ -14,14 +14,14 @@ public class Mob extends Entity {
      * Required layout: Positions on the column, and animation part of the row.
      * Positions must be in this order: up, down, left, right.
      **/
-    public Image spriteSheet = Image.loadImage(null);
+    public DataImage spriteSheet = DataImage.loadImage(null);
 
     public MobStates state = MobStates.IDLE;
     public String direction = "down";
 
     // Eyes
     /// If this is true, the main loop will call the {@code drawEyes} method
-    public Image eyesSheet = Image.loadImage(null);
+    public DataImage eyesSheet = DataImage.loadImage(null);
     public int eyesColumn = 0;
     public int eyesRow = 0;
     private boolean blinking = false;
@@ -46,7 +46,7 @@ public class Mob extends Entity {
         spriteColumn = 0;
 
         // Eyes sheet setup
-        eyesSheet = Image.loadImage("entity/eyes_sheet");
+        eyesSheet = DataImage.loadImage("entity/eyes_sheet");
         eyesSheet.scaleImage(Main.tileSize * 5, Main.tileSize * 2);
     }
 

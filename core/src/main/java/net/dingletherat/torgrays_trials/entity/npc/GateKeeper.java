@@ -3,14 +3,14 @@ package net.dingletherat.torgrays_trials.entity.npc;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.Mob;
-import net.dingletherat.torgrays_trials.rendering.Image;
+import net.dingletherat.torgrays_trials.rendering.DataImage;
 
 public class GateKeeper extends Mob {
     public GateKeeper(float spawnX, float spawnY) {
         super("GateKeeper", spawnX, spawnY, 12f, 16f);
 
         // Set the sprites
-        spriteSheet = Image.loadImage("entity/npc/gatekeeper_sheet");
+        spriteSheet = DataImage.loadImage("entity/npc/gatekeeper_sheet");
         spriteSheet.scaleImage(Main.tileSize * 3, Main.tileSize * 4);
         currentImage = spriteSheet;
 
