@@ -116,11 +116,11 @@ public class TileManager {
     }
 
     public static void draw() {
-        if (!maps.containsKey(Main.game.currentMap)) {
-            Main.LOGGER.error("Map '{}' not found", Main.game.currentMap);
+        if (!maps.containsKey(Main.world.currentMap)) {
+            Main.LOGGER.error("Map '{}' not found", Main.world.currentMap);
             return;
         }
-        Map map = maps.get(Main.game.currentMap);
+        Map map = maps.get(Main.world.currentMap);
 
         Main.batch.begin();
 
@@ -132,8 +132,8 @@ public class TileManager {
     }
 
     private static void drawLayer(Map map, HashMap<Pair, Integer> layer) {
-        float camX = Main.game.player.cameraX;
-        float camY = Main.game.player.cameraY;
+        float camX = Main.world.player.cameraX;
+        float camY = Main.world.player.cameraY;
         int tileSize = Main.tileSize;
         for (int worldRow = 0; worldRow < map.y(); worldRow++) {
             for (int worldCol = 0; worldCol < map.x(); worldCol++) {

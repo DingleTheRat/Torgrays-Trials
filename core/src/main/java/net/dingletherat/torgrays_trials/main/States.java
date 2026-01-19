@@ -9,9 +9,9 @@ public class States {
 		GAME_END,
 		EXCEPTION,
 	}
-    public enum MobStates {
-	IDLE,
-	WALKING
+    public enum MovementStates {
+	    IDLE,
+	    WALKING
     }
 	public enum DarknessStates {
 		NIGHT,

@@ -52,8 +52,8 @@ public class Player extends Mob {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) newDirection.append(!newDirection.isEmpty() ? " right" : "right");
 
         // If nothing was added to the StringBuilder, meaning the player isn't walking, change his state accordingly
-        if (newDirection.isEmpty()) state = States.MobStates.IDLE;
-        else state = States.MobStates.WALKING;
+        if (newDirection.isEmpty()) state = States.MovementStates.IDLE;
+        else state = States.MovementStates.WALKING;
 
         // Set the direction to the final newDirection string and let the mod's update method do the rest
         direction = newDirection.toString().trim();
@@ -64,7 +64,7 @@ public class Player extends Mob {
         cameraY -= (cameraY - y) * 0.15f;
 
         // Clamp the camera to the map bounds
-        Map map = TileManager.maps.get(Main.game.currentMap);
+        Map map = TileManager.maps.get(Main.world.currentMap);
         int maxCameraX = map.x() * Main.tileSize - Main.screenWidth / 2;
         int maxCameraY = map.y() * Main.tileSize - Main.screenHeight / 2;
         if (cameraX < Main.screenWidth / 2f) cameraX = Main.screenWidth / 2f;

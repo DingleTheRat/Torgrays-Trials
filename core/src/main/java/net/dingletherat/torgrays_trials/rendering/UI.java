@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.Game;
+import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.Sounds;
 import net.dingletherat.torgrays_trials.main.Translations;
 
@@ -152,7 +152,7 @@ public class UI {
 
         // Create the first actual button that creates a new game
         TextButton newMain = createButton(Translations.get(Main.identifier, "new_game"),
-            buttonStyle, () -> Main.game = new Game());
+            buttonStyle, () -> Main.world = new World());
         table.add(newMain);
 
         // New Row
@@ -244,20 +244,20 @@ public class UI {
         // Set up an update method to update the labels when the actors are active
         uiUpdates.put("Debug", () -> {
             // Position
-            x.setText("X: " + Main.game.player.x);
-            y.setText("Y: " + Main.game.player.y);
-            col.setText("Col: " + Main.game.player.x / Main.tileSize);
-            row.setText("Row: " + Main.game.player.y / Main.tileSize);
+            x.setText("X: " + Main.world.player.x);
+            y.setText("Y: " + Main.world.player.y);
+            col.setText("Col: " + Main.world.player.x / Main.tileSize);
+            row.setText("Row: " + Main.world.player.y / Main.tileSize);
 
             // States
             ui.setText("UI: " + uiState);
-            player.setText("Player: " + Main.game.player.state);
+            player.setText("Player: " + Main.world.player.state);
 
             // Player Sprite Stuff
-            scol.setText("SCol: " + Main.game.player.spriteColumn);
-            srow.setText("SRow: " + Main.game.player.spriteRow);
-            ecol.setText("ECol: " + Main.game.player.eyesColumn);
-            erow.setText("ERow: " + Main.game.player.eyesRow);
+            scol.setText("SCol: " + Main.world.player.spriteColumn);
+            srow.setText("SRow: " + Main.world.player.spriteRow);
+            ecol.setText("ECol: " + Main.world.player.eyesColumn);
+            erow.setText("ERow: " + Main.world.player.eyesRow);
         });
     }
 

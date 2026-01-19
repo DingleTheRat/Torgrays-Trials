@@ -45,7 +45,7 @@ public class CollisionChecker {
 
     // Check if entity collides with any other entity or any tile on layer2
     public static boolean checkEntityColliding(Entity entity) {
-        for (Entity other : Main.game.entities) {
+        for (Entity other : Main.world.entities) {
             if (other != entity && other.collision) {
                 if (check2EntityCollision(entity, other)) return true;
             }
@@ -53,9 +53,9 @@ public class CollisionChecker {
 
         // Check collision with player too (if it's not the player)
         if (!(entity instanceof Player))
-            if (check2EntityCollision(entity, Main.game.player)) return true;
+            if (check2EntityCollision(entity, Main.world.player)) return true;
 
-        Map map = TileManager.maps.get(Main.game.currentMap);
+        Map map = TileManager.maps.get(Main.world.currentMap);
         if (map == null) return false;
 
         for (int row = 0; row < map.y(); row++) {

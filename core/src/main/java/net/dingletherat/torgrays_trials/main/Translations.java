@@ -47,7 +47,7 @@ public class Translations {
      **/
     public static void loadFiles() {
         // Get the names of all the files in "/values/translations"
-        List<String> translationFiles = UtilityTool.getFileNames("values/translations");
+        List<String> translationFiles = UtilityTool.getFileNames("values/translations", ".json");
 
         // Loop through the translation files and add them to the TRANSLATION_FILES HashMap
         for (String file : translationFiles) {

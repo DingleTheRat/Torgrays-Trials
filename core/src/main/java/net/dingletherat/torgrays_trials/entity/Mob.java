@@ -2,7 +2,7 @@
 package net.dingletherat.torgrays_trials.entity;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.States.MobStates;
+import net.dingletherat.torgrays_trials.main.States.MovementStates;
 import net.dingletherat.torgrays_trials.rendering.DataImage;
 import java.util.HashMap;
 
@@ -16,7 +16,7 @@ public class Mob extends Entity {
      **/
     public DataImage spriteSheet = DataImage.loadImage(null);
 
-    public MobStates state = MobStates.IDLE;
+    public MovementStates state = MovementStates.IDLE;
     public String direction = "down";
 
     // Eyes
@@ -62,7 +62,7 @@ public class Mob extends Entity {
         if (Main.random.nextFloat() > 0.5)
             properties.put("light_intensity", 0.8f * ((Main.random.nextFloat() - 0.5f) / 5f + 1));
 
-        if (state == MobStates.WALKING) {
+        if (state == MovementStates.WALKING) {
             // Return if the direction is more than 2 words to not confuse the code
             String[] directionWords = direction.split(" ");
             if (directionWords.length > 2) return;
@@ -140,7 +140,7 @@ public class Mob extends Entity {
             if (Main.random.nextInt(3) != 0) return;
 
             // If the position isn't kept, update the state to walking
-            state = MobStates.WALKING;
+            state = MovementStates.WALKING;
 
             // Choose a direction, if 8 or 9 are chosen, change the state to idle
             switch (Main.random.nextInt(9)) {
@@ -152,7 +152,7 @@ public class Mob extends Entity {
                 case 5 -> direction = "up right";
                 case 6 -> direction = "down left";
                 case 7 -> direction = "down right";
-                case 8 -> state = MobStates.IDLE;
+                case 8 -> state = MovementStates.IDLE;
             }
         }
     }
@@ -161,7 +161,7 @@ public class Mob extends Entity {
     public void draw() {
         if (!onScreen) return;
 
-        if (state == MobStates.IDLE) {
+        if (state == MovementStates.IDLE) {
             // Increment the sprite counter
             int sprite_idle = counters.getOrDefault("sprite_idle", -1) + 1;
             counters.put("sprite_idle", sprite_idle);
@@ -175,7 +175,7 @@ public class Mob extends Entity {
                 counters.put("sprite_idle", 0);
                 counters.put("sprite_walk", 0);
             }
-        } else if (state == MobStates.WALKING) {
+        } else if (state == MovementStates.WALKING) {
             // Increment the sprite counter
             int sprite_walk = counters.getOrDefault("sprite_walk", -1) + 1;
             counters.put("sprite_walk", sprite_walk);
@@ -214,7 +214,7 @@ public class Mob extends Entity {
      **/
     public void drawEyes() {
         // Set which eyes
-        if (state == MobStates.IDLE) {
+        if (state == MovementStates.IDLE) {
             // Increment the eyes idle counter
             int eyes_idle = counters.getOrDefault("eyes_idle", -1) + 1;
             counters.put("eyes_idle", eyes_idle);
@@ -232,7 +232,7 @@ public class Mob extends Entity {
                 // Reset The counter
                 counters.put("eyes_idle", 0);
             }
-        } else if (state == MobStates.WALKING) {
+        } else if (state == MovementStates.WALKING) {
             // Reset the eye counter
             counters.put("eyes_idle", 0);
 
@@ -280,8 +280,8 @@ public class Mob extends Entity {
 
         // Draw the eyes (as long as the mob isn't facing backward)
         if (spriteRow != 0) {
-            float screenX = x - Main.game.player.cameraX + Main.screenWidth / 2f;
-            float screenY = y - Main.game.player.cameraY + Main.screenHeight / 2f;
+            float screenX = x - Main.world.player.cameraX + Main.screenWidth / 2f;
+            float screenY = y - Main.world.player.cameraY + Main.screenHeight / 2f;
 
             // Store what part of the sprite sheet to draw
             int imageX = Main.tileSize * eyesColumn;

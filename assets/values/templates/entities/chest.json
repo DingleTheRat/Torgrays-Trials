@@ -1,0 +1,4 @@
+{
+  "name": "Chest",
+  "components": ["PositionComponent", "SpriteComponent"]
+}

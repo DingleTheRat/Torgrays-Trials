@@ -45,6 +45,8 @@ public class UtilityTool {
         }
     }
 
+
+
     /**
      * Gets all the names of the files in a given directory.
      * <p>
@@ -90,6 +92,27 @@ public class UtilityTool {
             .filter(fileName -> !fileName.contains(fileType))
             .forEach(fileName -> fileNames.remove(fileName));
 
+        return fileNames;
+    }
+
+    /**
+     * Gets all the names of the files in a given directory and the decendants of those files, as long as they are the required file type.
+     * <p>
+     * @param directoryPath The path to the directory you want the method to get the names of the files of. EX: {@code "values/translations"}
+     * @param fileType The type of file you want to get the names of. For instance, {@code .json}.
+     * @return A {@link List} of Strings with all the names of the files contained in the directory and its decendants
+     **/
+    public static List<String> getDecendantFileNames(String directoryPath, String fileType) {
+        // Get the return list to which we will add the fileNames
+        List<String> fileNames = new ArrayList<>();
+
+        // Loop through all the fileNames in the directory which are obtained via the getFileNames method
+        for (String fileName : getFileNames(directoryPath)) {
+            // If the file has is the file type, add it to the list
+            if (fileName.contains(fileType)) fileNames.add(fileName);
+            // If not, call this method on the file to get all the fileNames of the decendants and add them (if it has any)
+            else fileNames.addAll(getDecendantFileNames(directoryPath, fileType));
+        }
         return fileNames;
     }
 }

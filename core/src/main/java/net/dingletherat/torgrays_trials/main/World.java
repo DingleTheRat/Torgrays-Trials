@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Matrix4;
 
-public class Game {
+public class World {
     // Entities
     public ArrayList<Entity> entities = new ArrayList<>();
     public ArrayList<Entity> entitiesDrawn = new ArrayList<>();
@@ -28,11 +28,11 @@ public class Game {
     Darkness darkness = new Darkness();
     long currentSong;
 
-    public Game() {
-        loadPlay();
+    public World() {
+        loadWorld();
     }
 
-    public void loadPlay() {
+    public void loadWorld() {
         // Load maps and tiles
         TileManager.loadTiles();
         MapHandler.loadMaps();

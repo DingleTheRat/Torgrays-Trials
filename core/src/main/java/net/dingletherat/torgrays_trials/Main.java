@@ -5,12 +5,13 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import net.dingletherat.torgrays_trials.entity.Entity;
+import net.dingletherat.torgrays_trials.entity.EntityHandler;
+import net.dingletherat.torgrays_trials.entity.component.SpriteSheetComponent;
 import net.dingletherat.torgrays_trials.entity.custom.Firefly;
-import net.dingletherat.torgrays_trials.main.Game;
+import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.Sounds;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.main.Translations;
@@ -42,7 +43,7 @@ public class Main extends ApplicationAdapter {
     public static String language = "english";
 
     // Essential, but miscellaneous
-    public static Game game;
+    public static World world;
     public static SpriteBatch batch;
     public static ShapeRenderer shapes;
     public static Random random = new Random();
@@ -71,6 +72,8 @@ public class Main extends ApplicationAdapter {
 
         // Load JSON files
         Translations.loadFiles();
+        EntityHandler.registerAllComponents();
+        EntityHandler.generateTemplates();
 
         // Setup UI
         UI.setup();
@@ -115,7 +118,7 @@ public class Main extends ApplicationAdapter {
                 // Draw UI
                 UI.stage.draw();
             }
-            case PLAY -> game.draw();
+            case PLAY -> world.draw();
         }
     }
     public void update() {
@@ -125,7 +128,7 @@ public class Main extends ApplicationAdapter {
                 UI.update();
                 titleFireflies.stream().forEach(Entity::update);
             }
-            case PLAY -> game.update();
+            case PLAY -> world.update();
         }
     }
 

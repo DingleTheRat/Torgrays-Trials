@@ -1,8 +1,6 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.rendering;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.main.UtilityTool;
 

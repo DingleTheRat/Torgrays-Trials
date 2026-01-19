@@ -106,8 +106,8 @@ public class Darkness {
             float intensity = ((Number) lightSource.properties.get("light_intensity")).floatValue();
             intensity = Math.max(0f, Math.min(1f, intensity));
 
-            float x = lightSource.x - (Main.game != null ? Main.game.player.cameraX : 0) + Main.screenWidth / 2f + 24 - radius;
-            float y = lightSource.y - (Main.game != null ? Main.game.player.cameraY : 0) + Main.screenHeight / 2f + 24 - radius;
+            float x = lightSource.x - (Main.world != null ? Main.world.player.cameraX : 0) + Main.screenWidth / 2f + 24 - radius;
+            float y = lightSource.y - (Main.world != null ? Main.world.player.cameraY : 0) + Main.screenHeight / 2f + 24 - radius;
 
             Main.batch.setColor(1f, 1f, 1f, intensity);
             Main.batch.draw(radialLightTexture, x, y, radius * 2, radius * 2);
