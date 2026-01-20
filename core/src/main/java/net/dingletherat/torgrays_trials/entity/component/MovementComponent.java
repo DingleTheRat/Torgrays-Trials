@@ -1,7 +1,6 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.entity.component;
 
-import net.dingletherat.torgrays_trials.entity.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
 public class MovementComponent implements Component {

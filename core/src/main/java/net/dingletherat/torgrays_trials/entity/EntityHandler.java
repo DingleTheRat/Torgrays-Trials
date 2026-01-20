@@ -12,11 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.component.Component;
-import net.dingletherat.torgrays_trials.entity.component.MovementComponent;
-import net.dingletherat.torgrays_trials.entity.component.NameComponent;
-import net.dingletherat.torgrays_trials.entity.component.PositionComponent;
-import net.dingletherat.torgrays_trials.entity.component.SpriteSheetComponent;
+import net.dingletherat.torgrays_trials.entity.component.*;
 import net.dingletherat.torgrays_trials.main.UtilityTool;
 
 public class EntityHandler {
@@ -33,12 +29,13 @@ public class EntityHandler {
         COMPONENTS.put(NameComponent.class.getSimpleName(), NameComponent.class);
         COMPONENTS.put(PositionComponent.class.getSimpleName(), PositionComponent.class);
         COMPONENTS.put(SpriteSheetComponent.class.getSimpleName(), SpriteSheetComponent.class);
+        COMPONENTS.put(SpriteComponent.class.getSimpleName(), SpriteComponent.class);
 
         Main.LOGGER.info("Loaded {} vanilla components", COMPONENTS.size());
     }
     public static void generateTemplates() {
         TEMPLATES.clear();
-        String filepath = "values/templates/entities/";
+        String filepath = "values/templates/";
 
         // Get the fileNames of everything inside the directory from the filepath
         List<String> fileNames = UtilityTool.getDecendantFileNames(filepath, ".json");

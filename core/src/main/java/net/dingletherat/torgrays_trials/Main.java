@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import net.dingletherat.torgrays_trials.entity.Entity;
 import net.dingletherat.torgrays_trials.entity.EntityHandler;
-import net.dingletherat.torgrays_trials.entity.component.SpriteSheetComponent;
 import net.dingletherat.torgrays_trials.entity.custom.Firefly;
 import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.Sounds;

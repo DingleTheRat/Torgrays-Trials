@@ -4,13 +4,15 @@
     {
       "name": "PositionComponent",
       "args": [
-        0,
-        0
+        21,
+        21
       ]
     },
     {
       "name": "SpriteComponent",
-      "args": []
+      "args": [
+        "entity/object/chest/closed"
+      ]
     }
   ]
 }
