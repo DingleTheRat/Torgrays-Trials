@@ -3,7 +3,9 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.Entity;
+import net.dingletherat.torgrays_trials.entity.EntityHandler;
 import net.dingletherat.torgrays_trials.entity.Player;
+import net.dingletherat.torgrays_trials.entity.component.Component;
 import net.dingletherat.torgrays_trials.entity.npc.GateKeeper;
 import net.dingletherat.torgrays_trials.main.States.GameStates;
 import net.dingletherat.torgrays_trials.rendering.Darkness;
@@ -12,12 +14,20 @@ import net.dingletherat.torgrays_trials.rendering.TileManager;
 import net.dingletherat.torgrays_trials.rendering.UI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.math.Matrix4;
 
 public class World {
     // Entities
-    public ArrayList<Entity> entities = new ArrayList<>();
+    @Deprecated
+    public ArrayList<Entity> oldEntities = new ArrayList<>();
+    private Map<Integer, List<Component>> entities = new HashMap<>();
+    private final ArrayList<Integer> VACANT_IDENTIFIERS = new ArrayList<>();
+    private int nextIdentifier = 0;
     public ArrayList<Entity> entitiesDrawn = new ArrayList<>();
     public Player player = new Player();
 
@@ -45,11 +55,55 @@ public class World {
         darkness.addLightSource(player);
 
         // TODO: Make an AssetSetter
-        entities.add(new GateKeeper(Main.tileSize * 21, Main.tileSize * 23));
+        oldEntities.add(new GateKeeper(Main.tileSize * 21, Main.tileSize * 23));
+
+        int chest = newEntity(EntityHandler.TEMPLATES.get("Chest"));
+        Main.LOGGER.debug("{}", entities);
+        removeEntity(chest);
+        newEntity(EntityHandler.TEMPLATES.get("Chest"));
+        Main.LOGGER.debug("{}", entities);
 
         // Change the music to the "playing music"
         Sounds.stopMusic("Tech Geek", Main.titleMusic);
         currentSong = Sounds.playMusic("Umbral Force");
+    }
+
+    // ECS Methods
+    public int newEntity(Map<Class<? extends Component>, List<Object>> componentTemplates) {
+        // Set the return variable to the nextIdentifier. However, if there is a vacant identifier from a removed entity, use that.
+        int identifier = nextIdentifier;
+        if (!VACANT_IDENTIFIERS.isEmpty()) identifier = VACANT_IDENTIFIERS.remove(0);
+        else nextIdentifier++; // Since we used up the nextIdentifier, increase it for the next entity
+
+        // Loop through all the componentClasses and construct them. Then, add them to the components list.
+        List<Component> components = new ArrayList<>();
+        for (Class<? extends Component> componentClass : componentTemplates.keySet()) {
+            List<Object> args = componentTemplates.get(componentClass);
+
+            // Enter try and catch zone in case constructing fails
+            try {
+                // Convert arguments to constructor parameter types
+                Class<?>[] parameterTypes = args.stream()
+                        .map(Object::getClass)
+                        .toArray(Class<?>[]::new);
+
+                // Create the component instance and add it to the components list
+                Component component = componentClass.getConstructor(parameterTypes).newInstance(args.toArray());
+                components.add(component);
+            } catch (Exception exception) {
+                Main.handleException(exception);
+            }
+        }
+
+        // Add the new entity
+        entities.put(identifier, components);
+
+        // Return the identifier
+        return identifier;
+    }
+    public void removeEntity(int identifier) {
+        VACANT_IDENTIFIERS.add(identifier);
+        entities.remove(identifier);
     }
 
     public void draw() {
@@ -67,7 +121,7 @@ public class World {
          */
         // Add in all entities
         entitiesDrawn.add(player);
-        entitiesDrawn.addAll(entities);
+        entitiesDrawn.addAll(oldEntities);
 
         // Sort the entities by y position
         entitiesDrawn.sort((entity, entity2) -> Float.compare(entity.y, entity2.y));
@@ -90,6 +144,6 @@ public class World {
 
         // Update player and entites
         player.update();
-        entities.forEach(Entity::update);
+        oldEntities.forEach(Entity::update);
     }
 }

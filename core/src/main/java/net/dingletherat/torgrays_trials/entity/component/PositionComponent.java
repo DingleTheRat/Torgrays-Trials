@@ -1,12 +1,19 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.entity.component;
 
-public class PositionComponent implements Component {
-    public int x;
-    public int y;
+import java.math.BigDecimal;
 
-    public PositionComponent(int x, int y) {
+public class PositionComponent implements Component {
+    public float x;
+    public float y;
+
+    public PositionComponent(Integer x, Integer y) {
         this.x = x;
         this.y = y;
+    }
+
+    public PositionComponent(BigDecimal x, BigDecimal y) {
+        this.x = x.floatValue();
+        this.y = y.floatValue();
     }
 }

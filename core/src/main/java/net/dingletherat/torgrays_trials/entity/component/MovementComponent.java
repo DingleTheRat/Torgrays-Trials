@@ -17,7 +17,7 @@ public class MovementComponent implements Component {
      * <p>
      * @param speed How much the entity moves each frame
      **/
-    public MovementComponent(int speed) {
+    public MovementComponent(Integer speed) {
         state = MovementStates.IDLE;
         direction = "down";
         this.speed = speed;
@@ -27,7 +27,7 @@ public class MovementComponent implements Component {
      * @param startDirection The direction the entity will face/move in at first
      * @param speed How much the entity moves each frame (if at all)
      **/
-    public MovementComponent(MovementStates startState, String startDirection, int speed) {
+    public MovementComponent(MovementStates startState, String startDirection, Integer speed) {
         state = startState;
         direction = startDirection;
         this.speed = speed;

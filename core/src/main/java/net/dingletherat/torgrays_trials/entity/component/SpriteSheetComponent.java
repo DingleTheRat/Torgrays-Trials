@@ -1,8 +1,6 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.entity.component;
 
-import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.EntityHandler;
 import net.dingletherat.torgrays_trials.rendering.DataImage;
 
 public class SpriteSheetComponent implements Component {
@@ -33,8 +31,8 @@ public class SpriteSheetComponent implements Component {
       @param sizeX What's the size of the sprite sheet on the X?
       @param sizeY What's the size of the sprite sheet on the Y?
      **/
-    public SpriteSheetComponent(DataImage spriteSheet, int column, int row, int sizeX, int sizeY) {
-        this.spriteSheet = spriteSheet;
+    public SpriteSheetComponent(String spriteSheetName, Integer column, Integer row, Integer sizeX, Integer sizeY) {
+        spriteSheet = DataImage.loadImage(spriteSheetName);
         this.column = column;
         this.row = row;
         this.sizeX = sizeX;

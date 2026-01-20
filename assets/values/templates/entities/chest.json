@@ -1,4 +1,16 @@
 {
   "name": "Chest",
-  "components": ["PositionComponent", "SpriteComponent"]
+  "components": [
+    {
+      "name": "PositionComponent",
+      "args": [
+        0,
+        0
+      ]
+    },
+    {
+      "name": "SpriteComponent",
+      "args": []
+    }
+  ]
 }

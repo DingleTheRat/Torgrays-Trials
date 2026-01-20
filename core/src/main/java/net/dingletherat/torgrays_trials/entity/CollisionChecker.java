@@ -45,7 +45,7 @@ public class CollisionChecker {
 
     // Check if entity collides with any other entity or any tile on layer2
     public static boolean checkEntityColliding(Entity entity) {
-        for (Entity other : Main.world.entities) {
+        for (Entity other : Main.world.oldEntities) {
             if (other != entity && other.collision) {
                 if (check2EntityCollision(entity, other)) return true;
             }
