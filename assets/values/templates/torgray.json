@@ -1,0 +1,21 @@
+{
+  "name": "Torgray",
+  "components": [
+    {
+      "name": "PlayerComponent",
+      "args": []
+    },
+    {
+      "name": "PositionComponent",
+      "args": [23, 21]
+    },
+    {
+      "name": "CollisionComponent",
+      "args": [1, 1]
+    },
+    {
+      "name": "SpriteSheetComponent",
+      "args": ["entity/player/torgray_sheet", 3, 4, 0]
+    }
+  ]
+}

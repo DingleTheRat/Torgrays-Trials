@@ -1,11 +1,16 @@
-// Copyright (c) 2025 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.rendering;
-
-import net.dingletherat.torgrays_trials.Main;
+// Copyright (c) 2026 DingleTheRat. All Rights Reserved.
+package net.dingletherat.torgrays_trials.system;
 
 import java.util.HashMap;
 
-public class TileManager {
+
+import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.main.World;
+import net.dingletherat.torgrays_trials.rendering.DataImage;
+import net.dingletherat.torgrays_trials.rendering.Map;
+import net.dingletherat.torgrays_trials.rendering.Tile;
+
+public class TileSystem implements System {
     public static HashMap<Integer, Tile> tileTypes = new HashMap<>();
     public static HashMap<String, Map> maps = new HashMap<>();
 
@@ -115,7 +120,8 @@ public class TileManager {
         registerTile(i, imageName, collision ? "11111/11111/11111/11111/11111" : "00000/00000/00000/00000/00000");
     }
 
-    public static void draw() {
+    @Override
+    public void draw() {
         if (!maps.containsKey(Main.world.currentMap)) {
             Main.LOGGER.error("Map '{}' not found", Main.world.currentMap);
             return;
@@ -131,9 +137,12 @@ public class TileManager {
         Main.batch.end();
     }
 
-    private static void drawLayer(Map map, HashMap<Pair, Integer> layer) {
-        float camX = Main.world.player.cameraX;
-        float camY = Main.world.player.cameraY;
+    @Override
+    public void update(float deltaTime) { }
+
+    private void drawLayer(Map map, HashMap<Pair, Integer> layer) {
+        float camX = Main.world.oldPlayer.cameraX;
+        float camY = Main.world.oldPlayer.cameraY;
         int tileSize = Main.tileSize;
         for (int worldRow = 0; worldRow < map.y(); worldRow++) {
             for (int worldCol = 0; worldCol < map.x(); worldCol++) {
@@ -148,7 +157,7 @@ public class TileManager {
                     worldX - tileSize < camX + Main.screenWidth / 2f &&
                     worldY + tileSize > camY - Main.screenHeight / 2f &&
                     worldY - tileSize < camY + Main.screenHeight / 2f) {
-                    Tile currentTile = TileManager.tileTypes.get(tileNumber);
+                    Tile currentTile = tileTypes.get(tileNumber);
                     Main.batch.draw(currentTile.image().getTexture(), Math.round(screenX), Math.round(screenY));
                 }
             }
@@ -161,4 +170,5 @@ public class TileManager {
             return "(" + x + ", " + y + ")";
         }
     }
+
 }

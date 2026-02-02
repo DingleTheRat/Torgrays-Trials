@@ -47,7 +47,7 @@ public class Mob extends Entity {
 
         // Eyes sheet setup
         eyesSheet = DataImage.loadImage("entity/eyes_sheet");
-        eyesSheet.scaleImage(Main.tileSize * 5, Main.tileSize * 2);
+        eyesSheet.scaleImage(Main.tileSize * 6, Main.tileSize * 2);
     }
 
     @Override
@@ -115,8 +115,6 @@ public class Mob extends Entity {
                     direction = (moveY == 1) ?
                         direction.replace("down", "up") : direction.replace("up", "down");
             }
-
-
         }
     }
 
@@ -251,6 +249,7 @@ public class Mob extends Entity {
 
         // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
         if (eyes_blink >= animationSpeed * (10 + Main.random.nextInt(10))) {
+            Main.LOGGER.debug("Mob");
             // Change the row to the blinking row
             eyesRow = 1;
 
@@ -280,8 +279,8 @@ public class Mob extends Entity {
 
         // Draw the eyes (as long as the mob isn't facing backward)
         if (spriteRow != 0) {
-            float screenX = x - Main.world.player.cameraX + Main.screenWidth / 2f;
-            float screenY = y - Main.world.player.cameraY + Main.screenHeight / 2f;
+            float screenX = x - Main.world.oldPlayer.cameraX + Main.screenWidth / 2f;
+            float screenY = y - Main.world.oldPlayer.cameraY + Main.screenHeight / 2f;
 
             // Store what part of the sprite sheet to draw
             int imageX = Main.tileSize * eyesColumn;

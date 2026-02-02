@@ -1,4 +1,5 @@
-package net.dingletherat.torgrays_trials.rendering;
+// Copyright (c) 2026 DingleTheRat. All Rights Reserved.
+package net.dingletherat.torgrays_trials.system;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -7,14 +8,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
-import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.Entity;
-import java.util.ArrayList;
 
-public class Darkness {
-    /// Add entities that emit light here. These entities must have the "light_radius" and "light_intensity"
-    /// properties in the {@code properties} variable set to proper float values.
-    private final ArrayList<Entity> lightSources = new ArrayList<>();
+import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.entity.component.*;
+
+public class DarknessSystem implements System{
     public float ambientDarkness = 0.92f;  // How dark it is without lights (0.0 = no darkness, 1.0 = complete darkness)
     Texture radialLightTexture = createRadialLight(128);
 
@@ -45,43 +43,7 @@ public class Darkness {
         return texture;
     }
 
-    public void addLightSource(Entity entity) {
-        lightSources.add(entity);
-        if (entity.properties.containsKey("light_radius")) {
-            try {
-                float radius = (float) (entity.properties.get("light_radius"));
-                entity.properties.put("light_radius", radius);
-            } catch (NumberFormatException e) {
-                Main.LOGGER.warn("Entity {} light_radius property is not a number. Setting default.", entity.name);
-                entity.properties.put("light_radius", 100.0f); // Default radius
-            }
-        } else {
-            Main.LOGGER.warn("Entity {} missing light_radius property. Setting default.", entity.name);
-            entity.properties.put("light_radius", 100.0f); // Default radius
-        }
-        if (entity.properties.containsKey("light_intensity")) {
-            try {
-                float radius = (float) (entity.properties.get("light_intensity"));
-                entity.properties.put("light_intensity", radius);
-            } catch (NumberFormatException e) {
-                Main.LOGGER.warn("Entity {} light_intensity property is not a number. Setting default.", entity.name);
-                entity.properties.put("light_intensity", 1.0f); // Default radius
-            }
-        } else {
-            Main.LOGGER.warn("Entity {} missing light_intensity property. Setting default.", entity.name);
-            entity.properties.put("light_intensity", 1.0f); // Default radius
-        }
-    }
-
-    public void removeLightSource(Entity entity) {
-        lightSources.remove(entity);
-    }
-
-    public ArrayList<Entity> getLightSources() {
-        return lightSources;
-    }
-
-    // Draws the darkness overlay
+    @Override
     public void draw() {
         // Save the current batch state and end it
         Main.batch.flush();
@@ -100,14 +62,34 @@ public class Darkness {
         // Use blending that allows lights to "cut holes" in the darkness
         Main.batch.setBlendFunction(GL20.GL_ZERO, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        // Draw all light sources
-        for (Entity lightSource : lightSources) {
-            int radius = Math.round((float) lightSource.properties.get("light_radius"));
-            float intensity = ((Number) lightSource.properties.get("light_intensity")).floatValue();
+        for (Integer lightSource : Main.world.queryAny(LightComponent.class)) {
+            LightComponent component = Main.world.getEntityComponent(lightSource, LightComponent.class).get();
+
+
+            int radius = Math.round(component.lightRadius);
+            float intensity = component.lightIntensity;
+
+            // Flicker the light (if needed)
+            if (component.flicker) {
+                if (Main.random.nextFloat() > 0.5)
+                    intensity = 0.8f * ((Main.random.nextFloat() - 0.5f) / 5f + 1);
+            }
+
+            // Set the intensity accordingly
             intensity = Math.max(0f, Math.min(1f, intensity));
 
-            float x = lightSource.x - (Main.world != null ? Main.world.player.cameraX : 0) + Main.screenWidth / 2f + 24 - radius;
-            float y = lightSource.y - (Main.world != null ? Main.world.player.cameraY : 0) + Main.screenHeight / 2f + 24 - radius;
+            // Get the entity's position. As long as it has a PositionComponent, otherwise, just leave it at 0.
+            float x = 0;
+            float y = 0;
+            if (Main.world.entityHasComponent(lightSource, PositionComponent.class)) {
+                PositionComponent positionComponent = Main.world.getEntityComponent(lightSource, PositionComponent.class).get();
+                x = positionComponent.x;
+                y = positionComponent.y;
+            }
+
+            // Get the light's position on the screen
+            x = x - Main.world.oldPlayer.cameraX + Main.screenWidth / 2f + 24 - radius;
+            y = y - Main.world.oldPlayer.cameraY + Main.screenHeight / 2f + 24 - radius;
 
             Main.batch.setColor(1f, 1f, 1f, intensity);
             Main.batch.draw(radialLightTexture, x, y, radius * 2, radius * 2);
@@ -132,4 +114,7 @@ public class Darkness {
 
         darknessFbo.dispose();
     }
+
+    @Override
+    public void update(float deltaTime) { }
 }

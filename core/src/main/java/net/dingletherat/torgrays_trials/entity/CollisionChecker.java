@@ -3,7 +3,7 @@ package net.dingletherat.torgrays_trials.entity;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.rendering.Map;
-import net.dingletherat.torgrays_trials.rendering.TileManager;
+import net.dingletherat.torgrays_trials.system.TileSystem;
 
 public class CollisionChecker {
     // Check if two entities are colliding
@@ -53,15 +53,15 @@ public class CollisionChecker {
 
         // Check collision with player too (if it's not the player)
         if (!(entity instanceof Player))
-            if (check2EntityCollision(entity, Main.world.player)) return true;
+            if (check2EntityCollision(entity, Main.world.oldPlayer)) return true;
 
-        Map map = TileManager.maps.get(Main.world.currentMap);
+        Map map = TileSystem.maps.get(Main.world.currentMap);
         if (map == null) return false;
 
         for (int row = 0; row < map.y(); row++) {
             for (int col = 0; col < map.x(); col++) {
-                int tileNumber = map.foreground().get(new TileManager.Pair(col, row));
-                var tile = TileManager.tileTypes.get(tileNumber);
+                int tileNumber = map.foreground().get(new TileSystem.Pair(col, row));
+                var tile = TileSystem.tileTypes.get(tileNumber);
                 if (tile == null) continue;
 
                 boolean[][] collisionPoints = tile.collision();

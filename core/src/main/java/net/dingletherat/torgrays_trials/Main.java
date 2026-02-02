@@ -9,14 +9,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import net.dingletherat.torgrays_trials.entity.Entity;
 import net.dingletherat.torgrays_trials.entity.EntityHandler;
-import net.dingletherat.torgrays_trials.entity.custom.Firefly;
+import net.dingletherat.torgrays_trials.entity.npc.GateKeeper;
 import net.dingletherat.torgrays_trials.main.World;
+import net.dingletherat.torgrays_trials.main.States.GameStates;
 import net.dingletherat.torgrays_trials.main.Sounds;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.main.Translations;
-import net.dingletherat.torgrays_trials.rendering.Darkness;
 import net.dingletherat.torgrays_trials.rendering.DataImage;
+import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.UI;
+import net.dingletherat.torgrays_trials.system.*;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -51,7 +53,6 @@ public class Main extends ApplicationAdapter {
 
     // Title screen elements
     static DataImage backdrop;
-    public static Darkness titleDarkness;
     public static ArrayList<Entity> titleFireflies = new ArrayList<>();
     public static long titleMusic;
 
@@ -82,16 +83,19 @@ public class Main extends ApplicationAdapter {
         titleMusic = Sounds.playMusic("Tech Geek");
 
         // Add 100 fireflies to the title darkness (which will also be created) :D
-        titleDarkness = new Darkness();
-        for (int i = 0; i < 50; i++) {
+        //for (int i = 0; i < 50; i++) {
             // Create a new fireflie at a random position and add it to the titleFireflies ArrayList to be updated
-            Entity firefly = new Firefly(random.nextFloat() * screenWidth - (screenWidth / 2),
-                    random.nextFloat() * screenHeight - (screenHeight / 2));
-            titleFireflies.add(firefly);
+            //Entity firefly = new Firefly(random.nextFloat() * screenWidth - (screenWidth / 2),
+                    //random.nextFloat() * screenHeight - (screenHeight / 2));
+            //titleFireflies.add(firefly);
 
             // Add the firefly as a light source so it's visible
-            titleDarkness.addLightSource(firefly);
-        }
+            //titleDarkness.addLightSource(firefly);
+        //}
+
+        // Create the title world
+        world = new World();
+        world.drawSystems.add(new DarknessSystem());
 
         // Lastly, load the backdrop
         backdrop = DataImage.loadImage("backdrop");
@@ -111,8 +115,7 @@ public class Main extends ApplicationAdapter {
                 batch.draw(backdrop.getTexture(), 0, 0);
                 batch.end();
 
-                // Draw the darkness
-                titleDarkness.draw();
+                world.draw();
 
                 // Draw UI
                 UI.stage.draw();
@@ -120,20 +123,21 @@ public class Main extends ApplicationAdapter {
             case PLAY -> world.draw();
         }
     }
-    public void update() {
+    public void update(float deltaTime) {
         switch (gameState) {
             case TITLE -> {
                 // Update UI and fireflies
                 UI.update();
                 titleFireflies.stream().forEach(Entity::update);
             }
-            case PLAY -> world.update();
+            case PLAY -> world.update(deltaTime);
         }
     }
 
     @Override
     public void render() {
-        update();
+       float deltaTime = Gdx.graphics.getDeltaTime();
+        update(deltaTime);
         draw();
     }
 
@@ -149,5 +153,41 @@ public class Main extends ApplicationAdapter {
     public static void handleException(Exception exception) {
         LOGGER.error("Torgray's Trials has encountered an error", exception);
         Gdx.app.exit();
+    }
+
+    public static void loadWorld() {
+        world = new World();
+
+        // Load maps and tiles
+        TileSystem.loadTiles();
+        MapHandler.loadMaps();
+
+        // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
+        Main.gameState = GameStates.PLAY;
+        UI.uiState = "Play";
+
+        // TODO: Make an AssetSetter
+        world.oldEntities.add(new GateKeeper(Main.tileSize * 21, Main.tileSize * 23));
+        world.newEntity(EntityHandler.TEMPLATES.get("Chest"));
+        world.newEntity(EntityHandler.TEMPLATES.get("GateKeeper"));
+        world.newEntity(EntityHandler.TEMPLATES.get("Torgray"));
+
+        // Declare update and draw systems
+        SpriteSystem spriteSystem = new SpriteSystem();
+
+        // Add draw systems
+        world.drawSystems.add(new TileSystem());
+        world.drawSystems.add(spriteSystem);
+        world.drawSystems.add(new DarknessSystem());
+
+        // Add update systems
+        world.updateSystems.add(spriteSystem);
+        world.updateSystems.add(new MovementSystem());
+        world.updateSystems.add(new PathfindingSystem());
+        world.updateSystems.add(new CollisionSystem());
+
+        // Change the music to the "playing music"
+        Sounds.stopMusic("Tech Geek", Main.titleMusic);
+        world.currentSong = Sounds.playMusic("Umbral Force");
     }
 }

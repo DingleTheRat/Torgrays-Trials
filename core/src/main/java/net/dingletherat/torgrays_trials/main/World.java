@@ -3,17 +3,11 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.Entity;
-import net.dingletherat.torgrays_trials.entity.EntityHandler;
 import net.dingletherat.torgrays_trials.entity.Player;
 import net.dingletherat.torgrays_trials.entity.component.Component;
 import net.dingletherat.torgrays_trials.entity.component.NameComponent;
-import net.dingletherat.torgrays_trials.entity.npc.GateKeeper;
-import net.dingletherat.torgrays_trials.main.States.GameStates;
-import net.dingletherat.torgrays_trials.rendering.Darkness;
-import net.dingletherat.torgrays_trials.rendering.MapHandler;
-import net.dingletherat.torgrays_trials.rendering.TileManager;
+import net.dingletherat.torgrays_trials.entity.component.PlayerComponent;
 import net.dingletherat.torgrays_trials.rendering.UI;
-import net.dingletherat.torgrays_trials.system.*;
 import net.dingletherat.torgrays_trials.system.System;
 
 import java.util.ArrayList;
@@ -27,6 +21,7 @@ import com.badlogic.gdx.math.Matrix4;
 public class World {
     // ECS
     private Map<Integer, List<Component>> entities = new HashMap<>();
+    private Integer player;
     public List<System> updateSystems = new ArrayList<>();
     public List<System> drawSystems = new ArrayList<>();
     private final ArrayList<Integer> VACANT_IDENTIFIERS = new ArrayList<>();
@@ -38,42 +33,13 @@ public class World {
     @Deprecated
     public ArrayList<Entity> entitiesDrawn = new ArrayList<>();
     @Deprecated
-    public Player player = new Player();
+    public Player oldPlayer = new Player();
 
     // Map
     public String currentMap = "Main Island";
 
     // Other
-    Darkness darkness = new Darkness();
-    long currentSong;
-
-    public World() {
-        loadWorld();
-    }
-
-    public void loadWorld() {
-        // Load maps and tiles
-        TileManager.loadTiles();
-        MapHandler.loadMaps();
-
-        // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
-        Main.gameState = GameStates.PLAY;
-        UI.uiState = "Play";
-
-        // TODO: Whenever there is an inventory system, make this only work with items
-        darkness.addLightSource(player);
-
-        // TODO: Make an AssetSetter
-        oldEntities.add(new GateKeeper(Main.tileSize * 21, Main.tileSize * 23));
-        newEntity(EntityHandler.TEMPLATES.get("Chest"));
-
-        // Add systems
-        drawSystems.add(new SpriteSystem());
-
-        // Change the music to the "playing music"
-        Sounds.stopMusic("Tech Geek", Main.titleMusic);
-        currentSong = Sounds.playMusic("Umbral Force");
-    }
+    public long currentSong;
 
     // ECS Methods
     public int newEntity(Map<Class<? extends Component>, List<Object>> componentTemplate) {
@@ -97,13 +63,23 @@ public class World {
                 // Create the component instance and add it to the components list
                 Component component = componentClass.getConstructor(parameterTypes).newInstance(args.toArray());
                 components.add(component);
+
+                // If the component is a playerComponent, check if there already is one. If not, make the entity the player. If there is, warn.
+                if (component instanceof PlayerComponent) {
+                    if (player == null) player = identifier;
+                    else {
+                        Main.LOGGER.warn("Entity template {} has a PlayerComponent when player has already been declated!");
+                        Main.LOGGER.warn("The entity will be created, but the component will be removed");
+                        components.remove(component);
+                    }
+                }
             } catch (NoSuchMethodException exception) {
                 Main.LOGGER.error(
                         "Failed to create entity: Component '{}' in Template '{}' has invalid args!",
                         componentClass.getSimpleName(), componentTemplate.get(NameComponent.class)
                 );
                 Main.LOGGER.error("The args are for this constructor that doesn't exist: {}", exception.getMessage());
-            }catch (Exception exception) {
+            } catch (Exception exception) {
                 Main.handleException(exception);
             }
         }
@@ -118,8 +94,40 @@ public class World {
         VACANT_IDENTIFIERS.add(identifier);
         entities.remove(identifier);
     }
+    public List<Component> getComponents(int identifier) {
+        return entities.containsKey(identifier) ? List.of() : entities.get(identifier);
+    }
+    public int getPlayer() {
+        return player == null ? -1 : player;
+    }
+    public List<Integer> queryAll(Class<? extends Component>... components) {
+        List<Integer> result = new ArrayList<>();
 
-    public List<Integer> query(Class<? extends Component>... components) {
+        for (int entity : entities.keySet()) {
+            boolean match = true;
+
+            for (Class<? extends Component> componentClass : components) {
+                boolean found = false;
+
+                for (Component component : entities.get(entity)) {
+                    if (componentClass.isInstance(component)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) result.add(entity);
+        }
+
+        return result;
+    }
+    public List<Integer> queryAny(Class<? extends Component>... components) {
         List<Integer> result = new ArrayList<>();
         for (int entity : entities.keySet()) {
             boolean match = false;
@@ -140,12 +148,24 @@ public class World {
     }
     public <T extends Component> Optional<T> getEntityComponent(int identifier, Class<T> type) {
         List<Component> entity = entities.get(identifier);
+
         for (Component element : entity) {
             if (type.isInstance(element)) {
                 return Optional.of((T) element);
             }
         }
         return Optional.empty();
+    }
+    public <T extends Component> List<T> getEntityComponents(int identifier, Class<T> type) {
+        List<T> result = new ArrayList<>();
+        List<Component> entity = entities.get(identifier);
+
+        for (Component component : entity) {
+            if (type.isInstance(component)) {
+                result.add(type.cast(component));
+            }
+        }
+        return result;
     }
     public <T extends Component> boolean entityHasComponent(int identifier, Class<T> type) {
         List<Component> entity = entities.get(identifier);
@@ -158,12 +178,11 @@ public class World {
     }
 
     public void draw() {
-
         // Flip the Y axis because most stuff are drawn upside down
         Matrix4 original = new Matrix4(Main.batch.getProjectionMatrix());
         Main.batch.getProjectionMatrix().setToOrtho(0, Main.screenWidth, Main.screenHeight, 0, 0, 1);
 
-        TileManager.draw(); // TEMPORARY! will relace this with better code later
+        for (System system : drawSystems) system.draw();
 
         /*
          * For entities, they will be drawn slightly differently than everything else.
@@ -172,7 +191,7 @@ public class World {
          * This allows entities to be behind something, but also in front, depending on their y position.
          */
         // Add in all entities
-        entitiesDrawn.add(player);
+        entitiesDrawn.add(oldPlayer);
         entitiesDrawn.addAll(oldEntities);
 
         // Sort the entities by y position
@@ -184,22 +203,18 @@ public class World {
         entitiesDrawn.clear();
         Main.batch.end();
 
-        for (System system : drawSystems) system.tick(this);
-
-        darkness.draw();
-
         // Unflip the Y axis and draw the UI. UI isn't drawn upside-down, which is why we flip it back
         Main.batch.setProjectionMatrix(original);
         UI.stage.draw();
     }
-    public void update() {
+    public void update(float deltaTime) {
         // Update UI
         UI.update();
 
-        for (System system : updateSystems) system.tick(this);
+        for (System system : updateSystems) system.update(deltaTime);
 
         // Update player and entites
-        player.update();
+        oldPlayer.update();
         oldEntities.forEach(Entity::update);
     }
 }

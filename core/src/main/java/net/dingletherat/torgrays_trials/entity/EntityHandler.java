@@ -13,6 +13,8 @@ import org.json.JSONObject;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.component.*;
+import net.dingletherat.torgrays_trials.entity.component.sprite.*;
+import net.dingletherat.torgrays_trials.entity.component.pathfinding.*;
 import net.dingletherat.torgrays_trials.main.UtilityTool;
 
 public class EntityHandler {
@@ -30,6 +32,13 @@ public class EntityHandler {
         COMPONENTS.put(PositionComponent.class.getSimpleName(), PositionComponent.class);
         COMPONENTS.put(SpriteSheetComponent.class.getSimpleName(), SpriteSheetComponent.class);
         COMPONENTS.put(SpriteComponent.class.getSimpleName(), SpriteComponent.class);
+        COMPONENTS.put(LightComponent.class.getSimpleName(), LightComponent.class);
+        COMPONENTS.put(CollisionComponent.class.getSimpleName(), CollisionComponent.class);
+        COMPONENTS.put(PlayerComponent.class.getSimpleName(), PlayerComponent.class);
+        COMPONENTS.put(WanderComponent.class.getSimpleName(), WanderComponent.class);
+        COMPONENTS.put(WalkingSheetComponent.class.getSimpleName(), WalkingSheetComponent.class);
+        COMPONENTS.put(PathfindingComponent.class.getSimpleName(), PathfindingComponent.class);
+        COMPONENTS.put(EyesSheetComponent.class.getSimpleName(), EyesSheetComponent.class);
 
         Main.LOGGER.info("Loaded {} vanilla components", COMPONENTS.size());
     }

@@ -152,7 +152,7 @@ public class UI {
 
         // Create the first actual button that creates a new game
         TextButton newMain = createButton(Translations.get(Main.identifier, "new_game"),
-            buttonStyle, () -> Main.world = new World());
+            buttonStyle, () -> Main.loadWorld());
         table.add(newMain);
 
         // New Row
@@ -244,20 +244,20 @@ public class UI {
         // Set up an update method to update the labels when the actors are active
         uiUpdates.put("Debug", () -> {
             // Position
-            x.setText("X: " + Main.world.player.x);
-            y.setText("Y: " + Main.world.player.y);
-            col.setText("Col: " + Main.world.player.x / Main.tileSize);
-            row.setText("Row: " + Main.world.player.y / Main.tileSize);
+            x.setText("X: " + Main.world.oldPlayer.x);
+            y.setText("Y: " + Main.world.oldPlayer.y);
+            col.setText("Col: " + Main.world.oldPlayer.x / Main.tileSize);
+            row.setText("Row: " + Main.world.oldPlayer.y / Main.tileSize);
 
             // States
             ui.setText("UI: " + uiState);
-            player.setText("Player: " + Main.world.player.state);
+            player.setText("Player: " + Main.world.oldPlayer.state);
 
             // Player Sprite Stuff
-            scol.setText("SCol: " + Main.world.player.spriteColumn);
-            srow.setText("SRow: " + Main.world.player.spriteRow);
-            ecol.setText("ECol: " + Main.world.player.eyesColumn);
-            erow.setText("ERow: " + Main.world.player.eyesRow);
+            scol.setText("SCol: " + Main.world.oldPlayer.spriteColumn);
+            srow.setText("SRow: " + Main.world.oldPlayer.spriteRow);
+            ecol.setText("ECol: " + Main.world.oldPlayer.eyesColumn);
+            erow.setText("ERow: " + Main.world.oldPlayer.eyesRow);
         });
     }
 

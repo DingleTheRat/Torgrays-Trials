@@ -3,6 +3,7 @@ package net.dingletherat.torgrays_trials.rendering;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.main.UtilityTool;
+import net.dingletherat.torgrays_trials.system.TileSystem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,12 +85,12 @@ public class MapHandler {
 			int col = 0;
 			while (col < mapWidth) {
 				int number = Integer.parseInt(numbers[col]);
-				mapClass.ground().put(new TileManager.Pair(col, row), number);
+				mapClass.ground().put(new TileSystem.Pair(col, row), number);
 
 				// If the tile number is not registered, register it as a disabled tile
-				if (TileManager.tileTypes.get(number) == null) {
+				if (TileSystem.tileTypes.get(number) == null) {
 					Main.LOGGER.warn("Index {} is not a valid tile in {} map ground.", number, name);
-					TileManager.registerTile(number, "", "00000/00000/00000/00000/00000");
+					TileSystem.registerTile(number, "", "00000/00000/00000/00000/00000");
 				}
 				col++;
 			}
@@ -104,12 +105,12 @@ public class MapHandler {
 				int col = 0;
 				while (col < mapWidth) {
 					int number = Integer.parseInt(numbers[col]);
-					mapClass.foreground().put(new TileManager.Pair(col, row), number);
+					mapClass.foreground().put(new TileSystem.Pair(col, row), number);
 
 					// If the tile number is not registered, register it as a disabled tile
-					if (TileManager.tileTypes.get(number) == null) {
+					if (TileSystem.tileTypes.get(number) == null) {
 						Main.LOGGER.error("Index {} is not a valid tile in {} map foreground.", number, name);
-						TileManager.registerTile(number, "", "00000|00000|00000|00000|00000");
+						TileSystem.registerTile(number, "", "00000|00000|00000|00000|00000");
 					}
 					col++;
 				}
@@ -119,7 +120,7 @@ public class MapHandler {
 
 
 		// Add to some useful HashMap and Array List
-		TileManager.maps.put(name, mapClass);
+		TileSystem.maps.put(name, mapClass);
 		mapFiles.put(name, file);
 		maps.add(name);
 	}

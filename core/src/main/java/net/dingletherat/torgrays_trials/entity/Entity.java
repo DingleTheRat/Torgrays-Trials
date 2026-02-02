@@ -67,8 +67,8 @@ public class Entity {
         Texture texture = currentImage.getTexture();
 
         // Where to draw the image on screen
-        float screenX = x - Main.world.player.cameraX + Main.screenWidth / 2f;
-        float screenY = y - Main.world.player.cameraY + Main.screenHeight / 2f;
+        float screenX = x - Main.world.oldPlayer.cameraX + Main.screenWidth / 2f;
+        float screenY = y - Main.world.oldPlayer.cameraY + Main.screenHeight / 2f;
 
         /* If spriteSheets are disabled (spriteColumn = -1, spriteRow = -1), draw the currentImage normally.
          If not, use spriteColumn and spriteRow to figure out what part to draw. */
@@ -99,9 +99,9 @@ public class Entity {
      **/
     public void update() {
         // Check if the entity is on the screen using the player's camera position
-        onScreen = x + width > Main.world.player.cameraX - Main.screenWidth / 2f &&
-            x < Main.world.player.cameraX + Main.screenWidth / 2f &&
-            y + height > Main.world.player.cameraY - Main.screenHeight / 2f &&
-            y < Main.world.player.cameraY + Main.screenHeight / 2f || updateOffScreen;
+        onScreen = x + width > Main.world.oldPlayer.cameraX - Main.screenWidth / 2f &&
+            x < Main.world.oldPlayer.cameraX + Main.screenWidth / 2f &&
+            y + height > Main.world.oldPlayer.cameraY - Main.screenHeight / 2f &&
+            y < Main.world.oldPlayer.cameraY + Main.screenHeight / 2f || updateOffScreen;
     }
 }

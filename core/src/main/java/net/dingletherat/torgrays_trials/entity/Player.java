@@ -7,7 +7,7 @@ import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.rendering.DataImage;
 import net.dingletherat.torgrays_trials.rendering.Map;
-import net.dingletherat.torgrays_trials.rendering.TileManager;
+import net.dingletherat.torgrays_trials.system.TileSystem;
 
 public class Player extends Mob {
     public float cameraX, cameraY;
@@ -64,7 +64,7 @@ public class Player extends Mob {
         cameraY -= (cameraY - y) * 0.15f;
 
         // Clamp the camera to the map bounds
-        Map map = TileManager.maps.get(Main.world.currentMap);
+        Map map = TileSystem.maps.get(Main.world.currentMap);
         int maxCameraX = map.x() * Main.tileSize - Main.screenWidth / 2;
         int maxCameraY = map.y() * Main.tileSize - Main.screenHeight / 2;
         if (cameraX < Main.screenWidth / 2f) cameraX = Main.screenWidth / 2f;

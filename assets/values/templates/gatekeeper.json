@@ -1,0 +1,29 @@
+{
+  "name": "GateKeeper",
+  "components": [
+    {
+      "name": "PositionComponent",
+      "args": [21, 23]
+    },
+    {
+      "name": "MovementComponent",
+      "args": [1]
+    },
+    {
+      "name": "WanderComponent",
+      "args": [0.9]
+    },
+    {
+      "name": "CollisionComponent",
+      "args": [1, 1]
+    },
+    {
+      "name": "EyesSheetComponent",
+      "args": ["entity/eyes_sheet", 6, 2, 1]
+    },
+    {
+      "name": "WalkingSheetComponent",
+      "args": ["entity/npc/gatekeeper_sheet", 3, 4, 0]
+    }
+  ]
+}
