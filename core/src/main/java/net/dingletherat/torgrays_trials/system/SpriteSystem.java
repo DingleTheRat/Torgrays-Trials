@@ -155,7 +155,6 @@ public class SpriteSystem implements System {
 
             // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
             if (blinkCounter >= component.animationSpeed + Main.random.nextFloat()) {
-                Main.LOGGER.debug("Entity");
                 // Change the row to the blinking row
                 component.row = 1;
 

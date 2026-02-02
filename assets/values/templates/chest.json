@@ -2,20 +2,32 @@
   "name": "Chest",
   "components": [
     {
-      "name": "PositionComponent",
-      "args": [21, 21]
+      "component": "net.dingletherat.torgrays_trials.entity.component.PositionComponent",
+      "args": [
+        21,
+        21
+      ]
     },
     {
-      "name": "CollisionComponent",
-      "args": [1, 1]
+      "component": "net.dingletherat.torgrays_trials.entity.component.CollisionComponent",
+      "args": [
+        1,
+        1
+      ]
     },
     {
-      "name": "SpriteComponent",
-      "args": ["entity/object/chest/closed", 0]
+      "component": "net.dingletherat.torgrays_trials.entity.component.sprite.SpriteComponent",
+      "args": [
+        "entity/object/chest/closed",
+        0
+      ]
     },
     {
-      "name": "LightComponent",
-      "args": [300, 0.8]
+      "component": "net.dingletherat.torgrays_trials.entity.component.LightComponent",
+      "args": [
+        300,
+        0.8
+      ]
     }
   ]
 }

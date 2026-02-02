@@ -72,7 +72,6 @@ public class Main extends ApplicationAdapter {
 
         // Load JSON files
         Translations.loadFiles();
-        EntityHandler.registerAllComponents();
         EntityHandler.generateTemplates();
 
         // Setup UI

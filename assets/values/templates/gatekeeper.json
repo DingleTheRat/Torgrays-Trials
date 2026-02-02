@@ -2,28 +2,55 @@
   "name": "GateKeeper",
   "components": [
     {
-      "name": "PositionComponent",
-      "args": [21, 23]
+      "component": "net.dingletherat.torgrays_trials.entity.component.PositionComponent",
+      "args": [
+        21,
+        23
+      ]
     },
     {
-      "name": "MovementComponent",
-      "args": [1]
+      "component": "net.dingletherat.torgrays_trials.entity.component.MovementComponent",
+      "args": [
+        1
+      ]
     },
     {
-      "name": "WanderComponent",
-      "args": [0.9]
+      "component": "net.dingletherat.torgrays_trials.entity.component.pathfinding.PathfindingComponent",
+      "args": [
+        "WanderComponent",
+        true
+      ]
     },
     {
-      "name": "CollisionComponent",
-      "args": [1, 1]
+      "component": "net.dingletherat.torgrays_trials.entity.component.pathfinding.WanderComponent",
+      "args": [
+        0.9
+      ]
     },
     {
-      "name": "EyesSheetComponent",
-      "args": ["entity/eyes_sheet", 6, 2, 1]
+      "component": "net.dingletherat.torgrays_trials.entity.component.CollisionComponent",
+      "args": [
+        1,
+        1
+      ]
     },
     {
-      "name": "WalkingSheetComponent",
-      "args": ["entity/npc/gatekeeper_sheet", 3, 4, 0]
+      "component": "net.dingletherat.torgrays_trials.entity.component.sprite.EyesSheetComponent",
+      "args": [
+        "entity/eyes_sheet",
+        6,
+        2,
+        1
+      ]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.entity.component.sprite.WalkingSheetComponent",
+      "args": [
+        "entity/npc/gatekeeper_sheet",
+        3,
+        4,
+        0
+      ]
     }
   ]
 }

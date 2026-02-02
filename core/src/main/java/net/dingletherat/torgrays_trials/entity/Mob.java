@@ -249,7 +249,6 @@ public class Mob extends Entity {
 
         // If the counter hits the goal, and it's high meaning we're not blinking, make us blink
         if (eyes_blink >= animationSpeed * (10 + Main.random.nextInt(10))) {
-            Main.LOGGER.debug("Mob");
             // Change the row to the blinking row
             eyesRow = 1;
 

@@ -2,20 +2,31 @@
   "name": "Torgray",
   "components": [
     {
-      "name": "PlayerComponent",
+      "component": "net.dingletherat.torgrays_trials.entity.component.PlayerComponent",
       "args": []
     },
     {
-      "name": "PositionComponent",
-      "args": [23, 21]
+      "component": "net.dingletherat.torgrays_trials.entity.component.PositionComponent",
+      "args": [
+        23,
+        21
+      ]
     },
     {
-      "name": "CollisionComponent",
-      "args": [1, 1]
+      "component": "net.dingletherat.torgrays_trials.entity.component.CollisionComponent",
+      "args": [
+        1,
+        1
+      ]
     },
     {
-      "name": "SpriteSheetComponent",
-      "args": ["entity/player/torgray_sheet", 3, 4, 0]
+      "component": "net.dingletherat.torgrays_trials.entity.component.sprite.SpriteSheetComponent",
+      "args": [
+        "entity/player/torgray_sheet",
+        3,
+        4,
+        0
+      ]
     }
   ]
 }

@@ -13,35 +13,11 @@ import org.json.JSONObject;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.entity.component.*;
-import net.dingletherat.torgrays_trials.entity.component.sprite.*;
-import net.dingletherat.torgrays_trials.entity.component.pathfinding.*;
 import net.dingletherat.torgrays_trials.main.UtilityTool;
 
 public class EntityHandler {
-    public static final Map<
-        String,
-        Map<Class<? extends Component>, List<Object>>
-    > TEMPLATES = new HashMap<>();
-    public static final HashMap<String, Class<? extends Component>> COMPONENTS = new HashMap<>();
+    public static final Map<String, Map<Class<? extends Component>, List<Object>>> TEMPLATES = new HashMap<>();
 
-    public static void registerAllComponents() {
-        COMPONENTS.clear();
-
-        COMPONENTS.put(MovementComponent.class.getSimpleName(), MovementComponent.class);
-        COMPONENTS.put(NameComponent.class.getSimpleName(), NameComponent.class);
-        COMPONENTS.put(PositionComponent.class.getSimpleName(), PositionComponent.class);
-        COMPONENTS.put(SpriteSheetComponent.class.getSimpleName(), SpriteSheetComponent.class);
-        COMPONENTS.put(SpriteComponent.class.getSimpleName(), SpriteComponent.class);
-        COMPONENTS.put(LightComponent.class.getSimpleName(), LightComponent.class);
-        COMPONENTS.put(CollisionComponent.class.getSimpleName(), CollisionComponent.class);
-        COMPONENTS.put(PlayerComponent.class.getSimpleName(), PlayerComponent.class);
-        COMPONENTS.put(WanderComponent.class.getSimpleName(), WanderComponent.class);
-        COMPONENTS.put(WalkingSheetComponent.class.getSimpleName(), WalkingSheetComponent.class);
-        COMPONENTS.put(PathfindingComponent.class.getSimpleName(), PathfindingComponent.class);
-        COMPONENTS.put(EyesSheetComponent.class.getSimpleName(), EyesSheetComponent.class);
-
-        Main.LOGGER.info("Loaded {} vanilla components", COMPONENTS.size());
-    }
     public static void generateTemplates() {
         TEMPLATES.clear();
         String filepath = "values/templates/";
@@ -89,20 +65,24 @@ public class EntityHandler {
             // Loop through all the component strings, get its corresponding class from the COMPONENTS HashMap, and add it to the componentClasses List
             for (JSONObject component : components) {
                 // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
-                if (!component.has("name") || !(component.get("name") instanceof String)) {
-                    Main.LOGGER.warn("Invalid entity template '{}': a 'name' field in 'components' is missing or is not a String.", fileNames.get(jsons.indexOf(json)));
+                if (!component.has("component") || !(component.get("component") instanceof String)) {
+                    Main.LOGGER.warn("Invalid entity template '{}': a 'component' field in 'components' is missing or is not a String.", fileNames.get(jsons.indexOf(json)));
                     continue;
                 }
 
-                String componentName = component.getString("name");
+                String componentPath = component.getString("component");
                 if (!component.has("args") || !(component.get("args") instanceof JSONArray)) {
-                    Main.LOGGER.warn("Invalid entity template '{}': 'args' field in '{}' component is missing or is not a JSONArray.", fileNames.get(jsons.indexOf(json)), componentName);
+                    Main.LOGGER.warn("Invalid entity template '{}': 'args' field in '{}' component is missing or is not a JSONArray.", fileNames.get(jsons.indexOf(json)), componentPath);
                     continue;
                 }
 
-                // Check if it even exists. If not, warn and continue
-                if (!COMPONENTS.containsKey(componentName)) {
-                    Main.LOGGER.warn("{} is not a component! Did you add it to the COMPONENTS list?", componentName);
+                // Get the component class. If it does not exist, it will throw a class not found exception. In that case, we continue and warn
+                Class<? extends Component> componentClass;
+                try {
+                    componentClass = Class.forName(componentPath).asSubclass(Component.class);
+                } catch (ClassNotFoundException exception) {
+                    Main.LOGGER.error("Invalid entity template '{}': Component path '{}' is not a path to a class or does not extend the 'Component' interface!",
+                            fileNames.get(jsons.indexOf(json)), componentPath);
                     continue;
                 }
 
@@ -111,7 +91,7 @@ public class EntityHandler {
                 List<Object> args = new ArrayList<>(IntStream.range(0, argsArray.length())
                                 .mapToObj(argsArray::get)
                                 .toList());
-                componentClasses.put(COMPONENTS.get(componentName), args);
+                componentClasses.put(componentClass, args);
             }
 
             // Last but not least, add our list of componentClasses to the TEMPLATES HashMap
