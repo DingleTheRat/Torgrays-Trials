@@ -167,7 +167,6 @@ public class Main extends ApplicationAdapter {
         UI.uiState = "Play";
 
         // TODO: Make an AssetSetter
-        world.oldEntities.add(new GateKeeper(Main.tileSize * 21, Main.tileSize * 23));
         world.newEntity(EntityHandler.TEMPLATES.get("Chest"));
         world.newEntity(EntityHandler.TEMPLATES.get("GateKeeper"));
         world.newEntity(EntityHandler.TEMPLATES.get("Torgray"));
