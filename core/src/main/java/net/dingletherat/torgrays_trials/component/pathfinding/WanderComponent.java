@@ -1,9 +1,9 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.entity.component.pathfinding;
+package net.dingletherat.torgrays_trials.component.pathfinding;
 
 import java.math.BigDecimal;
 
-import net.dingletherat.torgrays_trials.entity.component.Component;
+import net.dingletherat.torgrays_trials.component.Component;
 
 public class WanderComponent implements Component {
     public float decisionSpeed;

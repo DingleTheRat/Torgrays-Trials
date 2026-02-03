@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.component.*;
+import net.dingletherat.torgrays_trials.component.*;
 
 public class DarknessSystem implements System{
     public float ambientDarkness = 0.92f;  // How dark it is without lights (0.0 = no darkness, 1.0 = complete darkness)

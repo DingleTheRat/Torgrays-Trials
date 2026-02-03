@@ -2,8 +2,8 @@
 package net.dingletherat.torgrays_trials.system;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.component.MovementComponent;
-import net.dingletherat.torgrays_trials.entity.component.pathfinding.*;
+import net.dingletherat.torgrays_trials.component.MovementComponent;
+import net.dingletherat.torgrays_trials.component.pathfinding.*;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
 public class PathfindingSystem implements System{

@@ -17,10 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.component.MovementComponent;
-import net.dingletherat.torgrays_trials.entity.component.PositionComponent;
-import net.dingletherat.torgrays_trials.entity.component.sprite.EyesSheetComponent;
-import net.dingletherat.torgrays_trials.entity.component.sprite.SpriteSheetComponent;
+import net.dingletherat.torgrays_trials.component.*;
+import net.dingletherat.torgrays_trials.component.sprite.*;
 import net.dingletherat.torgrays_trials.main.Sounds;
 import net.dingletherat.torgrays_trials.main.Translations;
 

@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.component.MovementComponent;
-import net.dingletherat.torgrays_trials.entity.component.PlayerComponent;
+import net.dingletherat.torgrays_trials.component.MovementComponent;
+import net.dingletherat.torgrays_trials.component.PlayerComponent;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.rendering.Map;
 

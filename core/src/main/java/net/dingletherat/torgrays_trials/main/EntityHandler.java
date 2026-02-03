@@ -1,5 +1,5 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.entity;
+package net.dingletherat.torgrays_trials.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.component.*;
+import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.main.UtilityTool;
 
 public class EntityHandler {

@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import net.dingletherat.torgrays_trials.entity.Entity;
-import net.dingletherat.torgrays_trials.entity.EntityHandler;
-import net.dingletherat.torgrays_trials.entity.component.PositionComponent;
+import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.States.GameStates;
 import net.dingletherat.torgrays_trials.main.Sounds;
@@ -20,7 +18,6 @@ import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.UI;
 import net.dingletherat.torgrays_trials.system.*;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -53,7 +50,6 @@ public class Main extends ApplicationAdapter {
 
     // Title screen elements
     static DataImage backdrop;
-    public static ArrayList<Entity> titleFireflies = new ArrayList<>();
     public static long titleMusic;
 
     @Override
@@ -127,7 +123,6 @@ public class Main extends ApplicationAdapter {
             case TITLE -> {
                 // Update UI and fireflies
                 UI.update();
-                titleFireflies.stream().forEach(Entity::update);
             }
             case PLAY -> world.update(deltaTime);
         }

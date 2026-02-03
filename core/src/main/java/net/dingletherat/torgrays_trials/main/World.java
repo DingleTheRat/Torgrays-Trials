@@ -2,12 +2,7 @@
 package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.Entity;
-import net.dingletherat.torgrays_trials.entity.Player;
-import net.dingletherat.torgrays_trials.entity.component.Component;
-import net.dingletherat.torgrays_trials.entity.component.NameComponent;
-import net.dingletherat.torgrays_trials.entity.component.PlayerComponent;
-import net.dingletherat.torgrays_trials.entity.component.PositionComponent;
+import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.rendering.UI;
 import net.dingletherat.torgrays_trials.system.System;
 
@@ -27,14 +22,6 @@ public class World {
     public List<System> drawSystems = new ArrayList<>();
     private final ArrayList<Integer> VACANT_IDENTIFIERS = new ArrayList<>();
     private int nextIdentifier = 0;
-
-    // Old entities
-    @Deprecated
-    public ArrayList<Entity> oldEntities = new ArrayList<>();
-    @Deprecated
-    public ArrayList<Entity> entitiesDrawn = new ArrayList<>();
-    @Deprecated
-    public Player oldPlayer = new Player();
 
     // Map and camera
     public String currentMap = "Main Island";

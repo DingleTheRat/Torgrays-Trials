@@ -2,7 +2,7 @@
 package net.dingletherat.torgrays_trials.system;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.component.*;
+import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.rendering.Map;
 
 public class CollisionSystem implements System {

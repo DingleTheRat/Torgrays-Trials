@@ -1,5 +1,5 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.entity.component.sprite;
+package net.dingletherat.torgrays_trials.component.sprite;
 
 import java.math.BigDecimal;
 

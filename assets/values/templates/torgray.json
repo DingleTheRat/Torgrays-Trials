@@ -2,31 +2,31 @@
   "name": "Torgray",
   "components": [
     {
-      "component": "net.dingletherat.torgrays_trials.entity.component.PlayerComponent",
+      "component": "net.dingletherat.torgrays_trials.component.PlayerComponent",
       "args": []
     },
     {
-      "component": "net.dingletherat.torgrays_trials.entity.component.LightComponent",
+      "component": "net.dingletherat.torgrays_trials.component.LightComponent",
       "args": [150, 0.8, true]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.entity.component.PositionComponent",
+      "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
       "args": [23, 21]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.entity.component.MovementComponent",
+      "component": "net.dingletherat.torgrays_trials.component.MovementComponent",
       "args": [4]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.entity.component.CollisionComponent",
+      "component": "net.dingletherat.torgrays_trials.component.CollisionComponent",
       "args": [1, 1]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.entity.component.sprite.WalkingSheetComponent",
+      "component": "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent",
       "args": ["entity/player/torgray_sheet", 3, 4, 0]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.entity.component.sprite.EyesSheetComponent",
+      "component": "net.dingletherat.torgrays_trials.component.sprite.EyesSheetComponent",
       "args": ["entity/eyes_sheet", 6, 2, 1]
     }
   ]

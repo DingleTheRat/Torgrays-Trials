@@ -1,10 +1,10 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.entity.component.sprite;
+package net.dingletherat.torgrays_trials.component.sprite;
 
 import java.math.BigDecimal;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.entity.component.Component;
+import net.dingletherat.torgrays_trials.component.Component;
 import net.dingletherat.torgrays_trials.rendering.DataImage;
 
 public class SpriteComponent implements Component {
