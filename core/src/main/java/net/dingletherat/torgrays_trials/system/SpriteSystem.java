@@ -21,6 +21,22 @@ public class SpriteSystem implements System {
                 // Get PositionComponent
                 PositionComponent positionComponent = Main.world.getEntityComponent(entity, PositionComponent.class).get();
 
+                // If the entity isn't even on the screen, return
+                if (Main.world.entityHasComponent(entity, CollisionComponent.class)) {
+                    // Take collision width and height into concideration if there's a CollisionComponent
+                    CollisionComponent collisionComponent = Main.world.getEntityComponent(entity, CollisionComponent.class).get();
+
+                    if (!(positionComponent.x + collisionComponent.width > Main.world.cameraX - Main.screenWidth / 2f &&
+                        positionComponent.x < Main.world.cameraX + Main.screenWidth / 2f &&
+                        positionComponent.y + collisionComponent.height > Main.world.cameraY - Main.screenHeight / 2f &&
+                        positionComponent.y < Main.world.cameraY + Main.screenHeight / 2f)) continue;
+                } else {
+                    if (!(positionComponent.x > Main.world.cameraX - Main.screenWidth / 2f &&
+                        positionComponent.x < Main.world.cameraX + Main.screenWidth / 2f &&
+                        positionComponent.y > Main.world.cameraY - Main.screenHeight / 2f &&
+                        positionComponent.y < Main.world.cameraY + Main.screenHeight / 2f)) continue;
+                }
+
                 screenX = positionComponent.x - Main.world.cameraX + Main.screenWidth / 2f;
                 screenY = positionComponent.y - Main.world.cameraY + Main.screenHeight / 2f;
             } else {
