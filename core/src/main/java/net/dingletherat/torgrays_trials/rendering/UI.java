@@ -17,7 +17,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.World;
+import net.dingletherat.torgrays_trials.entity.component.MovementComponent;
+import net.dingletherat.torgrays_trials.entity.component.PositionComponent;
+import net.dingletherat.torgrays_trials.entity.component.sprite.EyesSheetComponent;
+import net.dingletherat.torgrays_trials.entity.component.sprite.SpriteSheetComponent;
 import net.dingletherat.torgrays_trials.main.Sounds;
 import net.dingletherat.torgrays_trials.main.Translations;
 
@@ -206,6 +209,7 @@ public class UI {
         Label y = new Label("Y: null", style);
         Label col = new Label("Col: null", style);
         Label row = new Label("Row: null", style);
+        Label direction = new Label("Direction: null", style);
 
         // States (in general)
         Label ui = new Label("UI: null", style);
@@ -223,6 +227,7 @@ public class UI {
         table.add(row).left().row();
         table.add(x).left().row();
         table.add(y).left().row();
+        table.add(direction).left().row();
 
         table.add(divider).left().row(); // Divider
 
@@ -243,21 +248,30 @@ public class UI {
 
         // Set up an update method to update the labels when the actors are active
         uiUpdates.put("Debug", () -> {
-            // Position
-            x.setText("X: " + Main.world.oldPlayer.x);
-            y.setText("Y: " + Main.world.oldPlayer.y);
-            col.setText("Col: " + Main.world.oldPlayer.x / Main.tileSize);
-            row.setText("Row: " + Main.world.oldPlayer.y / Main.tileSize);
+            Main.world.getEntityComponent(Main.world.getPlayer(), PositionComponent.class).ifPresent(component -> {
+                // Position
+                x.setText("X: " + component.x);
+                y.setText("Y: " + component.y);
+                col.setText("Col: " + component.x / Main.tileSize);
+                row.setText("Row: " + component.y / Main.tileSize);
+            });
 
             // States
+            Main.world.getEntityComponent(Main.world.getPlayer(), MovementComponent.class).ifPresent(component -> {
+                direction.setText("Direction: " + component.direction);
+                player.setText("Player: " + component.state);
+            });
             ui.setText("UI: " + uiState);
-            player.setText("Player: " + Main.world.oldPlayer.state);
 
             // Player Sprite Stuff
-            scol.setText("SCol: " + Main.world.oldPlayer.spriteColumn);
-            srow.setText("SRow: " + Main.world.oldPlayer.spriteRow);
-            ecol.setText("ECol: " + Main.world.oldPlayer.eyesColumn);
-            erow.setText("ERow: " + Main.world.oldPlayer.eyesRow);
+            Main.world.getEntityComponent(Main.world.getPlayer(), SpriteSheetComponent.class).ifPresent(component -> {
+                scol.setText("SCol: " + component.column);
+                srow.setText("SRow: " + component.row);
+            });
+            Main.world.getEntityComponent(Main.world.getPlayer(), EyesSheetComponent.class).ifPresent(component -> {
+                ecol.setText("ECol: " + component.column);
+                erow.setText("ERow: " + component.row);
+            });
         });
     }
 

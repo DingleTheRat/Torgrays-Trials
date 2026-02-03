@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.rendering.DataImage;
 import net.dingletherat.torgrays_trials.rendering.Map;
 import net.dingletherat.torgrays_trials.rendering.Tile;
@@ -141,22 +140,22 @@ public class TileSystem implements System {
     public void update(float deltaTime) { }
 
     private void drawLayer(Map map, HashMap<Pair, Integer> layer) {
-        float camX = Main.world.oldPlayer.cameraX;
-        float camY = Main.world.oldPlayer.cameraY;
+        float cameraX = Main.world.cameraX;
+        float cameraY = Main.world.cameraY;
         int tileSize = Main.tileSize;
         for (int worldRow = 0; worldRow < map.y(); worldRow++) {
             for (int worldCol = 0; worldCol < map.x(); worldCol++) {
                 int tileNumber = layer.get(new Pair(worldCol, worldRow));
                 int worldX = worldCol * tileSize;
                 int worldY = worldRow * tileSize;
-                float screenX = worldX - camX + Main.screenWidth / 2f;
-                float screenY = worldY - camY + Main.screenHeight / 2f;
+                float screenX = worldX - cameraX + Main.screenWidth / 2f;
+                float screenY = worldY - cameraY + Main.screenHeight / 2f;
 
                 // Check if the tile is within the visible screen
-                if (worldX + tileSize > camX - Main.screenWidth / 2f &&
-                    worldX - tileSize < camX + Main.screenWidth / 2f &&
-                    worldY + tileSize > camY - Main.screenHeight / 2f &&
-                    worldY - tileSize < camY + Main.screenHeight / 2f) {
+                if (worldX + tileSize > cameraX - Main.screenWidth / 2f &&
+                    worldX - tileSize < cameraX + Main.screenWidth / 2f &&
+                    worldY + tileSize > cameraY - Main.screenHeight / 2f &&
+                    worldY - tileSize < cameraY + Main.screenHeight / 2f) {
                     Tile currentTile = tileTypes.get(tileNumber);
                     Main.batch.draw(currentTile.image().getTexture(), Math.round(screenX), Math.round(screenY));
                 }

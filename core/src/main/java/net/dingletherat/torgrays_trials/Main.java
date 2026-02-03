@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import net.dingletherat.torgrays_trials.entity.Entity;
 import net.dingletherat.torgrays_trials.entity.EntityHandler;
-import net.dingletherat.torgrays_trials.entity.npc.GateKeeper;
+import net.dingletherat.torgrays_trials.entity.component.PositionComponent;
 import net.dingletherat.torgrays_trials.main.World;
 import net.dingletherat.torgrays_trials.main.States.GameStates;
 import net.dingletherat.torgrays_trials.main.Sounds;
@@ -166,9 +166,9 @@ public class Main extends ApplicationAdapter {
         UI.uiState = "Play";
 
         // TODO: Make an AssetSetter
+        world.newEntity(EntityHandler.TEMPLATES.get("Torgray"));
         world.newEntity(EntityHandler.TEMPLATES.get("Chest"));
         world.newEntity(EntityHandler.TEMPLATES.get("GateKeeper"));
-        world.newEntity(EntityHandler.TEMPLATES.get("Torgray"));
 
         // Declare update and draw systems
         SpriteSystem spriteSystem = new SpriteSystem();
@@ -179,6 +179,7 @@ public class Main extends ApplicationAdapter {
         world.drawSystems.add(new DarknessSystem());
 
         // Add update systems
+        world.updateSystems.add(new PlayerSystem());
         world.updateSystems.add(spriteSystem);
         world.updateSystems.add(new MovementSystem());
         world.updateSystems.add(new PathfindingSystem());

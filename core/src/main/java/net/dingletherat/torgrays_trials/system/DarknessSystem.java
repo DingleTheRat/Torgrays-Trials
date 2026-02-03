@@ -88,8 +88,8 @@ public class DarknessSystem implements System{
             }
 
             // Get the light's position on the screen
-            x = x - Main.world.oldPlayer.cameraX + Main.screenWidth / 2f + 24 - radius;
-            y = y - Main.world.oldPlayer.cameraY + Main.screenHeight / 2f + 24 - radius;
+            x = x - Main.world.cameraX + Main.screenWidth / 2f + 24 - radius;
+            y = y - Main.world.cameraY + Main.screenHeight / 2f + 24 - radius;
 
             Main.batch.setColor(1f, 1f, 1f, intensity);
             Main.batch.draw(radialLightTexture, x, y, radius * 2, radius * 2);

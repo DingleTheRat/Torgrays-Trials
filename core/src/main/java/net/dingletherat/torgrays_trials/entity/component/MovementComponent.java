@@ -18,7 +18,7 @@ public class MovementComponent implements Component {
      **/
     public MovementComponent(Integer speed) {
         state = MovementStates.IDLE;
-        direction = "down";
+        direction = "up";
         this.speed = speed;
     }
     /**

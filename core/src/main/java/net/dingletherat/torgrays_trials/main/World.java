@@ -7,6 +7,7 @@ import net.dingletherat.torgrays_trials.entity.Player;
 import net.dingletherat.torgrays_trials.entity.component.Component;
 import net.dingletherat.torgrays_trials.entity.component.NameComponent;
 import net.dingletherat.torgrays_trials.entity.component.PlayerComponent;
+import net.dingletherat.torgrays_trials.entity.component.PositionComponent;
 import net.dingletherat.torgrays_trials.rendering.UI;
 import net.dingletherat.torgrays_trials.system.System;
 
@@ -35,8 +36,10 @@ public class World {
     @Deprecated
     public Player oldPlayer = new Player();
 
-    // Map
+    // Map and camera
     public String currentMap = "Main Island";
+    public float cameraX;
+    public float cameraY;
 
     // Other
     public long currentSong;
@@ -184,25 +187,6 @@ public class World {
 
         for (System system : drawSystems) system.draw();
 
-        /*
-         * For entities, they will be drawn slightly differently than everything else.
-         * Entities will be added to an ArrayList called entities drawn.
-         * All entities in that ArrayList will later be sorted depending on their y position.
-         * This allows entities to be behind something, but also in front, depending on their y position.
-         */
-        // Add in all entities
-        entitiesDrawn.add(oldPlayer);
-        entitiesDrawn.addAll(oldEntities);
-
-        // Sort the entities by y position
-        entitiesDrawn.sort((entity, entity2) -> Float.compare(entity.y, entity2.y));
-
-        // Draw the entities and clear the Arraylist (for the next frame)
-        Main.batch.begin();
-        entitiesDrawn.forEach(Entity::draw);
-        entitiesDrawn.clear();
-        Main.batch.end();
-
         // Unflip the Y axis and draw the UI. UI isn't drawn upside-down, which is why we flip it back
         Main.batch.setProjectionMatrix(original);
         UI.stage.draw();
@@ -211,10 +195,12 @@ public class World {
         // Update UI
         UI.update();
 
-        for (System system : updateSystems) system.update(deltaTime);
+        // Move the camera to the player's x and y (if there is a PositionComponent)
+        getEntityComponent(getPlayer(), PositionComponent.class).ifPresent(component -> {
+            cameraX = component.x;
+            cameraY = component.y;
+        });
 
-        // Update player and entites
-        oldPlayer.update();
-        oldEntities.forEach(Entity::update);
+        for (System system : updateSystems) system.update(deltaTime);
     }
 }

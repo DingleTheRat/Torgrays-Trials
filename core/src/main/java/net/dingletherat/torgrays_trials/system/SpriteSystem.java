@@ -1,7 +1,6 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.system;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +21,11 @@ public class SpriteSystem implements System {
                 // Get PositionComponent
                 PositionComponent positionComponent = Main.world.getEntityComponent(entity, PositionComponent.class).get();
 
-                screenX = positionComponent.x - Main.world.oldPlayer.cameraX + Main.screenWidth / 2f;
-                screenY = positionComponent.y - Main.world.oldPlayer.cameraY + Main.screenHeight / 2f;
+                screenX = positionComponent.x - Main.world.cameraX + Main.screenWidth / 2f;
+                screenY = positionComponent.y - Main.world.cameraY + Main.screenHeight / 2f;
             } else {
-                screenX = 0 - Main.world.oldPlayer.cameraX + Main.screenWidth / 2f;
-                screenY = 0 - Main.world.oldPlayer.cameraY + Main.screenHeight / 2f;
+                screenX = 0 - Main.world.cameraX + Main.screenWidth / 2f;
+                screenY = 0 - Main.world.cameraY + Main.screenHeight / 2f;
             }
 
             // Get all sprite components inside of the entity and sort them depending on their z value
@@ -77,7 +76,12 @@ public class SpriteSystem implements System {
                     component.column = 0;
                     component.row = 1;
 
-                    // Reset The counter
+                    // If the entity also has an EyesSheetComponent, reset that too
+                    Main.world.getEntityComponent(entity, EyesSheetComponent.class).ifPresent(eyesComponent -> {
+                       if (eyesComponent.column == 20) eyesComponent.column = 0;
+                    });
+
+                    // Reset The counters
                     component.idleCounter = 0;
                     component.walkingCounter = 0;
                 }
@@ -120,8 +124,7 @@ public class SpriteSystem implements System {
                 // Increment the eyes idle counter
                 component.idleCounter += deltaTime;
 
-                /* If the counter hits the goal, change the position of the eyes
-                */
+                // If the counter hits the goal, change the position of the eyes
                 if (component.idleCounter >= component.animationSpeed + Main.random.nextFloat()) {
                     // To show Torgray is bored, his eyes will look around in this sequence:
                     switch (component.column) {
