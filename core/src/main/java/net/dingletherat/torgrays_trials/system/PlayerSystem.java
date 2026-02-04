@@ -14,7 +14,7 @@ public class PlayerSystem implements System {
     public void update(float deltaTime) {
         for (Integer entity : Main.world.queryAll(PlayerComponent.class)) {
             // Clamp the camera to the map bounds
-            Map map = TileSystem.maps.get(Main.world.currentMap);
+            Map map = TileSystem.maps.get(Main.world.getMap());
             int maxCameraX = map.x() * Main.tileSize - Main.screenWidth / 2;
             int maxCameraY = map.y() * Main.tileSize - Main.screenHeight / 2;
             if (Main.world.cameraX < Main.screenWidth / 2f) Main.world.cameraX = Main.screenWidth / 2f;

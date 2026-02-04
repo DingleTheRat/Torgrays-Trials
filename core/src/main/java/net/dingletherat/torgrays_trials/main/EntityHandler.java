@@ -13,7 +13,6 @@ import org.json.JSONObject;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
-import net.dingletherat.torgrays_trials.main.UtilityTool;
 
 public class EntityHandler {
     public static final Map<String, Map<Class<? extends Component>, List<Object>>> TEMPLATES = new HashMap<>();

@@ -121,11 +121,11 @@ public class TileSystem implements System {
 
     @Override
     public void draw() {
-        if (!maps.containsKey(Main.world.currentMap)) {
-            Main.LOGGER.error("Map '{}' not found", Main.world.currentMap);
+        if (!maps.containsKey(Main.world.getMap())) {
+            Main.LOGGER.error("Map '{}' not found", Main.world.getMap());
             return;
         }
-        Map map = maps.get(Main.world.currentMap);
+        Map map = maps.get(Main.world.getMap());
 
         Main.batch.begin();
 

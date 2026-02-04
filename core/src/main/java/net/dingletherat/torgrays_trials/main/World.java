@@ -3,6 +3,7 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
+import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.UI;
 import net.dingletherat.torgrays_trials.system.System;
 
@@ -11,11 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.badlogic.gdx.math.Matrix4;
 
 public class World {
     // ECS
+    private Map<String, Map<Integer, List<Component>>> entityStorage = new HashMap<>();
     private Map<Integer, List<Component>> entities = new HashMap<>();
     private Integer player;
     public List<System> updateSystems = new ArrayList<>();
@@ -24,7 +30,7 @@ public class World {
     private int nextIdentifier = 0;
 
     // Map and camera
-    public String currentMap = "Main Island";
+    private String currentMap = "Disabled";
     public float cameraX;
     public float cameraY;
 
@@ -167,6 +173,73 @@ public class World {
         return false;
     }
 
+    // Maps
+    public void setMap(String mapName) {
+        // Store or update the old map's entites in entityStorage and clear the entities list
+        entityStorage.put(currentMap, entities);
+        entities.clear();
+
+        // Set entities list to the map's entites
+        // If there's already entity data stored in entityStorage, use that
+        if (entityStorage.containsKey(mapName))
+            entities = entityStorage.get(mapName);
+        else {
+            // Otherwise, it's time to json out the entites
+            // First, check for necessary stuff
+            if (!MapHandler.mapFiles.containsKey(mapName)) {
+                Main.LOGGER.warn("Unnable to retrive corresponding map file to {}!", mapName);
+                return;
+            }
+            JSONObject mapFile = MapHandler.mapFiles.get(mapName);
+
+            if (!mapFile.has("entities") && !(mapFile.get("entities") instanceof JSONArray)) {
+                Main.LOGGER.warn("Map {} does not contain 'entities' field or 'entities' field is not a JSONArray!", mapName);
+                return;
+            }
+            JSONArray entitiesArray = mapFile.getJSONArray("entities");
+
+            // Turn entites JSONArray into a list, so I don't have to use horrible "for i" loops
+            List<JSONObject> entities = new ArrayList<>(IntStream.range(0, entitiesArray.length())
+                .mapToObj(entitiesArray::getJSONObject)
+                .toList());
+
+            for (JSONObject entityData : entities) {
+                // Check for important stuff (again)
+                if (!entityData.has("name") && !(entityData.get("name") instanceof String)) {
+                    Main.LOGGER.warn("Entry in 'entites' array in map {} does not contain 'name' field or 'name' field is not a String!", mapName);
+                    return;
+                }
+                if (!EntityHandler.TEMPLATES.containsKey(entityData.get("name"))) {
+                    Main.LOGGER.warn("{} is not an existing entity template!", entityData.get("name"));
+                    return;
+                }
+
+                // Add in the entity
+                Integer entity = newEntity(EntityHandler.TEMPLATES.get(entityData.get("name")));
+
+                // If the entityData has position components and the entity has a PositionComponent, change the data in the component
+                if (entityData.has("col") && entityData.has("row") &&
+                        entityData.get("col") instanceof Integer && entityData.get("row") instanceof Integer) {
+                    getEntityComponent(entity, PositionComponent.class).ifPresent(component -> {
+                        component.x = Main.tileSize * entityData.getInt("col");
+                        component.y = Main.tileSize * entityData.getInt("row");
+                    });
+                } else if (entityData.has("x") && entityData.has("y") &&
+                        entityData.get("x") instanceof Integer && entityData.get("y") instanceof Integer) {
+                    getEntityComponent(entity, PositionComponent.class).ifPresent(component -> {
+                        component.x = entityData.getInt("x");
+                        component.y = entityData.getInt("y");
+                    });
+                }
+            }
+        }
+
+        // Finally, do the deed
+        currentMap = mapName;
+    }
+    public String getMap() {
+        return currentMap;
+    }
     public void draw() {
         // Flip the Y axis because most stuff are drawn upside down
         Matrix4 original = new Matrix4(Main.batch.getProjectionMatrix());

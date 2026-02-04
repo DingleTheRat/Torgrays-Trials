@@ -74,7 +74,7 @@ public class CollisionSystem implements System {
         if (!Main.world.entityHasComponent(entity, PlayerComponent.class))
             if (check2EntityCollision(entity, Main.world.getPlayer())) return true;
 
-        Map map = TileSystem.maps.get(Main.world.currentMap);
+        Map map = TileSystem.maps.get(Main.world.getMap());
         if (map == null) return false;
 
         for (int row = 0; row < map.y(); row++) {

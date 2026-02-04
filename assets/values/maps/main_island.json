@@ -5,12 +5,23 @@
     "col": 23,
     "row": 21
   },
-  "entities": {
-    "npcs": [],
-    "monsters": [],
-    "items": [],
-    "objects": []
-  },
+  "entities": [
+    {
+      "name": "Torgray",
+      "col": 23,
+      "row": 21
+    },
+    {
+      "name": "Chest",
+      "col": 21,
+      "row": 21
+    },
+    {
+      "name": "GateKeeper",
+      "col": 21,
+      "row": 23
+    }
+  ],
   "name": "Main Island",
   "map": {
     "ground": [

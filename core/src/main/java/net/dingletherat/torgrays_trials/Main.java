@@ -155,15 +155,11 @@ public class Main extends ApplicationAdapter {
         // Load maps and tiles
         TileSystem.loadTiles();
         MapHandler.loadMaps();
+        world.setMap("Main Island");
 
         // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
         Main.gameState = GameStates.PLAY;
         UI.uiState = "Play";
-
-        // TODO: Make an AssetSetter
-        world.newEntity(EntityHandler.TEMPLATES.get("Torgray"));
-        world.newEntity(EntityHandler.TEMPLATES.get("Chest"));
-        world.newEntity(EntityHandler.TEMPLATES.get("GateKeeper"));
 
         // Declare update and draw systems
         SpriteSystem spriteSystem = new SpriteSystem();
