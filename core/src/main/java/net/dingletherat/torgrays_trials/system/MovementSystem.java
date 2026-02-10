@@ -4,14 +4,15 @@ package net.dingletherat.torgrays_trials.system;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.pathfinding.PathfindingComponent;
+import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
 public class MovementSystem implements System {
     @Override
     public void update(float deltaTime) {
-        for (Integer entity : Main.world.queryAll(MovementComponent.class, PositionComponent.class)) {
+        for (Integer entity : EntityHandler.queryAll(MovementComponent.class, PositionComponent.class)) {
             // Get component
-            MovementComponent component = Main.world.getEntityComponent(entity, MovementComponent.class).get();
+            MovementComponent component = EntityHandler.getEntityComponent(entity, MovementComponent.class).get();
 
             if (component.state == MovementStates.WALKING) {
                 // Return if the direction is more than 2 words to not confuse the code
@@ -19,7 +20,7 @@ public class MovementSystem implements System {
                 if (directionWords.length > 2) return;
 
                 // Get position component or else how the hell are we gonna move?
-                PositionComponent positionComponent = Main.world.getEntityComponent(entity, PositionComponent.class).get();
+                PositionComponent positionComponent = EntityHandler.getEntityComponent(entity, PositionComponent.class).get();
 
                 /*
                   * If the direction string contains a space, it means it has 2 words and 2 directions.
@@ -54,8 +55,8 @@ public class MovementSystem implements System {
                     positionComponent.x -= moveX * movementSpeed;
 
                     // If there's a PathfindingComponent with  avoidCollision enabled, switch the current direction to the opposite to avoid collision
-                    if (Main.world.entityHasComponent(entity, PathfindingComponent.class)) {
-                        PathfindingComponent pathfindingComponent = Main.world.getEntityComponent(entity, PathfindingComponent.class).get();
+                    if (EntityHandler.entityHasComponent(entity, PathfindingComponent.class)) {
+                        PathfindingComponent pathfindingComponent = EntityHandler.getEntityComponent(entity, PathfindingComponent.class).get();
 
                         if (pathfindingComponent.avoidCollision)
                             component.direction = (moveX == 1) ?
@@ -69,8 +70,8 @@ public class MovementSystem implements System {
                     positionComponent.y -= moveY * movementSpeed;
 
                     // If there's a PathfindingComponent with  avoidCollision enabled, switch the current direction to the opposite to avoid collision
-                    if (Main.world.entityHasComponent(entity, PathfindingComponent.class)) {
-                        PathfindingComponent pathfindingComponent = Main.world.getEntityComponent(entity, PathfindingComponent.class).get();
+                    if (EntityHandler.entityHasComponent(entity, PathfindingComponent.class)) {
+                        PathfindingComponent pathfindingComponent = EntityHandler.getEntityComponent(entity, PathfindingComponent.class).get();
 
                         if (pathfindingComponent.avoidCollision)
                             component.direction = (moveY == 1) ?

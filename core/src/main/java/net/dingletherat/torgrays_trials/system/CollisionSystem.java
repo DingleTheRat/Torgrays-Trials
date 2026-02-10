@@ -2,6 +2,7 @@
 package net.dingletherat.torgrays_trials.system;
 
 import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.rendering.Map;
 
@@ -9,16 +10,16 @@ public class CollisionSystem implements System {
     // Check if two entities are colliding
     public static boolean check2EntityCollision(Integer entityA, Integer entityB) {
         // Make sure the entites have the necessary components
-        if (!Main.world.entityHasComponent(entityA, PositionComponent.class) ||
-                !Main.world.entityHasComponent(entityB, PositionComponent.class)) return false;
-        if (!Main.world.entityHasComponent(entityA, CollisionComponent.class) ||
-                !Main.world.entityHasComponent(entityB, CollisionComponent.class)) return false;
+        if (!EntityHandler.entityHasComponent(entityA, PositionComponent.class) ||
+                !EntityHandler.entityHasComponent(entityB, PositionComponent.class)) return false;
+        if (!EntityHandler.entityHasComponent(entityA, CollisionComponent.class) ||
+                !EntityHandler.entityHasComponent(entityB, CollisionComponent.class)) return false;
 
         // Declare components
-        CollisionComponent componentA = Main.world.getEntityComponent(entityA, CollisionComponent.class).get();
-        CollisionComponent componentB = Main.world.getEntityComponent(entityB, CollisionComponent.class).get();
-        PositionComponent positionComponentA = Main.world.getEntityComponent(entityA, PositionComponent.class).get();
-        PositionComponent positionComponentB = Main.world.getEntityComponent(entityB, PositionComponent.class).get();
+        CollisionComponent componentA = EntityHandler.getEntityComponent(entityA, CollisionComponent.class).get();
+        CollisionComponent componentB = EntityHandler.getEntityComponent(entityB, CollisionComponent.class).get();
+        PositionComponent positionComponentA = EntityHandler.getEntityComponent(entityA, PositionComponent.class).get();
+        PositionComponent positionComponentB = EntityHandler.getEntityComponent(entityB, PositionComponent.class).get();
 
         float aLeft = positionComponentA.x;
         float aTop = positionComponentA.y;
@@ -35,12 +36,12 @@ public class CollisionSystem implements System {
 
     public static boolean checkBlockCollision(Integer entity, boolean[][] collisionPoints, float x, float y) {
         // Make sure the entites have the necessary components
-        if (!Main.world.entityHasComponent(entity, PositionComponent.class)) return false;
-        if (!Main.world.entityHasComponent(entity, CollisionComponent.class)) return false;
+        if (!EntityHandler.entityHasComponent(entity, PositionComponent.class)) return false;
+        if (!EntityHandler.entityHasComponent(entity, CollisionComponent.class)) return false;
 
         // Declare the components
-        CollisionComponent component = Main.world.getEntityComponent(entity, CollisionComponent.class).get();
-        PositionComponent positionComponent = Main.world.getEntityComponent(entity, PositionComponent.class).get();
+        CollisionComponent component = EntityHandler.getEntityComponent(entity, CollisionComponent.class).get();
+        PositionComponent positionComponent = EntityHandler.getEntityComponent(entity, PositionComponent.class).get();
 
         int gridX = collisionPoints.length;      // number of columns in collision grid
         int gridY = collisionPoints[0].length;   // number of rows in collision grid
@@ -65,13 +66,13 @@ public class CollisionSystem implements System {
 
     // Check if entity collides with any other entity or any tile on layer2
     public static boolean checkEntityColliding(Integer entity) {
-        for (Integer other : Main.world.queryAll(CollisionComponent.class, PositionComponent.class)) {
+        for (Integer other : EntityHandler.queryAll(CollisionComponent.class, PositionComponent.class)) {
             if (other != entity)
                 if (check2EntityCollision(entity, other)) return true;
         }
 
         // Check collision with player too (if it's not the player)
-        if (!Main.world.entityHasComponent(entity, PlayerComponent.class))
+        if (!EntityHandler.entityHasComponent(entity, PlayerComponent.class))
             if (check2EntityCollision(entity, Main.world.getPlayer())) return true;
 
         Map map = TileSystem.maps.get(Main.world.getMap());

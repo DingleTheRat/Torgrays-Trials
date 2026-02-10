@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
+import net.dingletherat.torgrays_trials.main.EntityHandler;
 
 public class DarknessSystem implements System{
     public float ambientDarkness = 0.92f;  // How dark it is without lights (0.0 = no darkness, 1.0 = complete darkness)
@@ -62,8 +63,8 @@ public class DarknessSystem implements System{
         // Use blending that allows lights to "cut holes" in the darkness
         Main.batch.setBlendFunction(GL20.GL_ZERO, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        for (Integer lightSource : Main.world.queryAny(LightComponent.class)) {
-            LightComponent component = Main.world.getEntityComponent(lightSource, LightComponent.class).get();
+        for (Integer lightSource : EntityHandler.queryAny(LightComponent.class)) {
+            LightComponent component = EntityHandler.getEntityComponent(lightSource, LightComponent.class).get();
 
 
             int radius = Math.round(component.lightRadius);
@@ -81,8 +82,8 @@ public class DarknessSystem implements System{
             // Get the entity's position. As long as it has a PositionComponent, otherwise, just leave it at 0.
             float x = 0;
             float y = 0;
-            if (Main.world.entityHasComponent(lightSource, PositionComponent.class)) {
-                PositionComponent positionComponent = Main.world.getEntityComponent(lightSource, PositionComponent.class).get();
+            if (EntityHandler.entityHasComponent(lightSource, PositionComponent.class)) {
+                PositionComponent positionComponent = EntityHandler.getEntityComponent(lightSource, PositionComponent.class).get();
                 x = positionComponent.x;
                 y = positionComponent.y;
             }

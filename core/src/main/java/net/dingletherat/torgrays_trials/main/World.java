@@ -51,7 +51,7 @@ public class World {
 
             // Enter try and catch zone in case constructing fails
             try {
-                // Convert arguments to constructor parameter types
+                // Convert arguments (JSONArray) to constructor parameter types (ArrayList of Classes)
                 Class<?>[] parameterTypes = args.stream()
                         .map(Object::getClass)
                         .toArray(Class<?>[]::new);
@@ -90,87 +90,14 @@ public class World {
         VACANT_IDENTIFIERS.add(identifier);
         entities.remove(identifier);
     }
+    public Map<Integer, List<Component>> getEntities() {
+        return entities;
+    }
     public List<Component> getComponents(int identifier) {
         return entities.containsKey(identifier) ? List.of() : entities.get(identifier);
     }
     public int getPlayer() {
         return player == null ? -1 : player;
-    }
-    public List<Integer> queryAll(Class<? extends Component>... components) {
-        List<Integer> result = new ArrayList<>();
-
-        for (int entity : entities.keySet()) {
-            boolean match = true;
-
-            for (Class<? extends Component> componentClass : components) {
-                boolean found = false;
-
-                for (Component component : entities.get(entity)) {
-                    if (componentClass.isInstance(component)) {
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) {
-                    match = false;
-                    break;
-                }
-            }
-
-            if (match) result.add(entity);
-        }
-
-        return result;
-    }
-    public List<Integer> queryAny(Class<? extends Component>... components) {
-        List<Integer> result = new ArrayList<>();
-        for (int entity : entities.keySet()) {
-            boolean match = false;
-
-            for (Class<? extends Component> componentClass : components) {
-                for (Component component : entities.get(entity)) {
-                    if (componentClass.isInstance(component)) {
-                        match = true;
-                        break;
-                    }
-                }
-            }
-
-            if (match) result.add(entity);
-        }
-
-        return result;
-    }
-    public <T extends Component> Optional<T> getEntityComponent(int identifier, Class<T> type) {
-        List<Component> entity = entities.get(identifier);
-
-        for (Component element : entity) {
-            if (type.isInstance(element)) {
-                return Optional.of((T) element);
-            }
-        }
-        return Optional.empty();
-    }
-    public <T extends Component> List<T> getEntityComponents(int identifier, Class<T> type) {
-        List<T> result = new ArrayList<>();
-        List<Component> entity = entities.get(identifier);
-
-        for (Component component : entity) {
-            if (type.isInstance(component)) {
-                result.add(type.cast(component));
-            }
-        }
-        return result;
-    }
-    public <T extends Component> boolean entityHasComponent(int identifier, Class<T> type) {
-        List<Component> entity = entities.get(identifier);
-        for (Component element : entity) {
-            if (type.isInstance(element)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     // Maps
@@ -220,13 +147,13 @@ public class World {
                 // If the entityData has position components and the entity has a PositionComponent, change the data in the component
                 if (entityData.has("col") && entityData.has("row") &&
                         entityData.get("col") instanceof Integer && entityData.get("row") instanceof Integer) {
-                    getEntityComponent(entity, PositionComponent.class).ifPresent(component -> {
+                    EntityHandler.getEntityComponent(entity, PositionComponent.class).ifPresent(component -> {
                         component.x = Main.tileSize * entityData.getInt("col");
                         component.y = Main.tileSize * entityData.getInt("row");
                     });
                 } else if (entityData.has("x") && entityData.has("y") &&
                         entityData.get("x") instanceof Integer && entityData.get("y") instanceof Integer) {
-                    getEntityComponent(entity, PositionComponent.class).ifPresent(component -> {
+                    EntityHandler.getEntityComponent(entity, PositionComponent.class).ifPresent(component -> {
                         component.x = entityData.getInt("x");
                         component.y = entityData.getInt("y");
                     });
@@ -256,7 +183,7 @@ public class World {
         UI.update();
 
         // Move the camera to the player's x and y (if there is a PositionComponent)
-        getEntityComponent(getPlayer(), PositionComponent.class).ifPresent(component -> {
+        EntityHandler.getEntityComponent(getPlayer(), PositionComponent.class).ifPresent(component -> {
             cameraX = component.x;
             cameraY = component.y;
         });

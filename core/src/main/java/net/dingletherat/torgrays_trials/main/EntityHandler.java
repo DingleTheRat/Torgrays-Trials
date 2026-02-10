@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.json.JSONArray;
@@ -98,5 +99,82 @@ public class EntityHandler {
         }
 
         Main.LOGGER.info("Loaded {} templates!", TEMPLATES.size());
+    }
+
+    public static List<Integer> queryAll(Class<? extends Component>... components) {
+        List<Integer> result = new ArrayList<>();
+
+        for (int entity : Main.world.getEntities().keySet()) {
+            boolean match = true;
+
+            for (Class<? extends Component> componentClass : components) {
+                boolean found = false;
+
+                for (Component component : Main.world.getEntities().get(entity)) {
+                    if (componentClass.isInstance(component)) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) result.add(entity);
+        }
+
+        return result;
+    }
+    public static List<Integer> queryAny(Class<? extends Component>... components) {
+        List<Integer> result = new ArrayList<>();
+        for (int entity : Main.world.getEntities().keySet()) {
+            boolean match = false;
+
+            for (Class<? extends Component> componentClass : components) {
+                for (Component component : Main.world.getEntities().get(entity)) {
+                    if (componentClass.isInstance(component)) {
+                        match = true;
+                        break;
+                    }
+                }
+            }
+
+            if (match) result.add(entity);
+        }
+
+        return result;
+    }
+    public static <T extends Component> Optional<T> getEntityComponent(int identifier, Class<T> type) {
+        List<Component> entity = Main.world.getEntities().get(identifier);
+
+        for (Component element : entity) {
+            if (type.isInstance(element)) {
+                return Optional.of((T) element);
+            }
+        }
+        return Optional.empty();
+    }
+    public static <T extends Component> List<T> getEntityComponents(int identifier, Class<T> type) {
+        List<T> result = new ArrayList<>();
+        List<Component> entity = Main.world.getEntities().get(identifier);
+
+        for (Component component : entity) {
+            if (type.isInstance(component)) {
+                result.add(type.cast(component));
+            }
+        }
+        return result;
+    }
+    public static <T extends Component> boolean entityHasComponent(int identifier, Class<T> type) {
+        List<Component> entity = Main.world.getEntities().get(identifier);
+        for (Component element : entity) {
+            if (type.isInstance(element)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

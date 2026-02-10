@@ -4,6 +4,7 @@ package net.dingletherat.torgrays_trials.system;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.MovementComponent;
 import net.dingletherat.torgrays_trials.component.pathfinding.*;
+import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
 public class PathfindingSystem implements System{
@@ -11,14 +12,14 @@ public class PathfindingSystem implements System{
 
     public void update(float deltaTime) {
         // Wandering
-        for (Integer entity : Main.world.queryAll(WanderComponent.class, PathfindingComponent.class, MovementComponent.class)) {
+        for (Integer entity : EntityHandler.queryAll(WanderComponent.class, PathfindingComponent.class, MovementComponent.class)) {
             // Check if the WanderComponent is active
-            PathfindingComponent pathfindingComponent = Main.world.getEntityComponent(entity, PathfindingComponent.class).get();
+            PathfindingComponent pathfindingComponent = EntityHandler.getEntityComponent(entity, PathfindingComponent.class).get();
             if (!pathfindingComponent.activeComponent.equals(WanderComponent.class.getSimpleName())) continue;
 
             // Get components
-            WanderComponent component = Main.world.getEntityComponent(entity, WanderComponent.class).get();
-            MovementComponent movementComponent = Main.world.getEntityComponent(entity, MovementComponent.class).get();
+            WanderComponent component = EntityHandler.getEntityComponent(entity, WanderComponent.class).get();
+            MovementComponent movementComponent = EntityHandler.getEntityComponent(entity, MovementComponent.class).get();
 
             // Increment wander counter until it reaches the wanderSpeed goal
             component.counter += deltaTime;

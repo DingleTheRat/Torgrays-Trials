@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.sprite.*;
 import net.dingletherat.torgrays_trials.main.Sounds;
@@ -246,7 +247,7 @@ public class UI {
 
         // Set up an update method to update the labels when the actors are active
         uiUpdates.put("Debug", () -> {
-            Main.world.getEntityComponent(Main.world.getPlayer(), PositionComponent.class).ifPresent(component -> {
+            EntityHandler.getEntityComponent(Main.world.getPlayer(), PositionComponent.class).ifPresent(component -> {
                 // Position
                 x.setText("X: " + component.x);
                 y.setText("Y: " + component.y);
@@ -255,18 +256,18 @@ public class UI {
             });
 
             // States
-            Main.world.getEntityComponent(Main.world.getPlayer(), MovementComponent.class).ifPresent(component -> {
+            EntityHandler.getEntityComponent(Main.world.getPlayer(), MovementComponent.class).ifPresent(component -> {
                 direction.setText("Direction: " + component.direction);
                 player.setText("Player: " + component.state);
             });
             ui.setText("UI: " + uiState);
 
             // Player Sprite Stuff
-            Main.world.getEntityComponent(Main.world.getPlayer(), SpriteSheetComponent.class).ifPresent(component -> {
+            EntityHandler.getEntityComponent(Main.world.getPlayer(), SpriteSheetComponent.class).ifPresent(component -> {
                 scol.setText("SCol: " + component.column);
                 srow.setText("SRow: " + component.row);
             });
-            Main.world.getEntityComponent(Main.world.getPlayer(), EyesSheetComponent.class).ifPresent(component -> {
+            EntityHandler.getEntityComponent(Main.world.getPlayer(), EyesSheetComponent.class).ifPresent(component -> {
                 ecol.setText("ECol: " + component.column);
                 erow.setText("ERow: " + component.row);
             });

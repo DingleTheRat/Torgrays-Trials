@@ -7,12 +7,13 @@ import com.badlogic.gdx.Input;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.MovementComponent;
 import net.dingletherat.torgrays_trials.component.PlayerComponent;
+import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States;
 import net.dingletherat.torgrays_trials.rendering.Map;
 
 public class PlayerSystem implements System {
     public void update(float deltaTime) {
-        for (Integer entity : Main.world.queryAll(PlayerComponent.class)) {
+        for (Integer entity : EntityHandler.queryAll(PlayerComponent.class)) {
             // Clamp the camera to the map bounds
             Map map = TileSystem.maps.get(Main.world.getMap());
             int maxCameraX = map.x() * Main.tileSize - Main.screenWidth / 2;
@@ -22,7 +23,7 @@ public class PlayerSystem implements System {
             if (Main.world.cameraX > maxCameraX) Main.world.cameraX = maxCameraX;
             if (Main.world.cameraY > maxCameraY) Main.world.cameraY = maxCameraY;
 
-            Main.world.getEntityComponent(entity, MovementComponent.class).ifPresent(component -> {
+            EntityHandler.getEntityComponent(entity, MovementComponent.class).ifPresent(component -> {
                 StringBuilder newDirection = new StringBuilder();
 
                 /* Depending on the key pressed, append a newDirection with a direction.
