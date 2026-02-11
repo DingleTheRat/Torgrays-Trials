@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import org.json.JSONArray;
@@ -89,6 +88,12 @@ public class World {
     public void removeEntity(int identifier) {
         VACANT_IDENTIFIERS.add(identifier);
         entities.remove(identifier);
+    }
+    public void addComponent(int identifier, Component component) {
+        entities.get(identifier).add(component);
+    }
+    public void removeComponent(int identifier, Component component) {
+        entities.get(identifier).remove(component);
     }
     public Map<Integer, List<Component>> getEntities() {
         return entities;
