@@ -11,8 +11,8 @@ public class HealthSystem implements System {
     public void update(float deltaTime) {
         for (Integer entity : EntityHandler.queryAll(HealthComponent.class, DamageSignal.class)) {
             // Declare all necessary components
-            HealthComponent healthComponent = EntityHandler.getEntityComponent(entity, HealthComponent.class).get();
-            DamageSignal damageSignal = EntityHandler.getEntityComponent(entity, DamageSignal.class).get();
+            HealthComponent healthComponent = EntityHandler.getComponent(entity, HealthComponent.class).get();
+            DamageSignal damageSignal = EntityHandler.getComponent(entity, DamageSignal.class).get();
 
             // Remove the damage amount from the health in the HealthComponent
             healthComponent.health -= damageSignal.amount;
@@ -25,8 +25,8 @@ public class HealthSystem implements System {
         }
         for (Integer entity : EntityHandler.queryAll(HealthComponent.class, HealSignal.class)) {
             // Declare all necessary components
-            HealthComponent healthComponent = EntityHandler.getEntityComponent(entity, HealthComponent.class).get();
-            HealSignal healSignal = EntityHandler.getEntityComponent(entity, HealSignal.class).get();
+            HealthComponent healthComponent = EntityHandler.getComponent(entity, HealthComponent.class).get();
+            HealSignal healSignal = EntityHandler.getComponent(entity, HealSignal.class).get();
 
             // Add the heal amount to the health in the HealthComponent
             healthComponent.health += healSignal.amount;

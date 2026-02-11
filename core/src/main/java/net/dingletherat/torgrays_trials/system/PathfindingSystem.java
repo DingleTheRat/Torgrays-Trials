@@ -14,12 +14,12 @@ public class PathfindingSystem implements System{
         // Wandering
         for (Integer entity : EntityHandler.queryAll(WanderComponent.class, PathfindingComponent.class, MovementComponent.class)) {
             // Check if the WanderComponent is active
-            PathfindingComponent pathfindingComponent = EntityHandler.getEntityComponent(entity, PathfindingComponent.class).get();
+            PathfindingComponent pathfindingComponent = EntityHandler.getComponent(entity, PathfindingComponent.class).get();
             if (!pathfindingComponent.activeComponent.equals(WanderComponent.class.getSimpleName())) continue;
 
             // Get components
-            WanderComponent component = EntityHandler.getEntityComponent(entity, WanderComponent.class).get();
-            MovementComponent movementComponent = EntityHandler.getEntityComponent(entity, MovementComponent.class).get();
+            WanderComponent component = EntityHandler.getComponent(entity, WanderComponent.class).get();
+            MovementComponent movementComponent = EntityHandler.getComponent(entity, MovementComponent.class).get();
 
             // Increment wander counter until it reaches the wanderSpeed goal
             component.counter += deltaTime;

@@ -18,18 +18,19 @@ public class SpriteSystem implements System {
             // Get the entity's positon on the screen. If the entity has positionComponent, draw it at the positon. Otherwise, draw it at 0
             float screenX;
             float screenY;
-            if (EntityHandler.entityHasComponent(entity, PositionComponent.class)) {
+
+            Optional<PositionComponent> positionOptional = EntityHandler.getComponent(entity, PositionComponent.class);
+            if (positionOptional.isPresent()) {
                 // Get PositionComponent
-                PositionComponent positionComponent = EntityHandler.getEntityComponent(entity, PositionComponent.class).get();
+                PositionComponent positionComponent = positionOptional.get();
 
                 // If the entity isn't even on the screen, return
-                if (EntityHandler.entityHasComponent(entity, CollisionComponent.class)) {
+                Optional<CollisionComponent> collisionComponent = EntityHandler.getComponent(entity, CollisionComponent.class);
+                if (collisionComponent.isPresent()) {
                     // Take collision width and height into concideration if there's a CollisionComponent
-                    CollisionComponent collisionComponent = EntityHandler.getEntityComponent(entity, CollisionComponent.class).get();
-
-                    if (!(positionComponent.x + collisionComponent.width > Main.world.cameraX - Main.screenWidth / 2f &&
+                    if (!(positionComponent.x + collisionComponent.get().width > Main.world.cameraX - Main.screenWidth / 2f &&
                         positionComponent.x < Main.world.cameraX + Main.screenWidth / 2f &&
-                        positionComponent.y + collisionComponent.height > Main.world.cameraY - Main.screenHeight / 2f &&
+                        positionComponent.y + collisionComponent.get().height > Main.world.cameraY - Main.screenHeight / 2f &&
                         positionComponent.y < Main.world.cameraY + Main.screenHeight / 2f)) continue;
                 } else {
                     if (!(positionComponent.x > Main.world.cameraX - Main.screenWidth / 2f &&
@@ -46,7 +47,7 @@ public class SpriteSystem implements System {
             }
 
             // Get all sprite components inside of the entity and sort them depending on their z value
-            List<SpriteComponent> sprites = EntityHandler.getEntityComponents(entity, SpriteComponent.class);
+            List<SpriteComponent> sprites = EntityHandler.getComponents(entity, SpriteComponent.class);
             sprites.sort(Comparator.comparingInt((SpriteComponent component) -> component.z));
 
             // Loop through all the sprites and draw the provided sprite
@@ -81,8 +82,8 @@ public class SpriteSystem implements System {
         // WalkingSheetComponent
         for (Integer entity : EntityHandler.queryAll(WalkingSheetComponent.class, MovementComponent.class)) {
             // Declare components
-            WalkingSheetComponent component = EntityHandler.getEntityComponent(entity, WalkingSheetComponent.class).get();
-            MovementComponent movementComponent = EntityHandler.getEntityComponent(entity, MovementComponent.class).get();
+            WalkingSheetComponent component = EntityHandler.getComponent(entity, WalkingSheetComponent.class).get();
+            MovementComponent movementComponent = EntityHandler.getComponent(entity, MovementComponent.class).get();
 
             if (movementComponent.state == MovementStates.IDLE) {
                 // Increment the sprite counter
@@ -94,7 +95,7 @@ public class SpriteSystem implements System {
                     component.row = 1;
 
                     // If the entity also has an EyesSheetComponent, reset that too
-                    EntityHandler.getEntityComponent(entity, EyesSheetComponent.class).ifPresent(eyesComponent -> {
+                    EntityHandler.getComponent(entity, EyesSheetComponent.class).ifPresent(eyesComponent -> {
                        if (eyesComponent.column == 20) eyesComponent.column = 0;
                     });
 
@@ -130,11 +131,11 @@ public class SpriteSystem implements System {
         // EyesSheetComponent
         for (Integer entity : EntityHandler.queryAll(EyesSheetComponent.class)) {
             // Get movementComponent (if there is one)
-            Optional<MovementComponent> movementOptional = EntityHandler.getEntityComponent(entity, MovementComponent.class);
+            Optional<MovementComponent> movementOptional = EntityHandler.getComponent(entity, MovementComponent.class);
             MovementComponent movementComponent = movementOptional.orElse(null);
 
             // Get main component
-            EyesSheetComponent component = EntityHandler.getEntityComponent(entity, EyesSheetComponent.class).get();
+            EyesSheetComponent component = EntityHandler.getComponent(entity, EyesSheetComponent.class).get();
 
             // Set which eyes
             if (movementOptional.isEmpty() || movementComponent.state == MovementStates.IDLE) {

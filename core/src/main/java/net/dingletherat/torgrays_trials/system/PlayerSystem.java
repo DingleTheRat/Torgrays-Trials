@@ -23,7 +23,7 @@ public class PlayerSystem implements System {
             if (Main.world.cameraX > maxCameraX) Main.world.cameraX = maxCameraX;
             if (Main.world.cameraY > maxCameraY) Main.world.cameraY = maxCameraY;
 
-            EntityHandler.getEntityComponent(entity, MovementComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(entity, MovementComponent.class).ifPresent(component -> {
                 StringBuilder newDirection = new StringBuilder();
 
                 /* Depending on the key pressed, append a newDirection with a direction.

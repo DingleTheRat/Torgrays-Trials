@@ -147,7 +147,7 @@ public class EntityHandler {
 
         return result;
     }
-    public static <T extends Component> Optional<T> getEntityComponent(int identifier, Class<T> type) {
+    public static <T extends Component> Optional<T> getComponent(int identifier, Class<T> type) {
         List<Component> entity = Main.world.getEntities().get(identifier);
 
         for (Component element : entity) {
@@ -157,7 +157,7 @@ public class EntityHandler {
         }
         return Optional.empty();
     }
-    public static <T extends Component> List<T> getEntityComponents(int identifier, Class<T> type) {
+    public static <T extends Component> List<T> getComponents(int identifier, Class<T> type) {
         List<T> result = new ArrayList<>();
         List<Component> entity = Main.world.getEntities().get(identifier);
 
@@ -167,14 +167,5 @@ public class EntityHandler {
             }
         }
         return result;
-    }
-    public static <T extends Component> boolean entityHasComponent(int identifier, Class<T> type) {
-        List<Component> entity = Main.world.getEntities().get(identifier);
-        for (Component element : entity) {
-            if (type.isInstance(element)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

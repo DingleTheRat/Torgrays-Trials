@@ -247,7 +247,7 @@ public class UI {
 
         // Set up an update method to update the labels when the actors are active
         uiUpdates.put("Debug", () -> {
-            EntityHandler.getEntityComponent(Main.world.getPlayer(), PositionComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(Main.world.getPlayer(), PositionComponent.class).ifPresent(component -> {
                 // Position
                 x.setText("X: " + component.x);
                 y.setText("Y: " + component.y);
@@ -256,18 +256,18 @@ public class UI {
             });
 
             // States
-            EntityHandler.getEntityComponent(Main.world.getPlayer(), MovementComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(Main.world.getPlayer(), MovementComponent.class).ifPresent(component -> {
                 direction.setText("Direction: " + component.direction);
                 player.setText("Player: " + component.state);
             });
             ui.setText("UI: " + uiState);
 
             // Player Sprite Stuff
-            EntityHandler.getEntityComponent(Main.world.getPlayer(), SpriteSheetComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(Main.world.getPlayer(), SpriteSheetComponent.class).ifPresent(component -> {
                 scol.setText("SCol: " + component.column);
                 srow.setText("SRow: " + component.row);
             });
-            EntityHandler.getEntityComponent(Main.world.getPlayer(), EyesSheetComponent.class).ifPresent(component -> {
+            EntityHandler.getComponent(Main.world.getPlayer(), EyesSheetComponent.class).ifPresent(component -> {
                 ecol.setText("ECol: " + component.column);
                 erow.setText("ERow: " + component.row);
             });

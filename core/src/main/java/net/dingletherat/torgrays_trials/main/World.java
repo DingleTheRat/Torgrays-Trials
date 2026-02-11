@@ -152,13 +152,13 @@ public class World {
                 // If the entityData has position components and the entity has a PositionComponent, change the data in the component
                 if (entityData.has("col") && entityData.has("row") &&
                         entityData.get("col") instanceof Integer && entityData.get("row") instanceof Integer) {
-                    EntityHandler.getEntityComponent(entity, PositionComponent.class).ifPresent(component -> {
+                    EntityHandler.getComponent(entity, PositionComponent.class).ifPresent(component -> {
                         component.x = Main.tileSize * entityData.getInt("col");
                         component.y = Main.tileSize * entityData.getInt("row");
                     });
                 } else if (entityData.has("x") && entityData.has("y") &&
                         entityData.get("x") instanceof Integer && entityData.get("y") instanceof Integer) {
-                    EntityHandler.getEntityComponent(entity, PositionComponent.class).ifPresent(component -> {
+                    EntityHandler.getComponent(entity, PositionComponent.class).ifPresent(component -> {
                         component.x = entityData.getInt("x");
                         component.y = entityData.getInt("y");
                     });
@@ -188,7 +188,7 @@ public class World {
         UI.update();
 
         // Move the camera to the player's x and y (if there is a PositionComponent)
-        EntityHandler.getEntityComponent(getPlayer(), PositionComponent.class).ifPresent(component -> {
+        EntityHandler.getComponent(getPlayer(), PositionComponent.class).ifPresent(component -> {
             cameraX = component.x;
             cameraY = component.y;
         });
