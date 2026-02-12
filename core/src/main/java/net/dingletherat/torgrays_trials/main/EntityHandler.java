@@ -20,15 +20,20 @@ public class EntityHandler {
 
     /**
      * Loops through the given componentData and finds the corresponding classes returning them in a map with the args.
-     * @param componentData A list of JSONObjects that contains all the componentData. The data needs to be the componentName ("component") and the arguments ("args")
+     * @param componentData A JSONArray of JSONObjects that contains all the componentData. The data needs to be the componentName ("component") and the arguments ("args")
      * @param location Whenever an error is thrown, which JSON file should the error blame?
      **/
-    public static Map<Class<? extends Component>, List<Object>> getComponents(List<JSONObject> componentData, String location) {
+    public static Map<Class<? extends Component>, List<Object>> getComponentClasses(JSONArray componentData, String location) {
+        // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
+        List<JSONObject> components = IntStream.range(0, componentData.length())
+            .mapToObj(componentData::getJSONObject)
+            .toList();
+
         // Create the list in which we will put our component classes in
         Map<Class<? extends Component>, List<Object>> componentClasses = new HashMap<>();
 
         // Loop through all the component strings, get its corresponding class from the COMPONENTS HashMap, and add it to the componentClasses List
-        for (JSONObject component : componentData) {
+        for (JSONObject component : components) {
             // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
             if (!component.has("component") || !(component.get("component") instanceof String)) {
                 Main.LOGGER.error("[Location: {}] A component field is missing or is not a String.", location);
@@ -91,14 +96,10 @@ public class EntityHandler {
             }
 
             // Get the components
-            JSONArray componentsArray = json.getJSONArray("components");
+            JSONArray components = json.getJSONArray("components");
 
-            // Turn the components from a json array into a list, so it's easier to deal with
-            List<JSONObject> components = IntStream.range(0, componentsArray.length())
-                .mapToObj(componentsArray::getJSONObject)
-                .toList();
-
-            Map<Class<? extends Component>, List<Object>> componentClasses = getComponents(components, fileNames.get(jsons.indexOf(json)));
+            // Convert the components into a map of the Classes of the listed components and their arguments via the getComponents method
+            Map<Class<? extends Component>, List<Object>> componentClasses = getComponentClasses(components, fileNames.get(jsons.indexOf(json)));
 
             // Add in the name component
             componentClasses.put(NameComponent.class, List.of(json.getString("name")));

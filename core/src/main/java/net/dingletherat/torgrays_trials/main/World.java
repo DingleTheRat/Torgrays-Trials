@@ -145,9 +145,15 @@ public class World {
                     Main.LOGGER.warn("{} is not an existing entity template!", entityData.get("name"));
                     return;
                 }
+                Map<Class<? extends Component>, List<Object>> components = EntityHandler.TEMPLATES.get(entityData.get("name"));
+
+                // If the entity also has a JSONArray by the name of "components",
+                // that means that the map file want to add on some more components to the entity on top of the template, so add the components to the components map
+                if (entityData.has("components") && entityData.get("components") instanceof JSONArray)
+                    components.putAll(EntityHandler.getComponentClasses(entityData.getJSONArray("components"), mapName + " map"));
 
                 // Add in the entity
-                Integer entity = newEntity(EntityHandler.TEMPLATES.get(entityData.get("name")));
+                Integer entity = newEntity(components);
 
                 // If the entityData has position components and the entity has a PositionComponent, change the data in the component
                 if (entityData.has("col") && entityData.has("row") &&

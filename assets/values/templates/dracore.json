@@ -2,10 +2,6 @@
   "name": "Dracore",
   "components": [
     {
-      "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
-      "args": [0, 0]
-    },
-    {
       "component": "net.dingletherat.torgrays_trials.component.MovementComponent",
       "args": ["WALKING", 1, "left"]
     },

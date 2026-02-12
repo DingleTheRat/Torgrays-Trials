@@ -8,23 +8,39 @@
   "entities": [
     {
       "name": "Torgray",
-      "col": 23,
-      "row": 21
+      "components": [
+        {
+          "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
+          "args": [23, 21]
+        }
+      ]
     },
     {
       "name": "Chest",
-      "col": 21,
-      "row": 21
+      "components": [
+        {
+          "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
+          "args": [21, 21]
+        }
+      ]
     },
     {
       "name": "Dracore",
-      "col": 23,
-      "row": 39
+      "components": [
+        {
+          "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
+          "args": [23, 39]
+        }
+      ]
     },
     {
       "name": "GateKeeper",
-      "col": 21,
-      "row": 23
+      "components": [
+        {
+          "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
+          "args": [21, 23]
+        }
+      ]
     }
   ],
   "name": "Main Island",

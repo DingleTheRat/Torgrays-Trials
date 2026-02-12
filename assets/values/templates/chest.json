@@ -2,10 +2,6 @@
   "name": "Chest",
   "components": [
     {
-      "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
-      "args": [21, 21]
-    },
-    {
       "component": "net.dingletherat.torgrays_trials.component.CollisionComponent",
       "args": [1, 1]
     },

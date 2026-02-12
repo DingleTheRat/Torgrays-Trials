@@ -10,10 +10,6 @@
       "args": [150, 0.8, true]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
-      "args": [23, 21]
-    },
-    {
       "component": "net.dingletherat.torgrays_trials.component.MovementComponent",
       "args": [4]
     },

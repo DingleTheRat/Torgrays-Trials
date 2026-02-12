@@ -2,10 +2,6 @@
   "name": "GateKeeper",
   "components": [
     {
-      "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
-      "args": [21, 23]
-    },
-    {
       "component": "net.dingletherat.torgrays_trials.component.MovementComponent",
       "args": [1]
     },
