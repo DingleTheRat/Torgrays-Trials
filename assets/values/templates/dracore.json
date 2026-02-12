@@ -1,0 +1,29 @@
+{
+  "name": "Dracore",
+  "components": [
+    {
+      "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
+      "args": [0, 0]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.MovementComponent",
+      "args": ["WALKING", 1, "left"]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.pathfinding.PathfindingComponent",
+      "args": ["WanderComponent", true]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.pathfinding.WanderComponent",
+      "args": [0.9]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.CollisionComponent",
+      "args": [1, 1]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent",
+      "args": ["entity/monster/dracore", 3, 4, 0]
+    }
+  ]
+}

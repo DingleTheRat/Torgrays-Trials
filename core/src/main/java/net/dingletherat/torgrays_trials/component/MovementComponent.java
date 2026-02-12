@@ -12,23 +12,43 @@ public class MovementComponent implements Component {
     public int speed;
 
     /**
+     * @param startState The entity's starting state. States determine how the entity moves (if at all)
+     * @param startDirection The direction the entity will face/move in at first
+     * @param speed How much the entity moves each frame (if at all)
+     **/
+    public MovementComponent(String startState, Integer speed, String startDirection) {
+        state = switch (startState) {
+            case "IDLE" -> MovementStates.IDLE;
+            case "WALKING" -> MovementStates.WALKING;
+            default -> MovementStates.IDLE;
+        };
+        direction = startDirection;
+        this.speed = speed;
+    }
+    /**
+     * Automatically sets state to IDLE (the default)
+     * <p>
+     * @param speed How much the entity moves each frame
+     * @param startDirection The direction the entity will face/move in at first
+     **/
+    public MovementComponent(Integer speed, String startDirection) {
+        this("Idle", speed, startDirection);
+    }
+    /**
+     * Automatically sets the direction to down (the default)
+     * <p>
+     * @param speed How much the entity moves each frame
+     * @param startState The entity's starting state. States determine how the entity moves (if at all)
+     **/
+    public MovementComponent(String startState, Integer speed) {
+        this(startState, speed, "down");
+    }
+    /**
      * Automatically sets state to IDLE and direction to down (the defaults)
      * <p>
      * @param speed How much the entity moves each frame
      **/
     public MovementComponent(Integer speed) {
-        state = MovementStates.IDLE;
-        direction = "up";
-        this.speed = speed;
-    }
-    /**
-     * @param startState The entity's starting state. States determine how the entity moves (if at all)
-     * @param startDirection The direction the entity will face/move in at first
-     * @param speed How much the entity moves each frame (if at all)
-     **/
-    public MovementComponent(MovementStates startState, String startDirection, Integer speed) {
-        state = startState;
-        direction = startDirection;
-        this.speed = speed;
+        this("Idle", speed, "down");
     }
 }
