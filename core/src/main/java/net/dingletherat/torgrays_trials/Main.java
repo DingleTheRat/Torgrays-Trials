@@ -160,6 +160,7 @@ public class Main extends ApplicationAdapter {
         // Set the state to play, so mobs and stuff could be updated and drawn. As well as the uiState for the, well, UI
         Main.gameState = GameStates.PLAY;
         UI.uiState = "Play";
+        UI.playState();
 
         // Declare update and draw systems
         SpriteSystem spriteSystem = new SpriteSystem();

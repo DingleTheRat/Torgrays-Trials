@@ -148,6 +148,8 @@ public class EntityHandler {
         return result;
     }
     public static <T extends Component> Optional<T> getComponent(int identifier, Class<T> type) {
+        if (!Main.world.getEntities().containsKey(identifier)) return Optional.empty();
+
         List<Component> entity = Main.world.getEntities().get(identifier);
 
         for (Component element : entity) {

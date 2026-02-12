@@ -5,6 +5,7 @@ import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.HealthComponent;
 import net.dingletherat.torgrays_trials.component.signals.*;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
+import net.dingletherat.torgrays_trials.rendering.UI;
 
 public class HealthSystem implements System {
     public void draw() { }
@@ -20,6 +21,9 @@ public class HealthSystem implements System {
             // If the health is below 0, set it back to 0 (we don't want negitives here)
             if (healthComponent.health < 0) healthComponent.health = 0;
 
+            // Update the UI
+            UI.playState();
+
             // Remove the damage signal
             Main.world.removeComponent(entity, damageSignal);
         }
@@ -33,6 +37,9 @@ public class HealthSystem implements System {
 
             // If the health is over the maxHealth, set it to the max health (cuz it reached the max)
             if (healthComponent.health > healthComponent.maxHealth) healthComponent.health = healthComponent.maxHealth;
+
+            // Update the UI
+            UI.playState();
 
             // Remove the HealSignal
             Main.world.removeComponent(entity, healSignal);
