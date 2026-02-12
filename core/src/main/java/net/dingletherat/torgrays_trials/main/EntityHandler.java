@@ -18,6 +18,48 @@ import net.dingletherat.torgrays_trials.component.*;
 public class EntityHandler {
     public static final Map<String, Map<Class<? extends Component>, List<Object>>> TEMPLATES = new HashMap<>();
 
+    /**
+     * Loops through the given componentData and finds the corresponding classes returning them in a map with the args.
+     * @param componentData A list of JSONObjects that contains all the componentData. The data needs to be the componentName ("component") and the arguments ("args")
+     * @param location Whenever an error is thrown, which JSON file should the error blame?
+     **/
+    public static Map<Class<? extends Component>, List<Object>> getComponents(List<JSONObject> componentData, String location) {
+        // Create the list in which we will put our component classes in
+        Map<Class<? extends Component>, List<Object>> componentClasses = new HashMap<>();
+
+        // Loop through all the component strings, get its corresponding class from the COMPONENTS HashMap, and add it to the componentClasses List
+        for (JSONObject component : componentData) {
+            // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
+            if (!component.has("component") || !(component.get("component") instanceof String)) {
+                Main.LOGGER.error("[Location: {}] A component field is missing or is not a String.", location);
+                continue;
+            }
+
+            String componentPath = component.getString("component");
+            if (!component.has("args") || !(component.get("args") instanceof JSONArray)) {
+                Main.LOGGER.error("[Location: {}] 'args' field in '{}' component is missing or is not a JSONArray.", location, componentPath);
+                continue;
+            }
+
+            // Get the component class. If it does not exist, it will throw a class not found exception. In that case, we continue and warn
+            Class<? extends Component> componentClass;
+            try {
+                componentClass = Class.forName(componentPath).asSubclass(Component.class);
+            } catch (ClassNotFoundException exception) {
+                Main.LOGGER.error("[Location: {}] Component path '{}' is not a path to a class or does not extend the 'Component' interface!", location, componentPath);
+                continue;
+            }
+
+            // Convert the "args" JSONArray into a list and add it into the componentClasses Map.
+            JSONArray argsArray = component.getJSONArray("args");
+            List<Object> args = new ArrayList<>(IntStream.range(0, argsArray.length())
+                            .mapToObj(argsArray::get)
+                            .toList());
+            componentClasses.put(componentClass, args);
+        }
+        return componentClasses;
+    }
+
     public static void generateTemplates() {
         TEMPLATES.clear();
         String filepath = "values/templates/";
@@ -56,43 +98,10 @@ public class EntityHandler {
                 .mapToObj(componentsArray::getJSONObject)
                 .toList();
 
-            // Create the list in which we will put our component classes in
-            Map<Class<? extends Component>, List<Object>> componentClasses = new HashMap<>();
+            Map<Class<? extends Component>, List<Object>> componentClasses = getComponents(components, fileNames.get(jsons.indexOf(json)));
 
             // Add in the name component
             componentClasses.put(NameComponent.class, List.of(json.getString("name")));
-
-            // Loop through all the component strings, get its corresponding class from the COMPONENTS HashMap, and add it to the componentClasses List
-            for (JSONObject component : components) {
-                // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
-                if (!component.has("component") || !(component.get("component") instanceof String)) {
-                    Main.LOGGER.warn("Invalid entity template '{}': a 'component' field in 'components' is missing or is not a String.", fileNames.get(jsons.indexOf(json)));
-                    continue;
-                }
-
-                String componentPath = component.getString("component");
-                if (!component.has("args") || !(component.get("args") instanceof JSONArray)) {
-                    Main.LOGGER.warn("Invalid entity template '{}': 'args' field in '{}' component is missing or is not a JSONArray.", fileNames.get(jsons.indexOf(json)), componentPath);
-                    continue;
-                }
-
-                // Get the component class. If it does not exist, it will throw a class not found exception. In that case, we continue and warn
-                Class<? extends Component> componentClass;
-                try {
-                    componentClass = Class.forName(componentPath).asSubclass(Component.class);
-                } catch (ClassNotFoundException exception) {
-                    Main.LOGGER.error("Invalid entity template '{}': Component path '{}' is not a path to a class or does not extend the 'Component' interface!",
-                            fileNames.get(jsons.indexOf(json)), componentPath);
-                    continue;
-                }
-
-                // Convert the "args" JSONArray into a list and add it into the componentClasses Map.
-                JSONArray argsArray = component.getJSONArray("args");
-                List<Object> args = new ArrayList<>(IntStream.range(0, argsArray.length())
-                                .mapToObj(argsArray::get)
-                                .toList());
-                componentClasses.put(componentClass, args);
-            }
 
             // Last but not least, add our list of componentClasses to the TEMPLATES HashMap
             TEMPLATES.put(json.getString("name"), componentClasses);
