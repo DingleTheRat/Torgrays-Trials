@@ -1,14 +1,16 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.system;
+package net.dingletherat.torgrays_trials.main;
 
 import java.util.Optional;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.main.EntityHandler;
-import net.dingletherat.torgrays_trials.component.*;
+import net.dingletherat.torgrays_trials.component.CollisionComponent;
+import net.dingletherat.torgrays_trials.component.PlayerComponent;
+import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.rendering.Map;
+import net.dingletherat.torgrays_trials.system.TileSystem;
 
-public class CollisionSystem implements System {
+public class CollisionChecker {
     // Check if two entities are colliding
     public static boolean check2EntityCollision(Integer entityA, Integer entityB) {
         // Declare the necessary components as optionals (so we can check if they are present)
@@ -95,9 +97,4 @@ public class CollisionSystem implements System {
         return false;
     }
 
-    @Override
-    public void draw() { }
-
-    @Override
-    public void update(float deltaTime) { }
 }

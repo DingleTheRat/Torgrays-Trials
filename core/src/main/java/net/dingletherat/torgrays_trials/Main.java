@@ -175,7 +175,6 @@ public class Main extends ApplicationAdapter {
         world.updateSystems.add(spriteSystem);
         world.updateSystems.add(new MovementSystem());
         world.updateSystems.add(new PathfindingSystem());
-        world.updateSystems.add(new CollisionSystem());
 
         // Change the music to the "playing music"
         Sounds.stopMusic("Tech Geek", Main.titleMusic);
