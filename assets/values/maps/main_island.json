@@ -1,17 +1,16 @@
 {
   "music": "default",
-  "blue effect": true,
-  "spawn point": {
-    "col": 23,
-    "row": 21
-  },
   "entities": [
     {
       "name": "Torgray",
       "components": [
         {
           "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
-          "args": [23, 21]
+          "action": true,
+          "args": [
+            23,
+            21
+          ]
         }
       ]
     },
@@ -20,7 +19,11 @@
       "components": [
         {
           "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
-          "args": [21, 21]
+          "action": true,
+          "args": [
+            21,
+            21
+          ]
         }
       ]
     },
@@ -29,7 +32,11 @@
       "components": [
         {
           "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
-          "args": [23, 39]
+          "action": true,
+          "args": [
+            23,
+            39
+          ]
         }
       ]
     },
@@ -38,7 +45,11 @@
       "components": [
         {
           "component": "net.dingletherat.torgrays_trials.component.PositionComponent",
-          "args": [21, 23]
+          "action": true,
+          "args": [
+            21,
+            23
+          ]
         }
       ]
     }

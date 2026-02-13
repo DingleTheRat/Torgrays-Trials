@@ -20,8 +20,10 @@ public class EntityHandler {
 
     /**
      * Loops through the given componentData and finds the corresponding classes returning them in a map with the args.
-     * @param componentData A JSONArray of JSONObjects that contains all the componentData. The data needs to be the componentName ("component") and the arguments ("args")
+     * @param componentData A list of JSONObjects that contains all the componentData.
+     * Each JSONObject needs to contain the filepath to the component it wants to add ("component") and the arguments for its constructor ("args")
      * @param location Whenever an error is thrown, which JSON file should the error blame?
+     * @return Returns a map with the corresponding component class as a key and a list of arguments as the value.
      **/
     public static Map<Class<? extends Component>, List<Object>> getComponentClasses(JSONArray componentData, String location) {
         // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
@@ -32,11 +34,11 @@ public class EntityHandler {
         // Create the list in which we will put our component classes in
         Map<Class<? extends Component>, List<Object>> componentClasses = new HashMap<>();
 
-        // Loop through all the component strings, get its corresponding class from the COMPONENTS HashMap, and add it to the componentClasses List
+        // Loop through all the component strings, get its corresponding class via the forName method, and add it to the componentClasses List
         for (JSONObject component : components) {
             // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
             if (!component.has("component") || !(component.get("component") instanceof String)) {
-                Main.LOGGER.error("[Location: {}] A component field is missing or is not a String.", location);
+                Main.LOGGER.error("[Location: {}] A 'component' field is missing or is not a String.", location);
                 continue;
             }
 
@@ -63,6 +65,88 @@ public class EntityHandler {
             componentClasses.put(componentClass, args);
         }
         return componentClasses;
+    }
+
+    /**
+     * Loops through the given componentData and finds the corresponding classes from the original map, removing them from the original map.
+     * @param original The map from which the components will be removed
+     * @param componentData A list of JSONObjects that contains all the componentData.
+     * Each JSONObject must contain a string filepath of the component its wanting to remove ("component")
+     * @param location Whenever an error is thrown, which JSON file should the error blame?
+     * @return The map provided, just missing the stuff you asked the method to remove.
+     **/
+    public static Map<Class<? extends Component>, List<Object>> removeComponentClasses(Map<Class<? extends Component>, List<Object>> original, JSONArray componentData, String location) {
+        // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
+        List<JSONObject> components = IntStream.range(0, componentData.length())
+            .mapToObj(componentData::getJSONObject)
+            .toList();
+
+        // Create a copy map of the original that will be returned once we finish tinkering with it.
+        Map<Class<? extends Component>, List<Object>> returnMap = original;
+
+        // Loop through all the component strings, getting the class to remove and either remove all instances or remove one with a specified ID
+        for (JSONObject component : components) {
+            // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
+            if (!component.has("component") || !(component.get("component") instanceof String)) {
+                Main.LOGGER.error("[Location: {}] A 'component' field is missing or is not a String.", location);
+                continue;
+            }
+
+            // Get the component class. If it does not exist, it will throw a class not found exception. In that case, we continue and warn
+            String componentPath = component.getString("component");
+            Class<? extends Component> componentClass;
+            try {
+                componentClass = Class.forName(componentPath).asSubclass(Component.class);
+            } catch (ClassNotFoundException exception) {
+                Main.LOGGER.error("[Location: {}] Component path '{}' is not a path to a class or does not extend the 'Component' interface!", location, componentPath);
+                continue;
+            }
+
+            // Now, get rid of the class
+            returnMap.remove(componentClass);
+        }
+        return returnMap;
+    }
+
+    /**
+     * Goes through the componentData seeing wether a JSONObject wants to remove a componentClass from the original map or add one.
+     * @param original The map that will be modified
+     * @param componentData A list of JSONObjects that contains all the componentData.
+     * Each JSONObject needs to have a filepath string to the component ("component") and an action boolean ("action").
+     * If the field is true, its set to add a component. If false, it's set to remove.
+     * A JSONObject that's adding a component must also provide an JSONArray of arguments ("args").
+     * @param location Whenever an error is thrown, which JSON file should the error blame?
+     * @return The map provided, just modified via the componentData provided.
+     **/
+    public static Map<Class<? extends Component>, List<Object>> modifyComponentClasses(Map<Class<? extends Component>, List<Object>> original, JSONArray componentData, String location) {
+        // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
+        List<JSONObject> components = IntStream.range(0, componentData.length())
+            .mapToObj(componentData::getJSONObject)
+            .toList();
+
+        // Declare two JSONArrays, with one holding all the components that are set to remove, the other holding all the ones to add
+        JSONArray additions = new JSONArray();
+        JSONArray removals = new JSONArray();
+
+        // Loop through all the component strings, checking its "action" to see where to add it
+        for (JSONObject component : components) {
+            // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
+            if (!component.has("action") || !(component.get("action") instanceof Boolean)) {
+                Main.LOGGER.error("[Location: {}] An 'action' field is missing or is not a boolean.", location);
+                continue;
+            }
+
+            // Now add the component to either additions or removals
+            if (component.getBoolean("action")) additions.put(component);
+            else removals.put(component);
+        }
+
+        // Now declare the return map and modify it via the removal and additon methods
+        Map<Class<? extends Component>, List<Object>> returnMap = original;
+        returnMap.putAll(getComponentClasses(additions, location));
+        returnMap = removeComponentClasses(returnMap, removals, location);
+
+        return returnMap;
     }
 
     public static void generateTemplates() {
@@ -98,7 +182,6 @@ public class EntityHandler {
             // Get the components
             JSONArray components = json.getJSONArray("components");
 
-            // Convert the components into a map of the Classes of the listed components and their arguments via the getComponents method
             Map<Class<? extends Component>, List<Object>> componentClasses = getComponentClasses(components, fileNames.get(jsons.indexOf(json)));
 
             // Add in the name component

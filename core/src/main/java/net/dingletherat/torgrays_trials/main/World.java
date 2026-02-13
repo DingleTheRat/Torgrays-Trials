@@ -150,25 +150,10 @@ public class World {
                 // If the entity also has a JSONArray by the name of "components",
                 // that means that the map file want to add on some more components to the entity on top of the template, so add the components to the components map
                 if (entityData.has("components") && entityData.get("components") instanceof JSONArray)
-                    components.putAll(EntityHandler.getComponentClasses(entityData.getJSONArray("components"), mapName + " map"));
+                    components.putAll(EntityHandler.modifyComponentClasses(components, entityData.getJSONArray("components"), mapName + " map"));
 
                 // Add in the entity
-                Integer entity = newEntity(components);
-
-                // If the entityData has position components and the entity has a PositionComponent, change the data in the component
-                if (entityData.has("col") && entityData.has("row") &&
-                        entityData.get("col") instanceof Integer && entityData.get("row") instanceof Integer) {
-                    EntityHandler.getComponent(entity, PositionComponent.class).ifPresent(component -> {
-                        component.x = Main.tileSize * entityData.getInt("col");
-                        component.y = Main.tileSize * entityData.getInt("row");
-                    });
-                } else if (entityData.has("x") && entityData.has("y") &&
-                        entityData.get("x") instanceof Integer && entityData.get("y") instanceof Integer) {
-                    EntityHandler.getComponent(entity, PositionComponent.class).ifPresent(component -> {
-                        component.x = entityData.getInt("x");
-                        component.y = entityData.getInt("y");
-                    });
-                }
+                newEntity(components);
             }
         }
 
