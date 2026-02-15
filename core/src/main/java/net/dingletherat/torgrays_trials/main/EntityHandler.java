@@ -113,7 +113,7 @@ public class EntityHandler {
      * @param original The map that will be modified
      * @param componentData A list of JSONObjects that contains all the componentData.
      * Each JSONObject needs to have a filepath string to the component ("component") and an action boolean ("action").
-     * If the field is true, its set to add a component. If false, it's set to remove.
+     * If the field is true, it's set to add a component. If false, it's set to remove.
      * A JSONObject that's adding a component must also provide an JSONArray of arguments ("args").
      * @param location Whenever an error is thrown, which JSON file should the error blame?
      * @return The map provided, just modified via the componentData provided.

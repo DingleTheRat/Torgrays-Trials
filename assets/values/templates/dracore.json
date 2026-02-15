@@ -29,7 +29,7 @@
       ]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.component.CollisionComponent",
+      "component": "net.dingletherat.torgrays_trials.component.area.CollisionComponent",
       "args": [
         1,
         1

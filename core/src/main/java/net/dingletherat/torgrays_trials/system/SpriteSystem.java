@@ -8,6 +8,7 @@ import java.util.Optional;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.sprite.*;
+import net.dingletherat.torgrays_trials.main.AreaChecker;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
@@ -15,35 +16,17 @@ public class SpriteSystem implements System {
     @Override
     public void draw() {
         for (Integer entity : EntityHandler.queryAny(SpriteComponent.class, SpriteSheetComponent.class)) {
+            // If the entity isn't even on screen, return
+            if (!AreaChecker.checkVisibility(entity)) continue;
+
             // Get the entity's positon on the screen. If the entity has positionComponent, draw it at the positon. Otherwise, draw it at 0
-            float screenX;
-            float screenY;
+            float screenX = 0 - Main.world.cameraX + Main.screenWidth / 2f;
+            float screenY = 0 - Main.world.cameraY + Main.screenHeight / 2f;
 
-            Optional<PositionComponent> positionOptional = EntityHandler.getComponent(entity, PositionComponent.class);
-            if (positionOptional.isPresent()) {
-                // Get PositionComponent
-                PositionComponent positionComponent = positionOptional.get();
-
-                // If the entity isn't even on the screen, return
-                Optional<CollisionComponent> collisionComponent = EntityHandler.getComponent(entity, CollisionComponent.class);
-                if (collisionComponent.isPresent()) {
-                    // Take collision width and height into concideration if there's a CollisionComponent
-                    if (!(positionComponent.x + collisionComponent.get().width > Main.world.cameraX - Main.screenWidth / 2f &&
-                        positionComponent.x < Main.world.cameraX + Main.screenWidth / 2f &&
-                        positionComponent.y + collisionComponent.get().height > Main.world.cameraY - Main.screenHeight / 2f &&
-                        positionComponent.y < Main.world.cameraY + Main.screenHeight / 2f)) continue;
-                } else {
-                    if (!(positionComponent.x > Main.world.cameraX - Main.screenWidth / 2f &&
-                        positionComponent.x < Main.world.cameraX + Main.screenWidth / 2f &&
-                        positionComponent.y > Main.world.cameraY - Main.screenHeight / 2f &&
-                        positionComponent.y < Main.world.cameraY + Main.screenHeight / 2f)) continue;
-                }
-
+            PositionComponent positionComponent = EntityHandler.getComponent(entity, PositionComponent.class).orElse(null);
+            if (positionComponent != null) {
                 screenX = positionComponent.x - Main.world.cameraX + Main.screenWidth / 2f;
                 screenY = positionComponent.y - Main.world.cameraY + Main.screenHeight / 2f;
-            } else {
-                screenX = 0 - Main.world.cameraX + Main.screenWidth / 2f;
-                screenY = 0 - Main.world.cameraY + Main.screenHeight / 2f;
             }
 
             // Get all sprite components inside of the entity and sort them depending on their z value

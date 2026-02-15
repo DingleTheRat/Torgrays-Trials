@@ -7,27 +7,49 @@
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.LightComponent",
-      "args": [150, 0.8, true]
+      "args": [
+        150,
+        0.8,
+        true
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.MovementComponent",
-      "args": [4]
+      "args": [
+        4
+      ]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.component.CollisionComponent",
-      "args": [1, 1]
+      "component": "net.dingletherat.torgrays_trials.component.area.CollisionComponent",
+      "args": [
+        1,
+        1
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent",
-      "args": ["entity/player/torgray_sheet", 3, 4, 0]
+      "args": [
+        "entity/player/torgray_sheet",
+        3,
+        4,
+        0
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.EyesSheetComponent",
-      "args": ["entity/eyes_sheet", 6, 2, 1]
+      "args": [
+        "entity/eyes_sheet",
+        6,
+        2,
+        1
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.HealthComponent",
-      "args": [12, false]
+      "args": [
+        12,
+        false
+      ]
     }
   ]
 }

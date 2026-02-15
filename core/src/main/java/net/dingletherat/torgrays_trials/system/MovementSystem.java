@@ -3,10 +3,9 @@ package net.dingletherat.torgrays_trials.system;
 
 import java.util.Optional;
 
-import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
 import net.dingletherat.torgrays_trials.component.pathfinding.PathfindingComponent;
-import net.dingletherat.torgrays_trials.main.CollisionChecker;
+import net.dingletherat.torgrays_trials.main.AreaChecker;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
@@ -54,7 +53,7 @@ public class MovementSystem implements System {
                  */
                 // First, X
                 positionComponent.x += moveX * movementSpeed;
-                if (CollisionChecker.checkEntityColliding(entity)) {
+                if (AreaChecker.checkEntityColliding(entity)) {
                     positionComponent.x -= moveX * movementSpeed;
 
                     // If there's a PathfindingComponent with  avoidCollision enabled, switch the current direction to the opposite to avoid collision
@@ -69,7 +68,7 @@ public class MovementSystem implements System {
 
                 // Then, Y
                 positionComponent.y += moveY * movementSpeed;
-                if (CollisionChecker.checkEntityColliding(entity)) {
+                if (AreaChecker.checkEntityColliding(entity)) {
                     positionComponent.y -= moveY * movementSpeed;
 
                     // If there's a PathfindingComponent with  avoidCollision enabled, switch the current direction to the opposite to avoid collision
