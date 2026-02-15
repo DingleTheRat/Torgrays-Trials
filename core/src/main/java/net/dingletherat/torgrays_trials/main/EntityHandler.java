@@ -2,6 +2,7 @@
 package net.dingletherat.torgrays_trials.main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -196,14 +197,18 @@ public class EntityHandler {
 
     public static List<Integer> queryAll(Class<? extends Component>... components) {
         List<Integer> result = new ArrayList<>();
+        boolean wantsCooldown = Arrays.asList(components).contains(CooldownComponent.class);
 
         for (int entity : Main.world.getEntities().keySet()) {
+            if (getComponent(entity, CooldownComponent.class).isPresent() && !wantsCooldown) continue;
+
             boolean match = true;
 
             for (Class<? extends Component> componentClass : components) {
                 boolean found = false;
 
                 for (Component component : Main.world.getEntities().get(entity)) {
+
                     if (componentClass.isInstance(component)) {
                         found = true;
                         break;
@@ -223,7 +228,10 @@ public class EntityHandler {
     }
     public static List<Integer> queryAny(Class<? extends Component>... components) {
         List<Integer> result = new ArrayList<>();
+        boolean wantsCooldown = Arrays.asList(components).contains(CooldownComponent.class);
+
         for (int entity : Main.world.getEntities().keySet()) {
+            if (getComponent(entity, CooldownComponent.class).isPresent() && !wantsCooldown) continue;
             boolean match = false;
 
             for (Class<? extends Component> componentClass : components) {
