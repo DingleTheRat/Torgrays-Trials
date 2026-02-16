@@ -1,6 +1,7 @@
 // Copyright (c) 2025 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.rendering;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -43,6 +44,11 @@ public class UI {
 
     // Assets
     public static DataImage heartsSheet = DataImage.loadImage("UI/heart_sheet");
+        public static TextureRegion[][] regions;
+        public static TextureRegion fullHeart;
+        public static TextureRegion halfHeart;
+        public static TextureRegion lostHeart;
+        public static final List<Image> HEARTS = new ArrayList<>();
 
     /**
      * Sets up the UI class, so it functions properly.
@@ -196,40 +202,25 @@ public class UI {
             heartsSheet.scaleImage(Main.tileSize * 3, Main.tileSize);
 
             // Declare all the regions of the image, so we can use them as seperate sprites
-            TextureRegion[][] regions = TextureRegion.split(heartsSheet.getTexture(), Main.tileSize, Main.tileSize);
-            TextureRegion fullHeart = regions[0][0];
-            TextureRegion halfHeart = regions[0][1];
-            TextureRegion lostHeart = regions[0][2];
+            regions = TextureRegion.split(heartsSheet.getTexture(), Main.tileSize, Main.tileSize);
+            fullHeart = regions[0][0];
+            halfHeart = regions[0][1];
+            lostHeart = regions[0][2];
 
             // Flip them, so they don't draw upside down
             fullHeart.flip(false, true);
             halfHeart.flip(false, true);
             lostHeart.flip(false, true);
 
-            // Create an ArrayList that will hold all the drawn hearts
-            ArrayList<Image> hearts = new ArrayList<>();
-
             // Create a heart for every two health points, as one is equal to half a heart
             for (int i = 0; i < component.maxHealth / 2; i++) {
                 Image heart = new Image(lostHeart);
-                hearts.add(heart);
+                HEARTS.add(heart);
                 table.add(heart).size(Main.tileSize).padRight(4);
             }
 
             // Now, change the hearts to their actual state
-            for (int i = 0; i < hearts.size(); i++) {
-                // Every heart is worth 2 health, that's why we do this
-                int heartIndex = i * 2;
-
-                // Change the reigon (sprite from sprite sheet) depending on the amount oh health
-                TextureRegion region;
-                if (component.health >= heartIndex + 2) region = fullHeart;
-                else if (component.health == heartIndex + 1) region = halfHeart;
-                else region = lostHeart;
-
-                // Now, finally, change the heart to the new reigon
-                hearts.get(i).setDrawable(new TextureRegionDrawable(region));
-            }
+            updateHearts();
         });
 
         // Create the uiState
@@ -241,6 +232,23 @@ public class UI {
             if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
                 if (uiState.contains("Debug")) uiState = uiState.replace("Debug", "");
                 else uiState = uiState + " Debug";
+            }
+        });
+    }
+    public static void updateHearts() {
+        EntityHandler.getComponent(Main.world.getPlayer(), HealthComponent.class).ifPresent(component -> {
+            for (int i = 0; i < HEARTS.size(); i++) {
+                // Every heart is worth 2 health, that's why we do this
+                int heartIndex = i * 2;
+
+                // Change the reigon (sprite from sprite sheet) depending on the amount oh health
+                TextureRegion region;
+                if (component.health >= heartIndex + 2) region = fullHeart;
+                else if (component.health == heartIndex + 1) region = halfHeart;
+                else region = lostHeart;
+
+                // Now, finally, change the heart to the new reigon
+                HEARTS.get(i).setDrawable(new TextureRegionDrawable(region));
             }
         });
     }

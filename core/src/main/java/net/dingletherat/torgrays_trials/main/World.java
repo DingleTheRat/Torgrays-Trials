@@ -3,6 +3,7 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
+import net.dingletherat.torgrays_trials.component.signals.DamageSignal;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.UI;
 import net.dingletherat.torgrays_trials.system.System;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.json.JSONArray;
@@ -22,6 +25,7 @@ public class World {
     // ECS
     private Map<String, Map<Integer, List<Component>>> entityStorage = new HashMap<>();
     private Map<Integer, List<Component>> entities = new HashMap<>();
+    public Map<Integer, Map<Class<? extends Component>, List<Object>>> entityTemplates = new HashMap<>();
     private Integer player;
     public List<System> updateSystems = new ArrayList<>();
     public List<System> drawSystems = new ArrayList<>();
@@ -35,18 +39,15 @@ public class World {
 
     // Other
     public long currentSong;
+    public boolean skipDraw = false;
+    public boolean skipUpdate = false;
 
     // ECS Methods
-    public int newEntity(Map<Class<? extends Component>, List<Object>> componentTemplate) {
-        // Set the return variable to the nextIdentifier. However, if there is a vacant identifier from a removed entity, use that.
-        int identifier = nextIdentifier;
-        if (!VACANT_IDENTIFIERS.isEmpty()) identifier = VACANT_IDENTIFIERS.remove(0);
-        else nextIdentifier++; // Since we used up the nextIdentifier, increase it for the next entity
-
+    public List<Component> generateComponents(Map<Class<? extends Component>, List<Object>> componentClasses) {
         // Loop through all the componentClasses and construct them. Then, add them to the components list.
         List<Component> components = new ArrayList<>();
-        for (Class<? extends Component> componentClass : componentTemplate.keySet()) {
-            List<Object> args = componentTemplate.get(componentClass);
+        for (Class<? extends Component> componentClass : componentClasses.keySet()) {
+            List<Object> args = componentClasses.get(componentClass);
 
             // Enter try and catch zone in case constructing fails
             try {
@@ -58,36 +59,62 @@ public class World {
                 // Create the component instance and add it to the components list
                 Component component = componentClass.getConstructor(parameterTypes).newInstance(args.toArray());
                 components.add(component);
-
-                // If the component is a playerComponent, check if there already is one. If not, make the entity the player. If there is, warn.
-                if (component instanceof PlayerComponent) {
-                    if (player == null) player = identifier;
-                    else {
-                        Main.LOGGER.warn("Entity template {} has a PlayerComponent when player has already been declated!");
-                        Main.LOGGER.warn("The entity will be created, but the component will be removed");
-                        components.remove(component);
-                    }
-                }
             } catch (NoSuchMethodException exception) {
                 Main.LOGGER.error(
-                        "Failed to create entity: Component '{}' in Template '{}' has invalid args!",
-                        componentClass.getSimpleName(), componentTemplate.get(NameComponent.class)
+                        "Failed to generate components: Component '{}' has invalid args!",
+                        componentClass.getSimpleName()
                 );
                 Main.LOGGER.error("The args are for this constructor that doesn't exist: {}", exception.getMessage());
             } catch (Exception exception) {
                 Main.handleException(exception);
             }
         }
+        return components;
+    }
+    public void updateEntity(int identifier, Map<Class<? extends Component>, List<Object>> componentClasses) {
+        // Create a copy of componentClasses and a set of the classes in the entity
+        Map<Class<? extends Component>, List<Object>> modifiedComponentClasses = new HashMap<>(componentClasses);
+        Set<Class<? extends Component>> existingClasses = entities.get(identifier).stream().map(Component::getClass).collect(Collectors.toSet());
+
+        // Now, if there's a same class in modifiedComponentClasses as in existingClasses, remove it, so no components get replaced
+        modifiedComponentClasses.keySet().removeIf(existingClasses::contains);
+
+        // Now add in the new components to the entity
+        List<Component> components = generateComponents(modifiedComponentClasses);
+        entities.get(identifier).addAll(components);
+        entityTemplates.get(identifier).putAll(componentClasses);
+    }
+    public int newEntity(Map<Class<? extends Component>, List<Object>> componentTemplate) {
+        // Set the return variable to the nextIdentifier. However, if there is a vacant identifier from a removed entity, use that.
+        int identifier = nextIdentifier;
+        if (!VACANT_IDENTIFIERS.isEmpty()) identifier = VACANT_IDENTIFIERS.remove(0);
+        else nextIdentifier++; // Since we used up the nextIdentifier, increase it for the next entity
+
+        // If there's a playerComponent, check if there already is one. If not, make the entity the player. If there is, warn.
+        if (componentTemplate.containsKey(PlayerComponent.class)) {
+            if (player == null) player = identifier;
+            else {
+                Main.LOGGER.warn("Entity template {} has a PlayerComponent when player has already been declared!");
+                Main.LOGGER.warn("The entity will be created, but the component will be removed");
+                componentTemplate.remove(PlayerComponent.class);
+            }
+        }
+
+        List<Component> components = generateComponents(componentTemplate);
 
         // Add the new entity
         entities.put(identifier, components);
+        entityTemplates.put(identifier, componentTemplate);
 
         // Return the identifier
         return identifier;
     }
     public void removeEntity(int identifier) {
+        if (entityTemplates.get(identifier).containsKey(PlayerComponent.class)) player = null;
+
         VACANT_IDENTIFIERS.add(identifier);
         entities.remove(identifier);
+        entityTemplates.remove(identifier);
     }
     public void addComponent(int identifier, Component component) {
         entities.get(identifier).add(component);
@@ -153,7 +180,8 @@ public class World {
                     components.putAll(EntityHandler.modifyComponentClasses(components, entityData.getJSONArray("components"), mapName + " map"));
 
                 // Add in the entity
-                newEntity(components);
+                Integer identifier = newEntity(components);
+                entityTemplates.put(identifier, EntityHandler.TEMPLATES.get(entityData.get("name")));
             }
         }
 

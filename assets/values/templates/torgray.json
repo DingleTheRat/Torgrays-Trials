@@ -27,6 +27,15 @@
       ]
     },
     {
+      "component": "net.dingletherat.torgrays_trials.component.area.TouchComponent",
+      "args": [
+        1,
+        1,
+        [],
+        []
+      ]
+    },
+    {
       "component": "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent",
       "args": [
         "entity/player/torgray_sheet",
@@ -48,7 +57,8 @@
       "component": "net.dingletherat.torgrays_trials.component.HealthComponent",
       "args": [
         12,
-        false
+        false,
+        1.0
       ]
     }
   ]
