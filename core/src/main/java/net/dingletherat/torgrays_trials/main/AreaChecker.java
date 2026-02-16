@@ -15,20 +15,20 @@ import net.dingletherat.torgrays_trials.system.TileSystem;
 public class AreaChecker {
     // Check if two entities are colliding
     public static boolean checkAreasIntersecting(AreaComponent componentA, PositionComponent positionComponentA, AreaComponent componentB, PositionComponent positionComponentB) {
-        float aLeft = positionComponentA.x;
-        float aTop = positionComponentA.y;
-        float aRight = positionComponentA.x + componentA.width;
-        float aBottom = positionComponentA.y + componentA.height;
+        float aLeft = positionComponentA.x + componentA.offsetX;
+        float aTop = positionComponentA.y + componentA.offsetY;
+        float aRight = positionComponentA.x + componentA.offsetX + componentA.width;
+        float aBottom = positionComponentA.y + componentA.offsetY + componentA.height;
 
-        float bLeft = positionComponentB.x;
-        float bTop = positionComponentB.y;
-        float bRight = positionComponentB.x + componentB.width;
-        float bBottom = positionComponentB.y + componentB.height;
+        float bLeft = positionComponentB.x + componentB.offsetX;
+        float bTop = positionComponentB.y + componentB.offsetY;
+        float bRight = positionComponentB.x + componentB.offsetX + componentB.width;
+        float bBottom = positionComponentB.y + componentB.offsetY + componentB.height;
 
         return aLeft < bRight && aRight > bLeft && aTop < bBottom && aBottom > bTop;
     }
 
-    public static boolean check2EntityIntersecting(Integer entity, Integer other, Class<? extends AreaComponent> componentClass) {
+    public static boolean check2EntityIntersecting(Integer entity, Integer other, Class<? extends AreaComponent> componentClass, boolean matchClass) {
         // Get the positionComponent, making sure there is one. If not, then just ignore this entity like doesn't exist :D
         PositionComponent positionComponent = EntityHandler.getComponent(entity, PositionComponent.class).orElse(null);
         if (positionComponent == null) return false;
@@ -41,7 +41,9 @@ public class AreaChecker {
             if (otherPosition == null) continue;
 
             // Finally, loop through the other entity's areas and see if one is intersecting with the current one
-            for (AreaComponent otherArea : EntityHandler.getComponents(other, componentClass)) {
+            List<? extends AreaComponent> otherAreas = matchClass ?
+                EntityHandler.getComponents(other, componentClass) : EntityHandler.getComponents(other, AreaComponent.class);
+            for (AreaComponent otherArea : otherAreas) {
                 if (checkAreasIntersecting(areaComponent, positionComponent, otherArea, otherPosition)) return true;
             }
         }
@@ -78,10 +80,10 @@ public class AreaChecker {
 
         // Otherwise, loop through each areaComponent and see if they are in the camera, taking the width, height, ect.. into consideration
         for (AreaComponent areaComponent : areaComponents) {
-            if (positionComponent.x + areaComponent.width > Main.world.cameraX - Main.screenWidth / 2f &&
-                positionComponent.x < Main.world.cameraX + Main.screenWidth / 2f &&
-                positionComponent.y + areaComponent.height > Main.world.cameraY - Main.screenHeight / 2f &&
-                positionComponent.y < Main.world.cameraY + Main.screenHeight / 2f) return true;
+            if (positionComponent.x + areaComponent.offsetX + areaComponent.width > Main.world.cameraX - Main.screenWidth / 2f &&
+                positionComponent.x + areaComponent.offsetX < Main.world.cameraX + Main.screenWidth / 2f &&
+                positionComponent.y + areaComponent.offsetY + areaComponent.height > Main.world.cameraY - Main.screenHeight / 2f &&
+                positionComponent.y + areaComponent.offsetY < Main.world.cameraY + Main.screenHeight / 2f) return true;
         }
         return false;
     }
@@ -119,11 +121,11 @@ public class AreaChecker {
     public static boolean checkEntityColliding(Integer entity) {
         for (Integer other : EntityHandler.queryAll(CollisionComponent.class, PositionComponent.class))
             if (other != entity)
-                if (check2EntityIntersecting(entity, other, CollisionComponent.class)) return true;
+                if (check2EntityIntersecting(entity, other, CollisionComponent.class, true)) return true;
 
         // Check collision with player too (if it's not the player)
         if (EntityHandler.getComponent(entity, PlayerComponent.class).isEmpty())
-            if (check2EntityIntersecting(entity, Main.world.getPlayer(), CollisionComponent.class)) return true;
+            if (check2EntityIntersecting(entity, Main.world.getPlayer(), CollisionComponent.class, true)) return true;
 
         Map map = TileSystem.maps.get(Main.world.getMap());
         if (map == null) return false;

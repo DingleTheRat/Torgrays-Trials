@@ -22,7 +22,7 @@ public class TouchSystem implements System {
             for (TouchComponent touchComponent : touchComponents) {
                 for (Integer other : EntityHandler.queryAll(TouchComponent.class, PositionComponent.class))
                     if (other != entity)
-                        if (AreaChecker.check2EntityIntersecting(entity, other, TouchComponent.class)) {
+                        if (AreaChecker.check2EntityIntersecting(entity, other, TouchComponent.class, false)) {
                             // Modify the components of both entities, starting with the first one
                             NameComponent nameComponent = EntityHandler.getComponent(entity, NameComponent.class).get();
                             Map<Class<? extends Component>, List<Object>> components = EntityHandler.modifyComponentClasses(Main.world.entityTemplates.get(entity), touchComponent.entity1Action, nameComponent.name + "'s (" + entity + ") TouchComponent declaration");
