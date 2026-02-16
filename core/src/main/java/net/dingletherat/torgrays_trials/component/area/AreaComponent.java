@@ -3,6 +3,7 @@
 package net.dingletherat.torgrays_trials.component.area;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.Component;
@@ -26,9 +27,9 @@ public class AreaComponent implements Component {
         this.offsetY = offsetY.floatValue();
     }
     public AreaComponent(Integer height, Integer width) {
-        this(height, width, new BigDecimal(width).divide(new BigDecimal(-2)).negate(), new BigDecimal(height).divide(new BigDecimal(-2)).negate());
+        this(height, width, new BigDecimal(0), new BigDecimal(0));
     }
     public AreaComponent(BigDecimal height, BigDecimal width) {
-        this(height, width, width.divide(new BigDecimal(-2)).negate(), height.divide(new BigDecimal(-2)).negate());
+        this(height, width, new BigDecimal(0), new BigDecimal(0));
     }
 }

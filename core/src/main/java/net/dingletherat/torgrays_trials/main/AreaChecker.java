@@ -15,15 +15,15 @@ import net.dingletherat.torgrays_trials.system.TileSystem;
 public class AreaChecker {
     // Check if two entities are colliding
     public static boolean checkAreasIntersecting(AreaComponent componentA, PositionComponent positionComponentA, AreaComponent componentB, PositionComponent positionComponentB) {
-        float aLeft = positionComponentA.x + componentA.offsetX;
-        float aTop = positionComponentA.y + componentA.offsetY;
-        float aRight = positionComponentA.x + componentA.offsetX + componentA.width;
-        float aBottom = positionComponentA.y + componentA.offsetY + componentA.height;
+        float aLeft = positionComponentA.x + componentA.offsetX - componentA.width / 2f;
+        float aTop = positionComponentA.y + componentA.offsetY - componentA.height / 2f;
+        float aRight = positionComponentA.x + componentA.offsetX + componentA.width / 2f;
+        float aBottom = positionComponentA.y + componentA.offsetY + componentA.height / 2f;
 
-        float bLeft = positionComponentB.x + componentB.offsetX;
-        float bTop = positionComponentB.y + componentB.offsetY;
-        float bRight = positionComponentB.x + componentB.offsetX + componentB.width;
-        float bBottom = positionComponentB.y + componentB.offsetY + componentB.height;
+        float bLeft = positionComponentB.x + componentB.offsetX - componentB.width / 2f;
+        float bTop = positionComponentB.y + componentB.offsetY - componentB.height / 2f;
+        float bRight = positionComponentB.x + componentB.offsetX + componentB.width / 2f;
+        float bBottom = positionComponentB.y + componentB.offsetY + componentB.height / 2f;
 
         return aLeft < bRight && aRight > bLeft && aTop < bBottom && aBottom > bTop;
     }
@@ -80,10 +80,11 @@ public class AreaChecker {
 
         // Otherwise, loop through each areaComponent and see if they are in the camera, taking the width, height, ect.. into consideration
         for (AreaComponent areaComponent : areaComponents) {
-            if (positionComponent.x + areaComponent.offsetX + areaComponent.width > Main.world.cameraX - Main.screenWidth / 2f &&
-                positionComponent.x + areaComponent.offsetX < Main.world.cameraX + Main.screenWidth / 2f &&
-                positionComponent.y + areaComponent.offsetY + areaComponent.height > Main.world.cameraY - Main.screenHeight / 2f &&
-                positionComponent.y + areaComponent.offsetY < Main.world.cameraY + Main.screenHeight / 2f) return true;
+            if (positionComponent.x + areaComponent.offsetX - areaComponent.width / 2f < Main.world.cameraX + Main.screenWidth / 2f &&
+                positionComponent.x + areaComponent.offsetX + areaComponent.width / 2f > Main.world.cameraX - Main.screenWidth / 2f &&
+                positionComponent.y + areaComponent.offsetY - areaComponent.height / 2f < Main.world.cameraY + Main.screenHeight / 2f &&
+                positionComponent.y + areaComponent.offsetY + areaComponent.height / 2f > Main.world.cameraY - Main.screenHeight / 2f)
+                    return true;
         }
         return false;
     }
