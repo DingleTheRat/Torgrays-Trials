@@ -1,0 +1,29 @@
+{
+  "name": "Pit",
+  "components": [
+    {
+      "component": "net.dingletherat.torgrays_trials.component.area.TouchComponent",
+      "args": [
+        0.3,
+        0.3,
+        [],
+        [
+          {
+            "component": "net.dingletherat.torgrays_trials.component.signals.DamageSignal",
+            "action": true,
+            "args": [
+              1
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteComponent",
+      "args": [
+        "entity/object/pit",
+        0
+      ]
+    }
+  ]
+}

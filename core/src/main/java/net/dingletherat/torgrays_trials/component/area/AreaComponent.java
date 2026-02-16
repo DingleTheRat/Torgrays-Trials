@@ -3,7 +3,6 @@
 package net.dingletherat.torgrays_trials.component.area;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.Component;

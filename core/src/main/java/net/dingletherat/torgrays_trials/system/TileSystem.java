@@ -60,7 +60,7 @@ public class TileSystem implements System {
 
         // Event Tiles
         registerTile(42, "path/path_pit", false);
-        registerTile(43, "grass/grass_pit", false);
+        //registerTile(43, "grass/grass_pit", false);
         registerTile(44, "grass/grass_healing", false);
         registerTile(45, "coiner's_hut", false);
 
