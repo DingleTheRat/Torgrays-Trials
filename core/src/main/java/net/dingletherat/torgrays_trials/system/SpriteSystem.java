@@ -1,6 +1,7 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.system;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -13,9 +14,29 @@ import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
 
 public class SpriteSystem implements System {
+
     @Override
     public void draw() {
-        for (Integer entity : EntityHandler.queryAny(SpriteComponent.class, SpriteSheetComponent.class)) {
+
+        // Add in all the entities to draw into an ArrayList that we can sort depending on their Y position (if they have one)
+        List<Integer> entitiesToDraw = new ArrayList<>();
+        for (Integer entity : EntityHandler.queryAny(SpriteComponent.class, SpriteSheetComponent.class))
+            entitiesToDraw.add(entity);
+
+        // Sort 'em
+        entitiesToDraw.sort((entityA, entityB) -> {
+            float aY = EntityHandler.getComponent(entityA, PositionComponent.class)
+                    .map(component -> component.y)
+                    .orElse(0f);
+
+            float bY = EntityHandler.getComponent(entityB, PositionComponent.class)
+                    .map(component -> component.y)
+                    .orElse(0f);
+
+            return Float.compare(bY, aY); // reversed
+        });
+
+        for (Integer entity : entitiesToDraw) {
             // If the entity isn't even on screen, return
             if (!AreaChecker.checkVisibility(entity)) continue;
 
