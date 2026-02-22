@@ -2,7 +2,15 @@
 package net.dingletherat.torgrays_trials.component;
 
 import net.dingletherat.torgrays_trials.main.States.MovementStates;
+import net.dingletherat.torgrays_trials.system.MovementSystem;
 
+/**
+ * When added, allows the entity to move around via a state machine.
+ * <p>
+ * This component allows for any kind of movement. Including walking and idling (all states are in the {@link MovementStates} class).
+ * Moving is essentially changing the {@link PositionComponent} X and Y values (Oh yeah, you need that for it to function).
+ * It's implemented in the {@link MovementSystem}.
+ **/
 public class MovementComponent implements Component {
     /// Determine how the entity moves (if at all) (Ex: Idle = Does nothing, Walking moves at speed)
     public MovementStates state;
