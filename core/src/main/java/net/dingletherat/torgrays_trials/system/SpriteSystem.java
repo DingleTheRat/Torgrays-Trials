@@ -25,14 +25,17 @@ public class SpriteSystem implements System {
 
         // Sort 'em
         entitiesToDraw.sort((entityA, entityB) -> {
-            float aY = EntityHandler.getComponent(entityA, PositionComponent.class)
-                    .map(component -> component.y)
-                    .orElse(0f);
+            // First, get both entity's Z position (if they have one, otherwise set it as 0)
+            float aZ = EntityHandler.getComponent(entityA, ZComponent.class).map(component -> component.z).orElse(0);
+            float bZ = EntityHandler.getComponent(entityB, ZComponent.class).map(component -> component.z).orElse(0);
 
-            float bY = EntityHandler.getComponent(entityB, PositionComponent.class)
-                    .map(component -> component.y)
-                    .orElse(0f);
+            // Return whoever's Z is heigher. If both don't have a ZComponent, move onto sorting depending on the Y
+            int zCompare = Float.compare(aZ, bZ);
+            if (zCompare != 0) return zCompare;
 
+            // Do basically the same thing here, just with the PositionComponent
+            float aY = EntityHandler.getComponent(entityA, PositionComponent.class).map(component -> component.y).orElse(0f);
+            float bY = EntityHandler.getComponent(entityB, PositionComponent.class).map(component -> component.y).orElse(0f);
             return Float.compare(bY, aY); // reversed
         });
 
