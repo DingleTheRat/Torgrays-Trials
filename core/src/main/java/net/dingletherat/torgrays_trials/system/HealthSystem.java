@@ -33,8 +33,8 @@ public class HealthSystem implements System {
             // If the health is below 0, set it back to 0 (we don't want negitives here)
             if (healthComponent.health < 0) healthComponent.health = 0;
 
-            // Update the UI and play a goofy sound
-            UI.updateHearts();
+            // Update the UI (if its the player) and play a goofy sound
+            if (Main.world.getPlayer() == entity) UI.updateHearts();
             Sounds.playSFX("Receive Damage");
 
             // Remove the damage signal
@@ -51,8 +51,8 @@ public class HealthSystem implements System {
             // If the health is over the maxHealth, set it to the max health (cuz it reached the max)
             if (healthComponent.health > healthComponent.maxHealth) healthComponent.health = healthComponent.maxHealth;
 
-            // Update the UI and play a goofy sound
-            UI.updateHearts();
+            // Update the UI (if its the player) and play a goofy sound
+            if (Main.world.getPlayer() == entity) UI.updateHearts();
             Sounds.playSFX("Power Up");
 
             // Remove the HealSignal

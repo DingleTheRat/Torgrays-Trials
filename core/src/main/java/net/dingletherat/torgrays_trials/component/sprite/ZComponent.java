@@ -1,6 +1,7 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
-package net.dingletherat.torgrays_trials.component;
+package net.dingletherat.torgrays_trials.component.sprite;
 
+import net.dingletherat.torgrays_trials.component.Component;
 import net.dingletherat.torgrays_trials.system.SpriteSystem;
 
 /**
