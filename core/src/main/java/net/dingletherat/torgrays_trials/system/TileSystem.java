@@ -118,6 +118,32 @@ public class TileSystem implements System {
     public static void registerTile(int i, String imageName, boolean collision) {
         registerTile(i, imageName, collision ? "11111/11111/11111/11111/11111" : "00000/00000/00000/00000/00000");
     }
+    /**
+     * Checks if any points of a tile in a certain location are collidable.
+     * @param tilePosition A {@link Pair}, which is a class that holds the X and Y values of your target tile.
+     * @return True if at least one point is collidable, false if not.
+     **/
+    public static boolean getTileCollision(Pair tilePosition) {
+        // Get the tile's position in the current map's foreground
+        Map map = maps.get(Main.world.getMap());
+        int tileNumber = map.foreground().get(tilePosition);
+
+        // Get its tile type (and return if it's null)
+        var tileType = tileTypes.get(tileNumber);
+        if (tileType == null) return false;
+
+        // Now, loop through booth boolean arrays checking if any are true. If that's the case, return true
+        boolean[][] collisionMap = tileType.collision();
+
+        for (int i = 0; i < collisionMap.length; i++) {
+            for (int j = 0; j < collisionMap[i].length; j++) {
+                if (collisionMap[i][j])
+                    return true;
+            }
+        }
+
+        return false;
+    }
 
     @Override
     public void draw() {

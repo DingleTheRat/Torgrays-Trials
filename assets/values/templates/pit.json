@@ -11,25 +11,18 @@
           {
             "component": "net.dingletherat.torgrays_trials.component.signals.DamageSignal",
             "action": true,
-            "args": [
-              1
-            ]
+            "args": [1]
           }
         ]
       ]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.component.ZComponent",
-      "args": [
-        -1
-      ]
+      "component": "net.dingletherat.torgrays_trials.component.sprite.ZComponent",
+      "args": [-1]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteComponent",
-      "args": [
-        "entity/object/pit",
-        0
-      ]
+      "args": ["entity/object/pit", 0]
     }
   ]
 }
