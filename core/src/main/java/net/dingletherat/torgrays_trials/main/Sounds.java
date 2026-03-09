@@ -69,12 +69,14 @@ public class Sounds {
      * @param sfxName The name of the sound you want to play.
      * This will be used as a key to obtain the desired sound from the {@code SOUND_LIBRARY}.
      **/
-    public static void playSFX(String sfxName) {
+    public static void playSFX(String sfxName, boolean randomizePitch) {
         // Get the sfx from the sound libary
         Sound sfx = SOUND_LIBRARY.get(sfxName);
 
-        // Get a random pitch to play the sfx with, with the pitch being between 0.8f and 1.2f
-        float pitch = 0.8f + Main.random.nextFloat(0.4f);
+        // If randomizePitch, get a random pitch to play the sfx with, with the pitch being between 0.8f and 1.2f
+        float pitch = 1f;
+        if (randomizePitch)
+            pitch = 0.8f + Main.random.nextFloat(0.4f);
 
         // Play the sfx
         sfx.play(1f, pitch, 0f);

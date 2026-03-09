@@ -368,7 +368,7 @@ public class UI {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                 // If the mouse entered, let the player know they can press it by putting arrows around it and playing a sound
-                Sounds.playSFX("Cursor");
+                Sounds.playSFX("Cursor", true);
                 button.setText("> " + text + " <");
             }
 

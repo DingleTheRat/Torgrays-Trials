@@ -35,7 +35,7 @@ public class HealthSystem implements System {
 
             // Update the UI (if its the player) and play a goofy sound
             if (Main.world.getPlayer() == entity) UI.updateHearts();
-            Sounds.playSFX("Receive Damage");
+            Sounds.playSFX("Receive Damage", true);
 
             // Remove the damage signal
             Main.world.removeComponent(entity, damageSignal);
@@ -53,7 +53,7 @@ public class HealthSystem implements System {
 
             // Update the UI (if its the player) and play a goofy sound
             if (Main.world.getPlayer() == entity) UI.updateHearts();
-            Sounds.playSFX("Power Up");
+            Sounds.playSFX("Power Up", false);
 
             // Remove the HealSignal
             Main.world.removeComponent(entity, healSignal);
