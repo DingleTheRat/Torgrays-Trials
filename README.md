@@ -1,8 +1,10 @@
 # Torgray's Trials
+
 An in-development, currently RPG-like game, about a ghost trapped in eternal darkness. Itch.io page coming soon!
 More description stuff will be added upon an itch.io release, trust.
 
 ## Updates
+
 - ### Alpha-1.0 - Initial Release
   - Tile rendering and movement
 - ### Alpha-1.1 - The Darkness Update
@@ -40,4 +42,3 @@ More description stuff will be added upon an itch.io release, trust.
   - Agro pathfinding
   - Darkness cycle (gloom, night, dusk)
   - New soup tips
-
