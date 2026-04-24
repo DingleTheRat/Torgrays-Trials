@@ -73,7 +73,7 @@ public class Sounds {
         // Get the sfx from the sound libary
         Sound sfx = SOUND_LIBRARY.get(sfxName);
 
-        // If randomizePitch, get a random pitch to play the sfx with, with the pitch being between 0.8f and 1.2f
+        // If randomizePitch, get a random pitch to play the sfx with, with the pitch being between 0.9f and 1.1f
         float pitch = 1f;
         if (randomizePitch)
             pitch = 0.9f + Main.random.nextFloat(0.3f);

@@ -101,7 +101,6 @@ public class PathfindingSystem implements System{
                If the moveToTarget returns true (we reached the goal), remove the node from the path */
             if (PathfindingHandler.moveToTarget(entity, targetComponent.path.get(0)))
                 targetComponent.path.remove(0);
-            movementComponent.state = MovementStates.WALKING;
         }
     }
 }

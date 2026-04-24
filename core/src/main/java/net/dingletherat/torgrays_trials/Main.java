@@ -174,6 +174,7 @@ public class Main extends ApplicationAdapter {
         world.updateSystems.add(new PlayerSystem());
         world.updateSystems.add(new MovementSystem());
         world.updateSystems.add(spriteSystem);
+        world.updateSystems.add(new BehaviourSystem());
         world.updateSystems.add(new PathfindingSystem());
         world.updateSystems.add(new HealthSystem());
         world.updateSystems.add(new TouchSystem());

@@ -9,7 +9,7 @@
         [],
         [
           {
-            "component": "net.dingletherat.torgrays_trials.component.signals.DamageSignal",
+            "component": "net.dingletherat.torgrays_trials.component.signal.DamageSignal",
             "action": true,
             "args": [1]
           }

@@ -1,7 +1,6 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.component.pathfinding;
 
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

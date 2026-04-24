@@ -7,7 +7,11 @@
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.pathfinding.PathfindingComponent",
-      "args": ["TargetComponent", false]
+      "args": ["", true]
+    },
+    {
+      "component": "net.dingletherat.torgrays_trials.component.pathfinding.behaviour.DracoreBehaviour",
+      "args": [5]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.pathfinding.TargetComponent",
@@ -29,7 +33,7 @@
         [],
         [
           {
-            "component": "net.dingletherat.torgrays_trials.component.signals.DamageSignal",
+            "component": "net.dingletherat.torgrays_trials.component.signal.DamageSignal",
             "action": true,
             "args": [2]
           }

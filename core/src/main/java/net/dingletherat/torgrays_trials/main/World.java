@@ -3,7 +3,6 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
-import net.dingletherat.torgrays_trials.component.signals.DamageSignal;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.UI;
 import net.dingletherat.torgrays_trials.system.System;

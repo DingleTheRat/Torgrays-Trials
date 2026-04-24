@@ -55,7 +55,7 @@ public class EntityHandler {
             try {
                 componentClass = Class.forName(componentPath).asSubclass(Component.class);
             } catch (ClassNotFoundException exception) {
-                Main.LOGGER.error("[Location: {}] Component path '{}' is not a path to a class or does not extend the 'Component' interface!", location, componentPath);
+                Main.LOGGER.error("[Location: {}] Component path '{}' is not a path to a component or does not implement the 'Component' interface!", location, componentPath);
                 continue;
             }
 

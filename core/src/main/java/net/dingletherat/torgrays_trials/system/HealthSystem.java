@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.HealthComponent;
 import net.dingletherat.torgrays_trials.component.InvincibilityComponent;
-import net.dingletherat.torgrays_trials.component.signals.*;
+import net.dingletherat.torgrays_trials.component.signal.*;
 import net.dingletherat.torgrays_trials.main.EntityHandler;
 import net.dingletherat.torgrays_trials.main.Sounds;
 import net.dingletherat.torgrays_trials.rendering.UI;

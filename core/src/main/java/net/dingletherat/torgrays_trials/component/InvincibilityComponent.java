@@ -3,7 +3,7 @@ package net.dingletherat.torgrays_trials.component;
 
 import java.math.BigDecimal;
 
-import net.dingletherat.torgrays_trials.component.signals.DamageSignal;
+import net.dingletherat.torgrays_trials.component.signal.DamageSignal;
 import net.dingletherat.torgrays_trials.system.CooldownSystem;
 import net.dingletherat.torgrays_trials.system.HealthSystem;
 
