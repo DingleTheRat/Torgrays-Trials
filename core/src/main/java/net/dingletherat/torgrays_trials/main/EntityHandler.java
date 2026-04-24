@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -270,5 +271,42 @@ public class EntityHandler {
             }
         }
         return result;
+    }
+    public static int getClosestEntity(int entity, String name, Class<? extends Component>... components) {
+        // Declare return variable
+        float closestDistanceSquared = Float.MAX_VALUE;
+        int returnEntity = -1;
+
+        // Get necessary component from main entity and make sure it exists
+        PositionComponent positionComponent = getComponent(entity, PositionComponent.class).orElse(null);
+
+        // Add in a positionComponent as one of the components needed to query
+        Class<? extends Component>[] queryComponents;
+        if (components == null || components.length == 0) queryComponents = new Class[]{PositionComponent.class};
+        else queryComponents = Stream.concat(Stream.of(PositionComponent.class), Arrays.stream(components)).toArray(Class[]::new);
+
+        for (int targetEntity : queryAll(queryComponents)) {
+            // Get necessary components
+            PositionComponent targetPosition = getComponent(targetEntity, PositionComponent.class).get();
+            NameComponent targetName = getComponent(targetEntity, NameComponent.class).get();
+
+            // Make sure the name matches the target one. However, if the name property is empty, let it pass anyway
+            if (!targetName.name.equals(name) && !name.isEmpty()) continue;
+
+            // Get the distance between the target entity and the entity
+            float distanceX = targetPosition.x - positionComponent.x;
+            float distanceY = targetPosition.y - positionComponent.y;
+
+            // Square it to compare it! (Best rhyme ever)
+            float distanceSquared = distanceX * distanceX + distanceY * distanceY;
+
+            // Now do the comparing part I mentioned. If it's larger than the current closest distance, set it as the returnEntity for now.
+            if (distanceSquared < closestDistanceSquared) {
+                closestDistanceSquared = distanceSquared;
+                returnEntity = targetEntity;
+            }
+        }
+
+        return returnEntity;
     }
 }

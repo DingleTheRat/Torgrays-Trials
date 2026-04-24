@@ -203,9 +203,6 @@ public class World {
         UI.stage.draw();
     }
     public void update(float deltaTime) {
-        // Update UI
-        UI.update();
-
         // Move the camera to the player's x and y (if there is a PositionComponent)
         EntityHandler.getComponent(getPlayer(), PositionComponent.class).ifPresent(component -> {
             cameraX = component.x;
@@ -213,5 +210,8 @@ public class World {
         });
 
         for (System system : updateSystems) system.update(deltaTime);
+
+        // Update UI
+        UI.update();
     }
 }

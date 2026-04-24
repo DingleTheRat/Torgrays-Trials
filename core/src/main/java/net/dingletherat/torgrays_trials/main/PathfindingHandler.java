@@ -11,11 +11,14 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import net.dingletherat.torgrays_trials.Main;
+import net.dingletherat.torgrays_trials.component.MovementComponent;
+import net.dingletherat.torgrays_trials.component.PositionComponent;
+import net.dingletherat.torgrays_trials.main.States.MovementStates;
 import net.dingletherat.torgrays_trials.rendering.Map;
 import net.dingletherat.torgrays_trials.system.TileSystem;
 
 public class PathfindingHandler {
-    public class Node {
+    public static class Node {
         public final int x;
         public final int y;
 
@@ -35,7 +38,7 @@ public class PathfindingHandler {
         }
     }
 
-    public HashMap<TileSystem.Pair, Node> generateNodes() {
+    public static HashMap<TileSystem.Pair, Node> generateNodes() {
         // Create the HashMap that we'll return
         HashMap<TileSystem.Pair, Node> returnMap = new HashMap<>();
 
@@ -49,7 +52,7 @@ public class PathfindingHandler {
 
         return returnMap;
     }
-    public List<TileSystem.Pair> getNeighbors(TileSystem.Pair pair) {
+    public static List<TileSystem.Pair> getNeighbors(TileSystem.Pair pair) {
         return List.of(
             new TileSystem.Pair(pair.x() + 1, pair.y()),
             new TileSystem.Pair(pair.x() - 1, pair.y()),
@@ -57,11 +60,11 @@ public class PathfindingHandler {
             new TileSystem.Pair(pair.x(), pair.y() - 1)
         );
     }
-    public int calculateHeuristic(Node nodeA, Node nodeB) {
+    public static int calculateHeuristic(Node nodeA, Node nodeB) {
         return Math.abs(nodeA.x - nodeB.x) + Math.abs(nodeA.y - nodeB.y);
     }
 
-    public List<TileSystem.Pair> generatePath(Node endNode) {
+    public static List<TileSystem.Pair> generatePath(Node endNode) {
         // Create our regular return list
         List<TileSystem.Pair> finalPath = new ArrayList<>();
 
@@ -82,14 +85,17 @@ public class PathfindingHandler {
 
         return finalPath;
     }
-    public List<TileSystem.Pair> findPath(TileSystem.Pair start, TileSystem.Pair end) {
+    public static List<TileSystem.Pair> findPath(TileSystem.Pair start, TileSystem.Pair end) {
         // Get all the nodes in the map and get the start and end nodes from that
         HashMap<TileSystem.Pair, Node> nodes = generateNodes();
         Node startNode = nodes.get(start);
         Node endNode = nodes.get(end);
 
         // Check if the start and end nodes exist. If not, error and return
-        if (startNode == null || endNode == null) Main.LOGGER.error("Failed to find path: Start or end nodes not found!");
+        if (startNode == null || endNode == null){
+            Main.LOGGER.error("Failed to find path: Start or end nodes not found!");
+            return List.of();
+        }
 
         /* Create a queue and a set for the open and closed nodes. I could have used lists, but this is generally more efficient.
           The opened queue contains all the nodes that have not yet been checked, the closed one contains all the ones that have been checked */
@@ -109,6 +115,9 @@ public class PathfindingHandler {
             // Get the node with the lowest cost (the current one)
             Node current = opened.poll();
 
+            // Close the node
+            closed.add(current);
+
             // If our target node has been reached, we're done :D, so just generate the path and return it
             if (current == endNode) return generatePath(endNode);
 
@@ -117,12 +126,12 @@ public class PathfindingHandler {
 
             // Loop through all the currentPair's neighbors
             for (TileSystem.Pair neighborPair : getNeighbors(currentPair)) {
-                // If the neighbor is collidable, rule it out, it's useless
-                if (TileSystem.getTileCollision(neighborPair)) continue;
-
                 // Get the node for this neighboring tile, making sure that's its not a null peice of junk
                 Node neighbor = nodes.get(neighborPair);
                 if (neighbor == null) continue;
+
+                // If the neighbor is collidable, rule it out, it's useless
+                if (TileSystem.getTileCollision(neighborPair)) continue;
 
                 // Skip it if we checked it already
                 if (closed.contains(neighbor)) continue;
@@ -134,7 +143,7 @@ public class PathfindingHandler {
                 boolean inOpenSet = opened.contains(neighbor);
 
                 // If the neighbor is not in the open set, or this path to it is cheaper, update it
-                if (!inOpenSet || nextGCost < neighbor.gCost) {
+                if (nextGCost < neighbor.gCost || !inOpenSet) {
                     // Set the parent so the path can be re-traced
                     neighbor.parent = current;
 
@@ -151,5 +160,44 @@ public class PathfindingHandler {
 
         // If the target was never reached, then there propably isn't any path
         return List.of();
+    }
+
+    public static boolean moveToTarget(int entity, TileSystem.Pair target) {
+        // Get necessary components and check if they're there. If not, return
+        PositionComponent positionComponent = EntityHandler.getComponent(entity, PositionComponent.class).orElse(null);
+        MovementComponent movementComponent = EntityHandler.getComponent(entity, MovementComponent.class).orElse(null);
+        if (positionComponent == null || movementComponent == null) return false;
+
+        // Get the X and Y distances between the target place and the entity in world units
+        float targetX = target.x() * Main.tileSize;
+        float targetY = target.y() * Main.tileSize;
+        float distanceX = targetX - positionComponent.x;
+        float distanceY = targetY - positionComponent.y;
+
+        // Declare the epsilon (it's a small tolerance to avoid float jitter)
+        float epsilon = movementComponent.speed + 0.5f;
+
+        // If we reached the target, snap to it exactly, stop movement and return true
+        if (Math.abs(distanceX) < epsilon && Math.abs(distanceY) < epsilon) {
+            positionComponent.x = targetX;
+            positionComponent.y = targetY;
+            movementComponent.direction = "";
+            movementComponent.state = MovementStates.IDLE;
+            return true;
+        }
+
+        // Use those distances to determine in which direction the entity should go
+        if (distanceX > 0 && distanceY > 0) movementComponent.direction = "down right";
+        else if (distanceX > 0 && distanceY < 0) movementComponent.direction = "up right";
+        else if (distanceX < 0 && distanceY > 0) movementComponent.direction = "down left";
+        else if (distanceX < 0 && distanceY < 0) movementComponent.direction = "up left";
+        else if (distanceX > 0) movementComponent.direction = "right";
+        else if (distanceX < 0) movementComponent.direction = "left";
+        else if (distanceY > 0) movementComponent.direction = "down";
+        else if (distanceY < 0) movementComponent.direction = "up";
+
+        // Set the state to walking so the movement system processes this entity
+        movementComponent.state = MovementStates.WALKING;
+        return false;
     }
 }

@@ -13,7 +13,7 @@ import net.dingletherat.torgrays_trials.system.PathfindingSystem;
  * This field is a string that can be set to various component names to enable their pathfinding behaviour.
  * For example, I can set it to "WanderComponent" to enable it. However, you still have to add in the {@link WanderComponent} for it to work.
  * <p>
- * - Recommended components: Any component you plan on being active, {@link PositionComponent}, {@link MovementComponent}.
+ * - Required components: Any component you plan on being active, {@link PositionComponent}, {@link MovementComponent}.
  * - Implemented by {@link PathfindingSystem}.
  **/
 public class PathfindingComponent implements Component {

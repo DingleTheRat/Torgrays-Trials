@@ -17,9 +17,12 @@ public class MovementSystem implements System {
             MovementComponent component = EntityHandler.getComponent(entity, MovementComponent.class).get();
 
             if (component.state == MovementStates.WALKING) {
-                // Return if the direction is more than 2 words to not confuse the code
+                // Change the state to idle if and continue the direction is more than 2 words to not confuse the code (also it's illegal)
                 String[] directionWords = component.direction.split(" ");
-                if (directionWords.length > 2) return;
+                if (directionWords.length > 2)  {
+                    component.state = MovementStates.IDLE;
+                    continue;
+                }
 
                 // Get position component or else how the hell are we gonna move?
                 PositionComponent positionComponent = EntityHandler.getComponent(entity, PositionComponent.class).get();
