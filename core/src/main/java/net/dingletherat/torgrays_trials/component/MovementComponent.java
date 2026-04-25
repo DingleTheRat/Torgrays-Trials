@@ -59,4 +59,9 @@ public class MovementComponent implements Component {
     public MovementComponent(Integer speed) {
         this("Idle", speed, "down");
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

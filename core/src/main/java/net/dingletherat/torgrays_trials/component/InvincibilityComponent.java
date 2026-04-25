@@ -22,4 +22,9 @@ public class InvincibilityComponent implements Component {
     public InvincibilityComponent(BigDecimal amount) {
         this.amount = amount.floatValue();
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

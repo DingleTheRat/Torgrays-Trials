@@ -20,4 +20,9 @@ public class CooldownComponent implements Component{
     public CooldownComponent(BigDecimal amount) {
         this.amount = amount.floatValue();
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

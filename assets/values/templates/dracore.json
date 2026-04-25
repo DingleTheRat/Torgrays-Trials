@@ -3,27 +3,43 @@
   "components": [
     {
       "component": "net.dingletherat.torgrays_trials.component.MovementComponent",
-      "args": ["WALKING", 1, "left"]
+      "args": [
+        "WALKING",
+        1,
+        "left"
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.pathfinding.PathfindingComponent",
-      "args": ["", true]
+      "args": [
+        "",
+        true
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.pathfinding.behaviour.DracoreBehaviour",
-      "args": [5]
+      "args": [
+        5
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.pathfinding.TargetComponent",
-      "args": ["Torgray"]
+      "args": [
+        "Torgray"
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.pathfinding.WanderComponent",
-      "args": [0.9]
+      "args": [
+        0.9
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.area.CollisionComponent",
-      "args": [38.0, 38.0]
+      "args": [
+        38.0,
+        38.0
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.area.TouchComponent",
@@ -35,14 +51,21 @@
           {
             "component": "net.dingletherat.torgrays_trials.component.signal.DamageSignal",
             "action": true,
-            "args": [2]
+            "args": [
+              2
+            ]
           }
         ]
       ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent",
-      "args": ["entity/monster/dracore", 3, 4, 0]
+      "args": [
+        "entity/monster/dracore",
+        3,
+        4,
+        0
+      ]
     }
   ]
 }

@@ -18,4 +18,9 @@ public class HealSignal implements Component {
     public HealSignal(Integer amount) {
         this.amount = amount;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

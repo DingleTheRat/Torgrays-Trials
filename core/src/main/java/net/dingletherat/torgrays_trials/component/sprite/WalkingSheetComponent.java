@@ -59,4 +59,9 @@ public class WalkingSheetComponent extends SpriteSheetComponent {
         animationFrames = sizeX;
         animationSpeed = 0.4f;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.MULTI;
+    }
 }

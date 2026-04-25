@@ -26,4 +26,9 @@ public class DracoreBehaviour implements Component {
     public DracoreBehaviour(Integer range) {
         this.range = range;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

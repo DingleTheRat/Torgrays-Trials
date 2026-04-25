@@ -30,4 +30,9 @@ public class PathfindingComponent implements Component {
         this.activeComponent = activeComponent;
         this.avoidCollision = avoidCollision;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

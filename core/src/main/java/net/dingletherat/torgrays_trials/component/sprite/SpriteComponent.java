@@ -55,4 +55,9 @@ public class SpriteComponent implements Component {
         sprite.scaleImage(Main.tileSize, Main.tileSize);
         this.z = z;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.MULTI;
+    }
 }

@@ -26,4 +26,9 @@ public class PositionComponent implements Component {
         this.x = x.floatValue();
         this.y = y.floatValue();
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

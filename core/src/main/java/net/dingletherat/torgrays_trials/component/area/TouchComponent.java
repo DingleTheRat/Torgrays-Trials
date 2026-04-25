@@ -72,4 +72,9 @@ public class TouchComponent extends AreaComponent {
         this.entity1Action = entity1Action;
         this.entity2Action = entity2Action;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.MULTI;
+    }
 }

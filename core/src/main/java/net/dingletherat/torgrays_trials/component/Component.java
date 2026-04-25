@@ -12,4 +12,12 @@ import org.json.JSONObject;
  * To create an entity, make a JSON file under {@code values/template} including a name and an array of components.
  * All array arguments must be a {@link JSONObject} that contains the component class filepath and an array of its constructor arguments.
  **/
-public interface Component { }
+public interface Component {
+    enum ComponentType {
+        SINGLE,
+        MULTI
+    }
+
+    public ComponentType getType();
+}
+

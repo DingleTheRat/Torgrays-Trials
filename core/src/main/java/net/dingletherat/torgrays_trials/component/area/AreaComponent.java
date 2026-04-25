@@ -63,4 +63,9 @@ public class AreaComponent implements Component {
     public AreaComponent(BigDecimal height, BigDecimal width) {
         this(height, width, BigDecimal.valueOf(0), BigDecimal.valueOf(0));
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.MULTI;
+    }
 }

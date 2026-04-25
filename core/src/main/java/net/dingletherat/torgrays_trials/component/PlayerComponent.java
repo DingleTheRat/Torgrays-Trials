@@ -12,4 +12,9 @@ import net.dingletherat.torgrays_trials.system.PlayerSystem;
  * If you ever decide to add a second one with it, this component will be automatically removed from the entity with a warning.
  * See all the goofy stuff it does in {@link PlayerSystem}
  **/
-public class PlayerComponent implements Component { }
+public class PlayerComponent implements Component {
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
+}

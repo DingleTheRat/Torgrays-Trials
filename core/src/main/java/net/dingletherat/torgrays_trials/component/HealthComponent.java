@@ -62,4 +62,9 @@ public class HealthComponent implements Component {
     public HealthComponent(Integer maxHealth, BigDecimal invincibilityLength) {
         this(maxHealth, maxHealth, invincibilityLength, true);
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

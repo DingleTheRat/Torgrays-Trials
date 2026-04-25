@@ -18,4 +18,9 @@ public class ZComponent implements Component {
     public ZComponent(Integer z) {
         this.z = z;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

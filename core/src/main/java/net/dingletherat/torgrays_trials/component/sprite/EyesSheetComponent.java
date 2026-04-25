@@ -90,4 +90,9 @@ public class EyesSheetComponent extends SpriteSheetComponent {
     public EyesSheetComponent(String spriteSheetName, BigDecimal sizeX, BigDecimal sizeY, Integer z) {
         super(spriteSheetName, sizeX, sizeY, z);
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.MULTI;
+    }
 }

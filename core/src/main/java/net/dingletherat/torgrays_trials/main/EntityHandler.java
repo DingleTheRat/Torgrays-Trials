@@ -1,6 +1,8 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,23 +20,23 @@ import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
 
 public class EntityHandler {
-    public static final Map<String, Map<Class<? extends Component>, List<Object>>> TEMPLATES = new HashMap<>();
+    public static final Map<String, List<Map.Entry<Class<? extends Component>, List<Object>>>> TEMPLATES = new HashMap<>();
 
     /**
-     * Loops through the given componentData and finds the corresponding classes returning them in a map with the args.
+     * Loops through the given componentData and finds the corresponding classes returning them in a list with the args.
      * @param componentData A list of JSONObjects that contains all the componentData.
      * Each JSONObject needs to contain the filepath to the component it wants to add ("component") and the arguments for its constructor ("args")
      * @param location Whenever an error is thrown, which JSON file should the error blame?
-     * @return Returns a map with the corresponding component class as a key and a list of arguments as the value.
+     * @return Returns a list with the corresponding component class as a key and a list of arguments as the value.
      **/
-    public static Map<Class<? extends Component>, List<Object>> getComponentClasses(JSONArray componentData, String location) {
+    public static List<Map.Entry<Class<? extends Component>, List<Object>>> getComponentClasses(JSONArray componentData, String location) {
         // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
         List<JSONObject> components = IntStream.range(0, componentData.length())
             .mapToObj(componentData::getJSONObject)
             .toList();
 
         // Create the list in which we will put our component classes in
-        Map<Class<? extends Component>, List<Object>> componentClasses = new HashMap<>();
+        List<Map.Entry<Class<? extends Component>, List<Object>>> componentClasses = new ArrayList<>();
 
         // Loop through all the component strings, get its corresponding class via the forName method, and add it to the componentClasses List
         for (JSONObject component : components) {
@@ -59,32 +61,32 @@ public class EntityHandler {
                 continue;
             }
 
-            // Convert the "args" JSONArray into a list and add it into the componentClasses Map.
+            // Convert the "args" JSONArray into a list and add it into the componentClasses list.
             JSONArray argsArray = component.getJSONArray("args");
             List<Object> args = new ArrayList<>(IntStream.range(0, argsArray.length())
                             .mapToObj(argsArray::get)
                             .toList());
-            componentClasses.put(componentClass, args);
+            componentClasses.add(new AbstractMap.SimpleEntry<>(componentClass, args));
         }
         return componentClasses;
     }
 
     /**
-     * Loops through the given componentData and finds the corresponding classes from the original map, removing them from the original map.
-     * @param original The map from which the components will be removed
+     * Loops through the given componentData and finds the corresponding classes from the original list, removing them from the original list.
+     * @param original The list from which the components will be removed
      * @param componentData A list of JSONObjects that contains all the componentData.
      * Each JSONObject must contain a string filepath of the component its wanting to remove ("component")
      * @param location Whenever an error is thrown, which JSON file should the error blame?
-     * @return The map provided, just missing the stuff you asked the method to remove.
+     * @return The list provided, just missing the stuff you asked the method to remove.
      **/
-    public static Map<Class<? extends Component>, List<Object>> removeComponentClasses(Map<Class<? extends Component>, List<Object>> original, JSONArray componentData, String location) {
+    public static List<Map.Entry<Class<? extends Component>, List<Object>>> removeComponentClasses(List<Map.Entry<Class<? extends Component>, List<Object>>> original, JSONArray componentData, String location) {
         // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
         List<JSONObject> components = IntStream.range(0, componentData.length())
             .mapToObj(componentData::getJSONObject)
             .toList();
 
         // Create a copy map of the original that will be returned once we finish tinkering with it.
-        Map<Class<? extends Component>, List<Object>> returnMap = original;
+        List<Map.Entry<Class<? extends Component>, List<Object>>> returnList = new ArrayList<>(original);
 
         // Loop through all the component strings, getting the class to remove and either remove all instances or remove one with a specified ID
         for (JSONObject component : components) {
@@ -105,22 +107,22 @@ public class EntityHandler {
             }
 
             // Now, get rid of the class
-            returnMap.remove(componentClass);
+            returnList.removeIf(entry -> entry.getKey().equals(componentClass));
         }
-        return returnMap;
+        return returnList;
     }
 
     /**
-     * Goes through the componentData seeing wether a JSONObject wants to remove a componentClass from the original map or add one.
-     * @param original The map that will be modified
+     * Goes through the componentData seeing whether a JSONObject wants to remove a componentClass from the original list or add one.
+     * @param original The list that will be modified
      * @param componentData A list of JSONObjects that contains all the componentData.
      * Each JSONObject needs to have a filepath string to the component ("component") and an action boolean ("action").
      * If the field is true, it's set to add a component. If false, it's set to remove.
-     * A JSONObject that's adding a component must also provide an JSONArray of arguments ("args").
+     * A JSONObject that's adding a component must also provide a JSONArray of arguments ("args").
      * @param location Whenever an error is thrown, which JSON file should the error blame?
-     * @return The map provided, just modified via the componentData provided.
+     * @return The list provided, just modified via the componentData provided.
      **/
-    public static Map<Class<? extends Component>, List<Object>> modifyComponentClasses(Map<Class<? extends Component>, List<Object>> original, JSONArray componentData, String location) {
+    public static List<Map.Entry<Class<? extends Component>, List<Object>>> modifyComponentClasses(List<Map.Entry<Class<? extends Component>, List<Object>>> original, JSONArray componentData, String location) {
         // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
         List<JSONObject> components = IntStream.range(0, componentData.length())
             .mapToObj(componentData::getJSONObject)
@@ -143,12 +145,11 @@ public class EntityHandler {
             else removals.put(component);
         }
 
-        // Now declare the return map and modify it via the removal and additon methods
-        Map<Class<? extends Component>, List<Object>> returnMap = original;
-        returnMap.putAll(getComponentClasses(additions, location));
-        returnMap = removeComponentClasses(returnMap, removals, location);
-
-        return returnMap;
+        // Now declare the return  and modify it via the removal and additon methods
+        List<Map.Entry<Class<? extends Component>, List<Object>>> returnList = new ArrayList<>(original);
+        returnList.addAll(getComponentClasses(additions, location));
+        returnList = removeComponentClasses(returnList, removals, location);
+        return returnList;
     }
 
     public static void generateTemplates() {
@@ -183,11 +184,10 @@ public class EntityHandler {
 
             // Get the components
             JSONArray components = json.getJSONArray("components");
-
-            Map<Class<? extends Component>, List<Object>> componentClasses = getComponentClasses(components, fileNames.get(jsons.indexOf(json)));
+            List<Map.Entry<Class<? extends Component>, List<Object>>> componentClasses = getComponentClasses(components, fileNames.get(jsons.indexOf(json)));
 
             // Add in the name component
-            componentClasses.put(NameComponent.class, List.of(json.getString("name")));
+            componentClasses.add(new AbstractMap.SimpleEntry<>(NameComponent.class, List.of(json.getString("name"))));
 
             // Last but not least, add our list of componentClasses to the TEMPLATES HashMap
             TEMPLATES.put(json.getString("name"), componentClasses);
@@ -196,6 +196,7 @@ public class EntityHandler {
         Main.LOGGER.info("Loaded {} templates!", TEMPLATES.size());
     }
 
+    @SafeVarargs
     public static List<Integer> queryAll(Class<? extends Component>... components) {
         List<Integer> result = new ArrayList<>();
         boolean wantsCooldown = Arrays.asList(components).contains(CooldownComponent.class);
@@ -227,6 +228,7 @@ public class EntityHandler {
 
         return result;
     }
+    @SafeVarargs
     public static List<Integer> queryAny(Class<? extends Component>... components) {
         List<Integer> result = new ArrayList<>();
         boolean wantsCooldown = Arrays.asList(components).contains(CooldownComponent.class);
@@ -255,9 +257,8 @@ public class EntityHandler {
         List<Component> entity = Main.world.getEntities().get(identifier);
 
         for (Component element : entity) {
-            if (type.isInstance(element)) {
+            if (type.isInstance(element))
                 return Optional.of((T) element);
-            }
         }
         return Optional.empty();
     }
@@ -266,12 +267,12 @@ public class EntityHandler {
         List<Component> entity = Main.world.getEntities().get(identifier);
 
         for (Component component : entity) {
-            if (type.isInstance(component)) {
+            if (type.isInstance(component))
                 result.add(type.cast(component));
-            }
         }
         return result;
     }
+    @SafeVarargs
     public static int getClosestEntity(int entity, String name, Class<? extends Component>... components) {
         // Declare return variable
         float closestDistanceSquared = Float.MAX_VALUE;

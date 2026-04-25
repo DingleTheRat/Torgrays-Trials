@@ -50,4 +50,9 @@ public class CollisionComponent extends AreaComponent {
     public CollisionComponent(BigDecimal height, BigDecimal width) {
         super(height, width);
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.MULTI;
+    }
 }

@@ -27,4 +27,9 @@ public class DamageSignal implements Component {
     public DamageSignal(Integer amount) {
         this.amount = amount;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

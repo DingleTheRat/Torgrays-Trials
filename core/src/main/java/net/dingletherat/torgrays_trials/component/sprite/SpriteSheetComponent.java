@@ -70,4 +70,9 @@ public class SpriteSheetComponent extends SpriteComponent {
     public SpriteSheetComponent(String spriteSheetName, BigDecimal sizeX, BigDecimal sizeY, Integer z) {
         this(spriteSheetName, 0, 0, sizeX, sizeY, z);
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.MULTI;
+    }
 }

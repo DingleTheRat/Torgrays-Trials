@@ -3,47 +3,27 @@
   "components": [
     {
       "component": "net.dingletherat.torgrays_trials.component.MovementComponent",
-      "args": [
-        1
-      ]
+      "args": [1]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.pathfinding.PathfindingComponent",
-      "args": [
-        "WanderComponent",
-        true
-      ]
+      "args": ["WanderComponent", true]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.pathfinding.WanderComponent",
-      "args": [
-        0.9
-      ]
+      "args": [0.9]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.area.CollisionComponent",
-      "args": [
-        1,
-        1
-      ]
+      "args": [1, 1]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.EyesSheetComponent",
-      "args": [
-        "entity/eyes_sheet",
-        6,
-        2,
-        1
-      ]
+      "args": ["entity/eyes_sheet", 6, 2, 1]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.WalkingSheetComponent",
-      "args": [
-        "entity/npc/gatekeeper_sheet",
-        3,
-        4,
-        0
-      ]
+      "args": ["entity/npc/gatekeeper_sheet", 3, 4, 0]
     }
   ]
 }

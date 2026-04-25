@@ -37,4 +37,9 @@ public class LightComponent implements Component {
     public LightComponent(Integer lightRadius, BigDecimal lightIntensity) {
         this(lightRadius, lightIntensity, true);
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.MULTI;
+    }
 }

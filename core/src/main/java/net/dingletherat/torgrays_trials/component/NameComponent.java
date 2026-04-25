@@ -16,4 +16,9 @@ public class NameComponent implements Component {
     public NameComponent(String name) {
         this.name = name;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

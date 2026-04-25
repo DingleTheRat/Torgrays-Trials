@@ -47,4 +47,9 @@ public class TargetComponent implements Component {
     public TargetComponent(String target) {
         this.target = target;
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

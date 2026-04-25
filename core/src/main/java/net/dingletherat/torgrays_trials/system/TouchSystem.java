@@ -25,12 +25,12 @@ public class TouchSystem implements System {
                         if (AreaChecker.check2EntityIntersecting(entity, other, TouchComponent.class, false)) {
                             // Modify the components of both entities, starting with the first one
                             NameComponent nameComponent = EntityHandler.getComponent(entity, NameComponent.class).get();
-                            Map<Class<? extends Component>, List<Object>> components = EntityHandler.modifyComponentClasses(Main.world.entityTemplates.get(entity), touchComponent.entity1Action, nameComponent.name + "'s (" + entity + ") TouchComponent declaration");
+                            List<Map.Entry<Class<? extends Component>, List<Object>>> components = EntityHandler.modifyComponentClasses(Main.world.entityTemplates.get(entity), touchComponent.entity1Action, nameComponent.name + "'s (" + entity + ") TouchComponent declaration");
                             Main.world.updateEntity(entity, components);
 
                             // Now, the second
                             NameComponent otherName = EntityHandler.getComponent(other, NameComponent.class).get();
-                            Map<Class<? extends Component>, List<Object>> otherComponents = EntityHandler.modifyComponentClasses(Main.world.entityTemplates.get(other), touchComponent.entity2Action, otherName.name + "'s (" + entity + ") TouchComponent declaration");
+                            List<Map.Entry<Class<? extends Component>, List<Object>>> otherComponents = EntityHandler.modifyComponentClasses(Main.world.entityTemplates.get(other), touchComponent.entity2Action, otherName.name + "'s (" + entity + ") TouchComponent declaration");
                             Main.world.updateEntity(other, otherComponents);
                         }
             }

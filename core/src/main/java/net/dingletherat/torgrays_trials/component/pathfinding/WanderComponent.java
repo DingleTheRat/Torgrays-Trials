@@ -24,4 +24,9 @@ public class WanderComponent implements Component {
     public WanderComponent(BigDecimal decisionSpeed) {
         this.decisionSpeed = decisionSpeed.floatValue();
     }
+
+    @Override
+    public ComponentType getType() {
+        return ComponentType.SINGLE;
+    }
 }

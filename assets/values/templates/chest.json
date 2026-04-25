@@ -12,7 +12,7 @@
       "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteComponent",
       "args": [
         "entity/object/chest/closed",
-        0
+        1
       ]
     },
     {
