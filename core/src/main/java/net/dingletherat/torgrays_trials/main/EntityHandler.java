@@ -1,8 +1,6 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.main;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,7 +18,8 @@ import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
 
 public class EntityHandler {
-    public static final Map<String, List<Map.Entry<Class<? extends Component>, List<Object>>>> TEMPLATES = new HashMap<>();
+    public static final Map<String, List<Component.Entry>> TEMPLATES = new HashMap<>();
+
 
     /**
      * Loops through the given componentData and finds the corresponding classes returning them in a list with the args.
@@ -29,14 +28,14 @@ public class EntityHandler {
      * @param location Whenever an error is thrown, which JSON file should the error blame?
      * @return Returns a list with the corresponding component class as a key and a list of arguments as the value.
      **/
-    public static List<Map.Entry<Class<? extends Component>, List<Object>>> getComponentClasses(JSONArray componentData, String location) {
+    public static List<Component.Entry> getComponentClasses(JSONArray componentData, String location) {
         // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
         List<JSONObject> components = IntStream.range(0, componentData.length())
             .mapToObj(componentData::getJSONObject)
             .toList();
 
         // Create the list in which we will put our component classes in
-        List<Map.Entry<Class<? extends Component>, List<Object>>> componentClasses = new ArrayList<>();
+        List<Component.Entry> componentClasses = new ArrayList<>();
 
         // Loop through all the component strings, get its corresponding class via the forName method, and add it to the componentClasses List
         for (JSONObject component : components) {
@@ -66,71 +65,37 @@ public class EntityHandler {
             List<Object> args = new ArrayList<>(IntStream.range(0, argsArray.length())
                             .mapToObj(argsArray::get)
                             .toList());
-            componentClasses.add(new AbstractMap.SimpleEntry<>(componentClass, args));
+            componentClasses.add(new Component.Entry(componentClass, args));
         }
         return componentClasses;
     }
 
     /**
-     * Loops through the given componentData and finds the corresponding classes from the original list, removing them from the original list.
-     * @param original The list from which the components will be removed
-     * @param componentData A list of JSONObjects that contains all the componentData.
-     * Each JSONObject must contain a string filepath of the component its wanting to remove ("component")
-     * @param location Whenever an error is thrown, which JSON file should the error blame?
-     * @return The list provided, just missing the stuff you asked the method to remove.
+     * Used by {@code getModifiedComponentClasses} to return a result that cointains a list of additions and removals.
+     * @param additions What needs to be added to the component classes.
+     * @param removals What needs to be removed from the component classes.
      **/
-    public static List<Map.Entry<Class<? extends Component>, List<Object>>> removeComponentClasses(List<Map.Entry<Class<? extends Component>, List<Object>>> original, JSONArray componentData, String location) {
-        // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
-        List<JSONObject> components = IntStream.range(0, componentData.length())
-            .mapToObj(componentData::getJSONObject)
-            .toList();
-
-        // Create a copy map of the original that will be returned once we finish tinkering with it.
-        List<Map.Entry<Class<? extends Component>, List<Object>>> returnList = new ArrayList<>(original);
-
-        // Loop through all the component strings, getting the class to remove and either remove all instances or remove one with a specified ID
-        for (JSONObject component : components) {
-            // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
-            if (!component.has("component") || !(component.get("component") instanceof String)) {
-                Main.LOGGER.error("[Location: {}] A 'component' field is missing or is not a String.", location);
-                continue;
-            }
-
-            // Get the component class. If it does not exist, it will throw a class not found exception. In that case, we continue and warn
-            String componentPath = component.getString("component");
-            Class<? extends Component> componentClass;
-            try {
-                componentClass = Class.forName(componentPath).asSubclass(Component.class);
-            } catch (ClassNotFoundException exception) {
-                Main.LOGGER.error("[Location: {}] Component path '{}' is not a path to a class or does not extend the 'Component' interface!", location, componentPath);
-                continue;
-            }
-
-            // Now, get rid of the class
-            returnList.removeIf(entry -> entry.getKey().equals(componentClass));
-        }
-        return returnList;
-    }
+    public record ComponentModifications(List<Component.Entry> additions, List<Component.Entry> removals) {}
 
     /**
-     * Goes through the componentData seeing whether a JSONObject wants to remove a componentClass from the original list or add one.
-     * @param original The list that will be modified
+     * Goes through the componentData seeing if a class needs to be removed or added.
+     * Using this, it's convert to a class via {@code getComponentClasses} and then added to the appropriate list in {@code ComponentModifications} (either in additions or removals).
      * @param componentData A list of JSONObjects that contains all the componentData.
      * Each JSONObject needs to have a filepath string to the component ("component") and an action boolean ("action").
-     * If the field is true, it's set to add a component. If false, it's set to remove.
-     * A JSONObject that's adding a component must also provide a JSONArray of arguments ("args").
+     * If the field is true, it's set to want to add a component. If false, it's set to want to remove.
+     * A JSONObject that want to addcomponent must also provide a JSONArray of arguments ("args").
      * @param location Whenever an error is thrown, which JSON file should the error blame?
-     * @return The list provided, just modified via the componentData provided.
+     * @return The {@code ComponentModifications} record with two lists of componentClasses: additions and removals.
      **/
-    public static List<Map.Entry<Class<? extends Component>, List<Object>>> modifyComponentClasses(List<Map.Entry<Class<? extends Component>, List<Object>>> original, JSONArray componentData, String location) {
+    public static ComponentModifications getModifiedComponentClasses(JSONArray componentData, String location) {
         // Convert the componentData JSONArray to a list of JSONObject so it's easier to manage
         List<JSONObject> components = IntStream.range(0, componentData.length())
             .mapToObj(componentData::getJSONObject)
             .toList();
 
         // Declare two JSONArrays, with one holding all the components that are set to remove, the other holding all the ones to add
-        JSONArray additions = new JSONArray();
-        JSONArray removals = new JSONArray();
+        JSONArray additionsArray = new JSONArray();
+        JSONArray removalsArray = new JSONArray();
 
         // Loop through all the component strings, checking its "action" to see where to add it
         for (JSONObject component : components) {
@@ -141,15 +106,16 @@ public class EntityHandler {
             }
 
             // Now add the component to either additions or removals
-            if (component.getBoolean("action")) additions.put(component);
-            else removals.put(component);
+            if (component.getBoolean("action")) additionsArray.put(component);
+            else removalsArray.put(component);
         }
 
-        // Now declare the return  and modify it via the removal and additon methods
-        List<Map.Entry<Class<? extends Component>, List<Object>>> returnList = new ArrayList<>(original);
-        returnList.addAll(getComponentClasses(additions, location));
-        returnList = removeComponentClasses(returnList, removals, location);
-        return returnList;
+        // Now declare the return record and add the classes to add and remove to it
+        List<Component.Entry> additions = getComponentClasses(additionsArray, location);
+        List<Component.Entry> removals = getComponentClasses(removalsArray, location);
+        ComponentModifications componentModifications = new ComponentModifications(additions, removals);
+
+        return componentModifications;
     }
 
     public static void generateTemplates() {
@@ -184,10 +150,10 @@ public class EntityHandler {
 
             // Get the components
             JSONArray components = json.getJSONArray("components");
-            List<Map.Entry<Class<? extends Component>, List<Object>>> componentClasses = getComponentClasses(components, fileNames.get(jsons.indexOf(json)));
+            List<Component.Entry> componentClasses = getComponentClasses(components, fileNames.get(jsons.indexOf(json)));
 
             // Add in the name component
-            componentClasses.add(new AbstractMap.SimpleEntry<>(NameComponent.class, List.of(json.getString("name"))));
+            componentClasses.add(new Component.Entry(NameComponent.class, List.of(json.getString("name"))));
 
             // Last but not least, add our list of componentClasses to the TEMPLATES HashMap
             TEMPLATES.put(json.getString("name"), componentClasses);

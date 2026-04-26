@@ -1,6 +1,8 @@
 // Copyright (c) 2026 DingleTheRat. All Rights Reserved.
 package net.dingletherat.torgrays_trials.component;
 
+import java.util.List;
+
 import org.json.JSONObject;
 
 /**
@@ -17,6 +19,7 @@ public interface Component {
         SINGLE,
         MULTI
     }
+    record Entry(Class<? extends Component> type, List<Object> args) {}
 
     public ComponentType getType();
 }

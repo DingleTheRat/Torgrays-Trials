@@ -2,10 +2,8 @@
 package net.dingletherat.torgrays_trials.system;
 
 import java.util.List;
-import java.util.Map;
 
 import net.dingletherat.torgrays_trials.Main;
-import net.dingletherat.torgrays_trials.component.Component;
 import net.dingletherat.torgrays_trials.component.NameComponent;
 import net.dingletherat.torgrays_trials.component.PositionComponent;
 import net.dingletherat.torgrays_trials.component.area.TouchComponent;
@@ -25,13 +23,13 @@ public class TouchSystem implements System {
                         if (AreaChecker.check2EntityIntersecting(entity, other, TouchComponent.class, false)) {
                             // Modify the components of both entities, starting with the first one
                             NameComponent nameComponent = EntityHandler.getComponent(entity, NameComponent.class).get();
-                            List<Map.Entry<Class<? extends Component>, List<Object>>> components = EntityHandler.modifyComponentClasses(Main.world.entityTemplates.get(entity), touchComponent.entity1Action, nameComponent.name + "'s (" + entity + ") TouchComponent declaration");
-                            Main.world.updateEntity(entity, components);
+                            EntityHandler.ComponentModifications componentModifications = EntityHandler.getModifiedComponentClasses(touchComponent.entity1Action, nameComponent.name + "'s (" + entity + ") TouchComponent declaration");
+                            Main.world.updateEntity(entity, componentModifications, nameComponent.name + "'s (" + entity + ") TouchComponent declaration");
 
                             // Now, the second
                             NameComponent otherName = EntityHandler.getComponent(other, NameComponent.class).get();
-                            List<Map.Entry<Class<? extends Component>, List<Object>>> otherComponents = EntityHandler.modifyComponentClasses(Main.world.entityTemplates.get(other), touchComponent.entity2Action, otherName.name + "'s (" + entity + ") TouchComponent declaration");
-                            Main.world.updateEntity(other, otherComponents);
+                            EntityHandler.ComponentModifications otherComponentModifications = EntityHandler.getModifiedComponentClasses(touchComponent.entity2Action, otherName.name + "'s (" + other + ") TouchComponent declaration");
+                            Main.world.updateEntity(other, otherComponentModifications, otherName.name + "'s (" + entity + ") TouchComponent declaration");
                         }
             }
         }

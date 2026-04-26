@@ -177,7 +177,7 @@ public class Main extends ApplicationAdapter {
         world.updateSystems.add(new BehaviourSystem());
         world.updateSystems.add(new PathfindingSystem());
         world.updateSystems.add(new HealthSystem());
-        //world.updateSystems.add(new TouchSystem());
+        world.updateSystems.add(new TouchSystem());
         world.updateSystems.add(new CooldownSystem());
 
         // Change the music to the "playing music"

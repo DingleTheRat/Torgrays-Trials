@@ -94,7 +94,7 @@ public class PathfindingHandler {
         // Check if the start and end nodes exist. If not, error and return
         if (startNode == null || endNode == null){
             Main.LOGGER.error("Failed to find path: Start or end nodes not found!");
-            return List.of();
+            return new ArrayList<>();
         }
 
         /* Create a queue and a set for the open and closed nodes. I could have used lists, but this is generally more efficient.
@@ -159,7 +159,7 @@ public class PathfindingHandler {
         }
 
         // If the target was never reached, then there propably isn't any path
-        return List.of();
+        return new ArrayList<>();
     }
 
     public static boolean moveToTarget(int entity, TileSystem.Pair target) {
