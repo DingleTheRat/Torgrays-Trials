@@ -85,8 +85,9 @@ public class World {
         List<Component> removals = generateComponents(componentModifications.removals(), location);
 
         // Double check that there will be no SINGLE duplicates or entry index duplicates once we add in the additions
-        // TODO: Do the same for entry numbers
-        List<Component> existing = entities.get(identifier);
+        // TODO: Do the same for entry indexes and rework touch system to make this work
+
+        /* List<Component> existing = entities.get(identifier);
         List<Component> filteredAdditions = new ArrayList<>();
         for (Component addition : additions) {
             if (addition.getType() == ComponentType.SINGLE) {
@@ -98,7 +99,7 @@ public class World {
                 }
             }
             filteredAdditions.add(addition);
-        }
+        } */
 
         // Now, update the entity with the components and the template with the classes (the stuff in the componentModifications lists)
         entities.get(identifier).addAll(additions);

@@ -14,14 +14,6 @@
             "args": [
               1
             ]
-          },
-          {
-            "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteComponent",
-            "action": true,
-            "args": [
-              "entity/object/pit",
-              0
-            ]
           }
         ]
       ]

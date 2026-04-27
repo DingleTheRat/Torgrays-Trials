@@ -16,16 +16,6 @@
       ]
     },
     {
-      "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteComponent",
-      "entry index": 1,
-      "args": [
-        "entity/object/chest/opened",
-        2,
-        2,
-        1
-      ]
-    },
-    {
       "component": "net.dingletherat.torgrays_trials.component.LightComponent",
       "args": [
         300,

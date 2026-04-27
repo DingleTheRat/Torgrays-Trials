@@ -18,8 +18,13 @@ import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
 
 public class EntityHandler {
-    public static final Map<String, List<Component.Entry>> TEMPLATES = new HashMap<>();
+    // JSON keys for stuff
+    public static final String KEY_COMPONENT = "component";
+    public static final String KEY_ARGS = "args";
+    public static final String KEY_ENTRY_INDEX = "entry index";
+    public static final String KEY_ACTION = "action";
 
+    public static final Map<String, List<Component.Entry>> TEMPLATES = new HashMap<>();
 
     /**
      * Loops through the given componentData and finds the corresponding classes returning them in a list with the args.
@@ -40,14 +45,14 @@ public class EntityHandler {
         // Loop through all the component strings, get its corresponding class via the forName method, and add it to the componentClasses List
         for (JSONObject component : components) {
             // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
-            if (!component.has("component") || !(component.get("component") instanceof String)) {
-                Main.LOGGER.error("[Location: {}] A 'component' field is missing or is not a String.", location);
+            if (!component.has(KEY_COMPONENT) || !(component.get(KEY_COMPONENT) instanceof String)) {
+                Main.LOGGER.error("[Location: {}] A \"{}\" field is missing or is not a String.", KEY_COMPONENT, location);
                 continue;
             }
 
-            String componentPath = component.getString("component");
-            if (!component.has("args") || !(component.get("args") instanceof JSONArray)) {
-                Main.LOGGER.error("[Location: {}] 'args' field in '{}' component is missing or is not a JSONArray.", location, componentPath);
+            String componentPath = component.getString(KEY_COMPONENT);
+            if (!component.has(KEY_ARGS) || !(component.get(KEY_ARGS) instanceof JSONArray)) {
+                Main.LOGGER.error("[Location: {}] \"{}\" field in '{}' component is missing or is not a JSONArray.", location, KEY_ARGS, componentPath);
                 continue;
             }
 
@@ -56,23 +61,23 @@ public class EntityHandler {
             try {
                 componentClass = Class.forName(componentPath).asSubclass(Component.class);
             } catch (ClassNotFoundException exception) {
-                Main.LOGGER.error("[Location: {}] Component path '{}' is not a path to a component or does not implement the 'Component' interface!", location, componentPath);
+                Main.LOGGER.error("[Location: {}] Component path \"{}\" is not a path to a component or does not implement the {} interface!", location, componentPath, Component.class.getSimpleName());
                 continue;
             }
 
             // Convert the "args" JSONArray into a list and turn it into an entry, ready to be added
-            JSONArray argsArray = component.getJSONArray("args");
+            JSONArray argsArray = component.getJSONArray(KEY_ARGS);
             List<Object> args = new ArrayList<>(IntStream.range(0, argsArray.length())
                             .mapToObj(argsArray::get)
                             .toList());
-            int entryIndex = component.optInt("entry index");
+            int entryIndex = component.optInt(KEY_ENTRY_INDEX);
             Component.Entry entry = new Component.Entry(componentClass, args, entryIndex);
 
             // Check if the component has a duplicate entryIndex with any other componentClass. If so, error and don't add it
             boolean hasDuplicate = componentClasses.stream().anyMatch(existing -> existing.entryIndex() == entry.entryIndex());
             boolean isSameClass = componentClasses.stream().anyMatch(existing -> existing.componentClass() == entry.componentClass());
             if (hasDuplicate && isSameClass) {
-                Main.LOGGER.error("[Location: {}] Entry index {} is already used for component {}! Did you add an \"entry index\" int field?", location, entryIndex, componentClass.getSimpleName());
+                Main.LOGGER.error("[Location: {}] Entry index {} is already used for component {}! Did you add an \"{}\" int field?", location, entryIndex, componentClass.getSimpleName(), KEY_ENTRY_INDEX);
                 continue;
             }
 
@@ -112,13 +117,13 @@ public class EntityHandler {
         // Loop through all the component strings, checking its "action" to see where to add it
         for (JSONObject component : components) {
             // Make sure the necessary stuff is inside the JSONObject. If not, warn and continue
-            if (!component.has("action") || !(component.get("action") instanceof Boolean)) {
-                Main.LOGGER.error("[Location: {}] An 'action' field is missing or is not a boolean.", location);
+            if (!component.has(KEY_ACTION) || !(component.get(KEY_ACTION) instanceof Boolean)) {
+                Main.LOGGER.error("[Location: {}] An \"{}\" field is missing or is not a boolean.", location, KEY_ACTION);
                 continue;
             }
 
             // Now add the component to either additions or removals
-            if (component.getBoolean("action")) additionsArray.put(component);
+            if (component.getBoolean(KEY_ACTION)) additionsArray.put(component);
             else removalsArray.put(component);
         }
 
