@@ -3,6 +3,7 @@ package net.dingletherat.torgrays_trials.main;
 
 import net.dingletherat.torgrays_trials.Main;
 import net.dingletherat.torgrays_trials.component.*;
+import net.dingletherat.torgrays_trials.component.Component.ComponentType;
 import net.dingletherat.torgrays_trials.rendering.MapHandler;
 import net.dingletherat.torgrays_trials.rendering.UI;
 import net.dingletherat.torgrays_trials.system.System;
@@ -45,7 +46,7 @@ public class World {
         // Loop through all the componentClasses and construct them. Then, add them to the components list.
         List<Component> components = new ArrayList<>();
         for (Component.Entry entry : componentClasses) {
-            Class<? extends Component> componentClass = entry.type();
+            Class<? extends Component> componentClass = entry.componentClass();
             List<Object> args = entry.args();
 
             // Enter try and catch zone in case constructing fails
@@ -58,11 +59,11 @@ public class World {
                 // Create the component instance and add it to the components list
                 Component component = componentClass.getConstructor(parameterTypes).newInstance(args.toArray());
 
-                // BUT BEFORE, if the component type is SINGLE, don't add this component and warn
-                if (component.getType() == Component.ComponentType.SINGLE) {
-                    boolean hadDuplicate = components.stream().anyMatch(existing -> existing.getClass().equals(componentClass));
-                    if (hadDuplicate) {
-                        Main.LOGGER.warn("Component {} is already present in {}, despite the type being SINGLE! Component won't be added.",
+                // BUT BEFORE, if the component type is SINGLE, don't add this component and warn.
+                if (component.getType() == ComponentType.SINGLE) {
+                    boolean hasDuplicate = components.stream().anyMatch(existing -> existing.getClass().equals(componentClass));
+                    if (hasDuplicate) {
+                        Main.LOGGER.warn("[Location: {}] Component {} is already present, despite the type being SINGLE! Component won't be added.",
                                  location, componentClass.getSimpleName());
                         continue;
                     }
@@ -70,7 +71,7 @@ public class World {
 
                 components.add(component);
             } catch (NoSuchMethodException exception) {
-                Main.LOGGER.error("Failed to generate components for {}: Component '{}' has invalid args!", location, componentClass.getSimpleName());
+                Main.LOGGER.error("[Location: {}] Failed to generate components: Component '{}' has invalid args!", location, componentClass.getSimpleName());
                 Main.LOGGER.error("The args are for this constructor that doesn't exist: {}", exception.getMessage());
             } catch (Exception exception) {
                 Main.handleException(exception);
@@ -82,6 +83,22 @@ public class World {
         // Generate the components for both lists in componentModifications
         List<Component> additions = generateComponents(componentModifications.additions(), location);
         List<Component> removals = generateComponents(componentModifications.removals(), location);
+
+        // Double check that there will be no SINGLE duplicates or entry index duplicates once we add in the additions
+        // TODO: Do the same for entry numbers
+        List<Component> existing = entities.get(identifier);
+        List<Component> filteredAdditions = new ArrayList<>();
+        for (Component addition : additions) {
+            if (addition.getType() == ComponentType.SINGLE) {
+                boolean hasDuplicate = existing.stream().anyMatch(e -> e.getClass().equals(addition.getClass()));
+                if (hasDuplicate) {
+                    Main.LOGGER.warn("[Location: {}] Component {} is already present, despite the type being SINGLE! Component won't be added.",
+                            location, addition.getClass().getSimpleName());
+                    continue;
+                }
+            }
+            filteredAdditions.add(addition);
+        }
 
         // Now, update the entity with the components and the template with the classes (the stuff in the componentModifications lists)
         entities.get(identifier).addAll(additions);
@@ -96,12 +113,12 @@ public class World {
         else nextIdentifier++; // Since we used up the nextIdentifier, increase it for the next entity
 
         // If there's a playerComponent, check if there already is one. If not, make the entity the player. If there is, warn.
-        if (componentTemplate.stream().anyMatch(entry -> entry.type().equals(PlayerComponent.class))) {
+        if (componentTemplate.stream().anyMatch(entry -> entry.componentClass().equals(PlayerComponent.class))) {
             if (player == null) player = identifier;
             else {
                 Main.LOGGER.warn("Entity template {} has a PlayerComponent when player has already been declared!");
                 Main.LOGGER.warn("The entity will be created, but the component will be removed");
-                componentTemplate = componentTemplate.stream().filter(entry -> !entry.type().equals(PlayerComponent.class)).collect(Collectors.toList());
+                componentTemplate = componentTemplate.stream().filter(entry -> !entry.componentClass().equals(PlayerComponent.class)).collect(Collectors.toList());
             }
         }
 
@@ -116,7 +133,7 @@ public class World {
     }
     public void removeEntity(int identifier) {
         // If the player is the one being removed, then set player to null so another one is possible to add
-        if (entityTemplates.get(identifier).stream().anyMatch(entry -> entry.type().equals(PlayerComponent.class))) player = null;
+        if (entityTemplates.get(identifier).stream().anyMatch(entry -> entry.componentClass().equals(PlayerComponent.class))) player = null;
 
         // Make its identifier vacant and remove it from everywhere
         VACANT_IDENTIFIERS.add(identifier);

@@ -3,19 +3,34 @@
   "components": [
     {
       "component": "net.dingletherat.torgrays_trials.component.area.CollisionComponent",
-      "args": [1, 1]
+      "args": [
+        1,
+        1
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteComponent",
-      "args": ["entity/object/chest/closed", 1]
+      "args": [
+        "entity/object/chest/closed",
+        1
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.sprite.SpriteComponent",
-      "args": ["entity/object/chest/opened", 2, 2, 1]
+      "entry index": 1,
+      "args": [
+        "entity/object/chest/opened",
+        2,
+        2,
+        1
+      ]
     },
     {
       "component": "net.dingletherat.torgrays_trials.component.LightComponent",
-      "args": [300, 0.8]
+      "args": [
+        300,
+        0.8
+      ]
     }
   ]
 }

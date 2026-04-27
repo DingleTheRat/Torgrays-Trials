@@ -60,12 +60,24 @@ public class EntityHandler {
                 continue;
             }
 
-            // Convert the "args" JSONArray into a list and add it into the componentClasses list.
+            // Convert the "args" JSONArray into a list and turn it into an entry, ready to be added
             JSONArray argsArray = component.getJSONArray("args");
             List<Object> args = new ArrayList<>(IntStream.range(0, argsArray.length())
                             .mapToObj(argsArray::get)
                             .toList());
-            componentClasses.add(new Component.Entry(componentClass, args));
+            int entryIndex = component.optInt("entry index");
+            Component.Entry entry = new Component.Entry(componentClass, args, entryIndex);
+
+            // Check if the component has a duplicate entryIndex with any other componentClass. If so, error and don't add it
+            boolean hasDuplicate = componentClasses.stream().anyMatch(existing -> existing.entryIndex() == entry.entryIndex());
+            boolean isSameClass = componentClasses.stream().anyMatch(existing -> existing.componentClass() == entry.componentClass());
+            if (hasDuplicate && isSameClass) {
+                Main.LOGGER.error("[Location: {}] Entry index {} is already used for component {}! Did you add an \"entry index\" int field?", location, entryIndex, componentClass.getSimpleName());
+                continue;
+            }
+
+            // If it passes all that, add it in!
+            componentClasses.add(entry);
         }
         return componentClasses;
     }
@@ -153,7 +165,7 @@ public class EntityHandler {
             List<Component.Entry> componentClasses = getComponentClasses(components, fileNames.get(jsons.indexOf(json)));
 
             // Add in the name component
-            componentClasses.add(new Component.Entry(NameComponent.class, List.of(json.getString("name"))));
+            componentClasses.add(new Component.Entry(NameComponent.class, List.of(json.getString("name")), 0));
 
             // Last but not least, add our list of componentClasses to the TEMPLATES HashMap
             TEMPLATES.put(json.getString("name"), componentClasses);
